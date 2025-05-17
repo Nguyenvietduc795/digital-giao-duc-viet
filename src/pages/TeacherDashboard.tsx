@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -14,6 +13,12 @@ interface ClassItem {
   progress: number;
 }
 
+interface Student {
+  id: number;
+  name: string;
+  submitted: boolean;
+}
+
 interface Assignment {
   id: number;
   title: string;
@@ -21,6 +26,9 @@ interface Assignment {
   dueDate: string;
   submissions: number;
   totalStudents: number;
+  students?: Student[];
+  type: string;
+  description: string;
 }
 
 const TeacherDashboard: React.FC = () => {
@@ -31,7 +39,14 @@ const TeacherDashboard: React.FC = () => {
       course: "Lập trình Python cơ bản",
       dueDate: "15/05/2025",
       submissions: 18,
-      totalStudents: 20
+      totalStudents: 20,
+      students: [
+        { id: 1, name: "Nguyễn Văn A", submitted: true },
+        { id: 2, name: "Trần Thị B", submitted: false },
+        // ... (bổ sung thêm sinh viên)
+      ],
+      type: "Tự luận",
+      description: "Viết chương trình Hello World"
     },
     {
       id: 2,
@@ -39,7 +54,14 @@ const TeacherDashboard: React.FC = () => {
       course: "Lập trình Python cơ bản",
       dueDate: "22/05/2025",
       submissions: 12,
-      totalStudents: 20
+      totalStudents: 20,
+      students: [
+        { id: 1, name: "Nguyễn Văn A", submitted: true },
+        { id: 2, name: "Trần Thị B", submitted: false },
+        // ... (bổ sung thêm sinh viên)
+      ],
+      type: "Tự luận",
+      description: "Biến và kiểu dữ liệu"
     },
     {
       id: 3,
@@ -47,9 +69,27 @@ const TeacherDashboard: React.FC = () => {
       course: "TOEIC 750+",
       dueDate: "18/05/2025",
       submissions: 15,
-      totalStudents: 25
+      totalStudents: 25,
+      students: [
+        { id: 1, name: "Nguyễn Văn A", submitted: true },
+        { id: 2, name: "Trần Thị B", submitted: false },
+        // ... (bổ sung thêm sinh viên)
+      ],
+      type: "Trắc nghiệm",
+      description: "Từ vựng chủ đề công nghệ"
     }
   ]);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [assignmentForm, setAssignmentForm] = useState({
+    title: '',
+    class: '',
+    type: '',
+    description: '',
+    deadline: ''
+  });
+  const [detailAssignment, setDetailAssignment] = useState<Assignment | null>(null);
+  const [detailClass, setDetailClass] = useState<ClassItem | null>(null);
+  const [showAllClasses, setShowAllClasses] = useState(false);
 
   const classes: ClassItem[] = [
     {
@@ -84,6 +124,35 @@ const TeacherDashboard: React.FC = () => {
     toast.success("Đã gửi link Zoom cho lớp học!");
   };
 
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setAssignmentForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!assignmentForm.title.trim() || !assignmentForm.class.trim()) {
+      toast.error('Vui lòng nhập đầy đủ Tiêu đề và Lớp học!');
+      return;
+    }
+    // Tạo assignment mới
+    const newAssignment = {
+      id: Date.now(),
+      title: assignmentForm.title,
+      course: assignmentForm.class,
+      dueDate: assignmentForm.deadline,
+      submissions: 0,
+      totalStudents: 0,
+      type: assignmentForm.type,
+      description: assignmentForm.description,
+      students: []
+    };
+    setAssignments(prev => [newAssignment, ...prev]); // Thêm vào đầu danh sách
+    toast.success('✅ Bài tập đã được tạo thành công!');
+    setAssignmentForm({ title: '', class: '', type: '', description: '', deadline: '' });
+    setShowCreateModal(false);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -103,8 +172,8 @@ const TeacherDashboard: React.FC = () => {
                   </p>
                 </div>
                 <div className="mt-4 md:mt-0 space-x-3">
-                  <Button asChild className="bg-secondary text-black hover:bg-yellow-300">
-                    <Link to="#">Tạo bài tập mới</Link>
+                  <Button className="bg-secondary text-black hover:bg-yellow-300" onClick={() => setShowCreateModal(true)}>
+                    Tạo bài tập mới
                   </Button>
                 </div>
               </div>
@@ -116,8 +185,8 @@ const TeacherDashboard: React.FC = () => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold">Lớp học của tôi</h2>
-                <Button asChild variant="outline">
-                  <Link to="#">Xem tất cả lớp học</Link>
+                <Button variant="outline" onClick={() => setShowAllClasses(true)}>
+                  Xem tất cả lớp học
                 </Button>
               </div>
 
@@ -159,7 +228,7 @@ const TeacherDashboard: React.FC = () => {
                         </div>
                       </div>
                       <div className="flex space-x-2">
-                        <Button asChild variant="outline" size="sm" className="flex-1">
+                        <Button asChild variant="outline" size="sm" className="flex-1" onClick={() => setDetailClass(classItem)}>
                           <Link to="#">Chi tiết</Link>
                         </Button>
                         <Button 
@@ -183,11 +252,50 @@ const TeacherDashboard: React.FC = () => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold">Bài tập đã giao</h2>
-                <Button asChild variant="outline">
-                  <Link to="#">Tạo bài tập mới</Link>
+                <Button variant="outline" onClick={() => setShowCreateModal(true)}>
+                  Tạo bài tập mới
                 </Button>
               </div>
-
+              {/* Modal tạo bài tập mới */}
+              {showCreateModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+                  <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative">
+                    <button className="absolute top-2 right-2 text-gray-500 hover:text-black" onClick={() => setShowCreateModal(false)}>&times;</button>
+                    <h3 className="text-xl font-bold mb-4">Tạo bài tập mới</h3>
+                    <form onSubmit={handleFormSubmit} className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Tiêu đề</label>
+                        <input type="text" name="title" className="w-full border rounded p-2" value={assignmentForm.title} onChange={handleFormChange} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Lớp học</label>
+                        <input type="text" name="class" className="w-full border rounded p-2" value={assignmentForm.class} onChange={handleFormChange} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Loại bài tập</label>
+                        <select name="type" className="w-full border rounded p-2" value={assignmentForm.type} onChange={handleFormChange}>
+                          <option value="">-- Chọn loại --</option>
+                          <option value="Tự luận">Tự luận</option>
+                          <option value="Trắc nghiệm">Trắc nghiệm</option>
+                          <option value="Bài tập nhóm">Bài tập nhóm</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Mô tả</label>
+                        <textarea name="description" className="w-full border rounded p-2" value={assignmentForm.description} onChange={handleFormChange} rows={3} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Hạn nộp</label>
+                        <input type="date" name="deadline" className="w-full border rounded p-2" value={assignmentForm.deadline} onChange={handleFormChange} />
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <Button type="button" variant="outline" onClick={() => setShowCreateModal(false)}>Hủy</Button>
+                        <Button type="submit">Gửi bài tập</Button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
               <div className="overflow-x-auto">
                 <table className="min-w-full">
                   <thead className="bg-gray-50 border-b">
@@ -214,12 +322,14 @@ const TeacherDashboard: React.FC = () => {
                         </td>
                         <td className="py-4 px-4">
                           <div className="flex items-center justify-center space-x-2">
-                            <button className="text-blue-600 hover:text-blue-800">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                              </svg>
-                            </button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex-1"
+                              onClick={() => setDetailAssignment(assignment)}
+                            >
+                              Chi tiết
+                            </Button>
                             <button 
                               className="text-red-600 hover:text-red-800"
                               onClick={() => deleteAssignment(assignment.id)}
@@ -242,6 +352,106 @@ const TeacherDashboard: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {detailAssignment && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative">
+            <button className="absolute top-2 right-2 text-gray-500 hover:text-black" onClick={() => setDetailAssignment(null)}>&times;</button>
+            <h3 className="text-xl font-bold mb-4 text-center">Danh sách sinh viên nộp bài</h3>
+            <div className="flex flex-col gap-6">
+              <div>
+                <div className="font-semibold mb-2 text-green-700 flex items-center gap-2">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  Đã nộp
+                </div>
+                <ul className="list-none overflow-y-auto" style={{ maxHeight: 180 }}>
+                  {detailAssignment.students?.filter(sv => sv.submitted).length ? (
+                    detailAssignment.students?.filter(sv => sv.submitted).map(sv => (
+                      <li key={sv.id} className="flex items-center gap-2 text-green-600 py-1">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        {sv.name}
+                      </li>
+                    ))
+                  ) : (
+                    <li className="text-gray-500">Không có sinh viên nào đã nộp</li>
+                  )}
+                </ul>
+              </div>
+              <div>
+                <div className="font-semibold mb-2 text-red-700 flex items-center gap-2">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  Chưa nộp
+                </div>
+                <ul className="list-none overflow-y-auto" style={{ maxHeight: 180 }}>
+                  {detailAssignment.students?.filter(sv => !sv.submitted).length ? (
+                    detailAssignment.students?.filter(sv => !sv.submitted).map(sv => (
+                      <li key={sv.id} className="flex items-center gap-2 text-red-600 py-1">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        {sv.name}
+                      </li>
+                    ))
+                  ) : (
+                    <li className="text-gray-500">Tất cả sinh viên đã nộp</li>
+                  )}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {detailClass && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative">
+            <button className="absolute top-2 right-2 text-gray-500 hover:text-black" onClick={() => setDetailClass(null)}>&times;</button>
+            <h3 className="text-xl font-bold mb-4">Chi tiết lớp học</h3>
+            <div className="space-y-2">
+              <div><b>Tên lớp:</b> {detailClass.name}</div>
+              <div><b>Lịch học:</b> {detailClass.schedule}</div>
+              <div><b>Số học viên:</b> {detailClass.students}</div>
+              <div><b>Tiến độ:</b> {detailClass.progress}%</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showAllClasses && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-4xl relative">
+            <button className="absolute top-2 right-2 text-gray-500 hover:text-black" onClick={() => setShowAllClasses(false)}>&times;</button>
+            <h3 className="text-2xl font-bold mb-6 text-center">Tất cả lớp học của tôi</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto" style={{ maxHeight: 500 }}>
+              {classes.map(cls => (
+                <div key={cls.id} className="border rounded-lg shadow p-6 bg-gray-50 flex flex-col justify-between">
+                  <div>
+                    <div className="text-lg font-bold mb-2 text-primary">{cls.name}</div>
+                    <div className="flex items-center text-gray-600 mb-1">
+                      <svg width="18" height="18" className="mr-2" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                      {cls.schedule}
+                    </div>
+                    <div className="flex items-center text-gray-600 mb-1">
+                      <svg width="18" height="18" className="mr-2" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                      {cls.students} học viên
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <div className="flex justify-between text-sm text-gray-500 mb-1">
+                      <span>Tiến độ</span>
+                      <span>{cls.progress}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-green-500 h-2 rounded-full"
+                        style={{ width: `${cls.progress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -22,7 +21,7 @@ const RoleSelection: React.FC = () => {
               variant="default" 
               className="w-full py-8 text-xl flex items-center justify-center"
             >
-              Tôi là Học sinh
+              Tôi là Học viên
             </Button>
           </Link>
           
