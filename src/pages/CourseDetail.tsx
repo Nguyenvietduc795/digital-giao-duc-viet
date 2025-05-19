@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -40,14 +39,14 @@ const CourseDetail: React.FC = () => {
         <div className="container mx-auto px-4">
           {/* Course Header */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-            <div className="h-64 bg-gradient-to-r from-blue-600 to-blue-500 relative">
+            <div className="h-64 bg-gradient-to-r from-pink-600 to-pink-500 relative">
               <img 
                 src={course.image} 
                 alt={course.title} 
                 className="w-full h-full object-cover opacity-50"
               />
               <div className="absolute inset-0 flex flex-col justify-end p-8 text-white">
-                <span className="bg-blue-700 text-white px-3 py-1 rounded-full text-sm font-medium mb-3 inline-block">
+                <span className="bg-pink-700 text-white px-3 py-1 rounded-full text-sm font-medium mb-3 inline-block">
                   {course.category}
                 </span>
                 <h1 className="text-3xl font-bold mb-2">{course.title}</h1>
