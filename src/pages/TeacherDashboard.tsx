@@ -161,13 +161,13 @@ const TeacherDashboard: React.FC = () => {
         <div className="container mx-auto px-4">
           {/* Welcome Section */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-            <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-8">
+            <div className="bg-gradient-to-r from-pink-600 to-pink-500 px-6 py-8">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div>
                   <h1 className="text-2xl font-bold text-white mb-2">
                     Xin chào, Thầy Nguyễn Văn A!
                   </h1>
-                  <p className="text-blue-100">
+                  <p className="text-pink-100">
                     Bạn có 3 lớp học đang diễn ra và 18 bài tập cần đánh giá.
                   </p>
                 </div>
@@ -316,7 +316,7 @@ const TeacherDashboard: React.FC = () => {
                         <td className="py-4 px-4 text-gray-600">{assignment.course}</td>
                         <td className="py-4 px-4 text-gray-600">{assignment.dueDate}</td>
                         <td className="py-4 px-4">
-                          <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                          <span className="bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded">
                             {assignment.submissions}/{assignment.totalStudents}
                           </span>
                         </td>
