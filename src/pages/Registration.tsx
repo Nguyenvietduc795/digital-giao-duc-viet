@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -101,7 +100,7 @@ const Registration: React.FC = () => {
           <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
             <div className="bg-primary px-6 py-4">
               <h1 className="text-xl font-bold text-white">Đăng ký học thử</h1>
-              <p className="text-blue-100">Trải nghiệm khóa học miễn phí và khám phá phương pháp học tập hiệu quả.</p>
+              <p className="text-pink-100">Trải nghiệm khóa học miễn phí và khám phá phương pháp học tập hiệu quả.</p>
             </div>
 
             <div className="p-6">

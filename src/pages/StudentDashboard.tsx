@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -26,13 +25,13 @@ const StudentDashboard: React.FC = () => {
         <div className="container mx-auto px-4">
           {/* Welcome Section */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-            <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-8">
+            <div className="bg-gradient-to-r from-pink-600 to-pink-500 px-6 py-8">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div>
                   <h1 className="text-2xl font-bold text-white mb-2">
                     Xin chào, {studentName}!
                   </h1>
-                  <p className="text-blue-100">
+                  <p className="text-pink-100">
                     Chào mừng bạn quay trở lại với khóa học {courseTitle}
                   </p>
                 </div>
@@ -92,7 +91,7 @@ const StudentDashboard: React.FC = () => {
                     <div className="border rounded-lg p-4">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center">
-                          <div className="bg-blue-100 p-2 rounded mr-3">
+                          <div className="bg-pink-100 p-2 rounded mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
                               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                               <polyline points="14 2 14 8 20 8"></polyline>
@@ -115,7 +114,7 @@ const StudentDashboard: React.FC = () => {
                     <div className="border rounded-lg p-4">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center">
-                          <div className="bg-blue-100 p-2 rounded mr-3">
+                          <div className="bg-pink-100 p-2 rounded mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
                               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                               <polyline points="14 2 14 8 20 8"></polyline>
@@ -138,7 +137,7 @@ const StudentDashboard: React.FC = () => {
                     <div className="border rounded-lg p-4">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center">
-                          <div className="bg-blue-100 p-2 rounded mr-3">
+                          <div className="bg-pink-100 p-2 rounded mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
                               <polygon points="23 7 16 12 23 17 23 7"></polygon>
                               <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
@@ -158,7 +157,7 @@ const StudentDashboard: React.FC = () => {
                     <div className="border rounded-lg p-4">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center">
-                          <div className="bg-blue-100 p-2 rounded mr-3">
+                          <div className="bg-pink-100 p-2 rounded mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
                               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                               <polyline points="14 2 14 8 20 8"></polyline>

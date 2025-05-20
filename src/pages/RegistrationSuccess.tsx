@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useLocation, Link, Navigate } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -42,8 +41,8 @@ const RegistrationSuccess: React.FC = () => {
                 <p className="text-gray-600 mb-4">
                   Chúng tôi đã nhận được đăng ký học thử của bạn. Dựa trên thông tin bạn cung cấp, chúng tôi đề xuất bạn nên bắt đầu với các khóa học trình độ <span className="font-semibold">{state.level}</span>.
                 </p>
-                <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-4">
-                  <h3 className="font-medium text-blue-800 mb-2">Thông tin buổi học thử</h3>
+                <div className="bg-pink-50 border border-pink-200 rounded-md p-4 mb-4">
+                  <h3 className="font-medium text-pink-800 mb-2">Thông tin buổi học thử</h3>
                   <ul className="space-y-2">
                     <li className="flex">
                       <span className="font-medium w-32">Thời gian:</span>

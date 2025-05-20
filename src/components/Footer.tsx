@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -37,6 +36,11 @@ const Footer: React.FC = () => {
                   Liên hệ
                 </Link>
               </li>
+              <li>
+                <Link to="/ho-so" className="text-gray-600 hover:text-primary">
+                  Hồ sơ
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -67,20 +71,44 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
+            <h3 className="text-lg font-bold mb-4">Hỗ trợ</h3>
+            <ul className="space-y-2">
+              <li>
+                <a href="#" className="text-gray-600 hover:text-primary">
+                  Trung tâm trợ giúp
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-gray-600 hover:text-primary">
+                  Điều khoản sử dụng
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-gray-600 hover:text-primary">
+                  Chính sách bảo mật
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
             <h3 className="text-lg font-bold mb-4">Liên hệ</h3>
-            <address className="not-italic text-gray-600 space-y-2">
-              <p>Số 123, Đường Lê Lợi, Quận 1</p>
-              <p>Thành phố Hồ Chí Minh, Việt Nam</p>
-              <p>Email: contact@digitaledu.vn</p>
-              <p>Số điện thoại: 028 1234 5678</p>
-            </address>
+            <ul className="space-y-2">
+              <li className="text-gray-600">
+                Email: support@digitaleducation.vn
+              </li>
+              <li className="text-gray-600">
+                Hotline: 1900 1234
+              </li>
+              <li className="text-gray-600">
+                Địa chỉ: 123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="border-t border-gray-200 mt-8 pt-6 text-center">
-          <p className="text-gray-600">
-            © {new Date().getFullYear()} Digital Education. Tất cả các quyền được bảo lưu.
-          </p>
+        <div className="border-t border-gray-200 mt-8 pt-6 text-center text-gray-600">
+          <p>&copy; 2024 Digital Education. Tất cả quyền được bảo lưu.</p>
         </div>
       </div>
     </footer>

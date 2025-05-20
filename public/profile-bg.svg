@@ -1,0 +1,22 @@
+<svg width="100%" height="100%" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGrad" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#fddde6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pinkGrad" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fddde6"/>
+      <stop offset="1" stop-color="#fbeff4"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#pinkGrad)"/>
+  <circle cx="120" cy="100" r="60" fill="#fff" fill-opacity="0.13"/>
+  <circle cx="700" cy="200" r="80" fill="#fff" fill-opacity="0.10"/>
+  <circle cx="400" cy="500" r="120" fill="#fff" fill-opacity="0.08"/>
+  <circle cx="650" cy="100" r="30" fill="#fff" fill-opacity="0.15"/>
+  <circle cx="200" cy="400" r="40" fill="#fff" fill-opacity="0.10"/>
+  <circle cx="600" cy="450" r="35" fill="#fff" fill-opacity="0.13"/>
+  <ellipse cx="600" cy="100" rx="60" ry="30" fill="#fff" fill-opacity="0.09"/>
+  <ellipse cx="150" cy="500" rx="80" ry="40" fill="#fff" fill-opacity="0.09"/>
+  <rect width="800" height="600" fill="url(#bgGrad)"/>
+</svg> 

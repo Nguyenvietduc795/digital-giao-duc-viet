@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
@@ -19,7 +18,7 @@ interface CourseCardProps {
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   return (
-    <div className="card">
+    <div className="card flex flex-col h-full">
       <img 
         src={course.image} 
         alt={course.title}
@@ -38,7 +37,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       <div className="flex items-center text-sm text-gray-500 mb-4">
         <span>Giảng viên: {course.teacher}</span>
       </div>
-      <Button asChild className="w-full">
+      <Button asChild className="w-full mt-auto">
         <Link to={`/khoa-hoc/${course.id}`}>Xem chi tiết</Link>
       </Button>
     </div>
