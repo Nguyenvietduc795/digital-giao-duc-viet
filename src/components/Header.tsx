@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -14,6 +13,7 @@ const navItems: NavItem[] = [
   { label: 'Khóa học', href: '/khoa-hoc' },
   { label: 'Giới thiệu', href: '/gioi-thieu' },
   { label: 'Liên hệ', href: '/lien-he' },
+  { label: 'Hồ sơ', href: '/ho-so' },
 ];
 
 const Header: React.FC = () => {
