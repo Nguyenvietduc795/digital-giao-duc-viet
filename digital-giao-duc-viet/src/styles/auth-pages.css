@@ -1,0 +1,131 @@
+.auth-page-container {
+    font-family: Arial, sans-serif;
+    background-color: #fcdde8;
+    padding: 30px;
+    max-width: 500px;
+    margin: auto;
+    color: #333;
+}
+
+/* Ẩn icon con mắt mặc định của trình duyệt */
+.auth-page-container input[type="password"]::-ms-reveal,
+.auth-page-container input[type="password"]::-ms-clear,
+.auth-page-container input[type="password"]::-webkit-contacts-auto-fill-button,
+.auth-page-container input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none !important;
+}
+
+.auth-page-container input[type="password"]::-webkit-inner-spin-button,
+.auth-page-container input[type="password"]::-webkit-outer-spin-button,
+.auth-page-container input[type="password"]::-webkit-search-cancel-button,
+.auth-page-container input[type="password"]::-webkit-search-decoration,
+.auth-page-container input[type="password"]::-webkit-textfield-decoration-container {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.auth-page-container .logo {
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 40px;
+    background: linear-gradient(to right, #e18df9, #888ff7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.auth-page-container h2 {
+    color: #888ff7;
+    text-align: center;
+}
+
+.auth-page-container form {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.auth-page-container .password-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.auth-page-container .password-wrapper input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.auth-page-container .password-wrapper button.togglePassword {
+    background: transparent;
+    border: none;
+    color: #7266f0;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    min-width: 45px;
+}
+
+.auth-page-container .password-wrapper button.togglePassword:hover {
+    background-color: #f0f0ff;
+}
+
+.auth-page-container input:not(.password-wrapper input) {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.auth-page-container button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #e18df9, #888ff7);
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.auth-page-container button[type="submit"]:hover {
+    opacity: 0.9;
+}
+
+.auth-page-container .message {
+    margin-top: 10px;
+    color: red;
+    font-size: 14px;
+    text-align: center;
+}
+
+.auth-page-container .auth-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.auth-page-container .auth-links a {
+    color: #7266f0;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.auth-page-container .auth-links a:hover {
+    text-decoration: underline;
+} 
