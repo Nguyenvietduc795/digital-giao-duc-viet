@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
@@ -90,6 +88,8 @@ const TeacherDashboard: React.FC = () => {
   const [detailAssignment, setDetailAssignment] = useState<Assignment | null>(null);
   const [detailClass, setDetailClass] = useState<ClassItem | null>(null);
   const [showAllClasses, setShowAllClasses] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const classes: ClassItem[] = [
     {
@@ -129,6 +129,22 @@ const TeacherDashboard: React.FC = () => {
     setAssignmentForm(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const allowedTypes = [
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/msword',
+        'application/zip',
+        'application/x-zip-compressed',
+        'multipart/x-zip',
+        'application/x-compressed',
+      ];
+      const filesArr = Array.from(e.target.files).filter(f => allowedTypes.includes(f.type) || f.name.endsWith('.zip'));
+      setUploadedFiles(filesArr);
+    }
+  };
+
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!assignmentForm.title.trim() || !assignmentForm.class.trim()) {
@@ -151,23 +167,22 @@ const TeacherDashboard: React.FC = () => {
     toast.success('✅ Bài tập đã được tạo thành công!');
     setAssignmentForm({ title: '', class: '', type: '', description: '', deadline: '' });
     setShowCreateModal(false);
+    setUploadedFiles([]);
   };
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      
       <main className="flex-grow py-8 bg-gray-50">
         <div className="container mx-auto px-4">
           {/* Welcome Section */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-            <div className="bg-gradient-to-r from-pink-600 to-pink-500 px-6 py-8">
+            <div className="bg-pink-300 px-6 py-8">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div>
                   <h1 className="text-2xl font-bold text-white mb-2">
                     Xin chào, Thầy Nguyễn Văn A!
                   </h1>
-                  <p className="text-pink-100">
+                  <p className="text-white">
                     Bạn có 3 lớp học đang diễn ra và 18 bài tập cần đánh giá.
                   </p>
                 </div>
@@ -217,12 +232,12 @@ const TeacherDashboard: React.FC = () => {
                       </div>
                       <div className="mb-4">
                         <div className="flex justify-between mb-1">
-                          <span className="text-sm text-gray-600">Tiến độ</span>
-                          <span className="text-sm text-gray-600">{classItem.progress}%</span>
+                          <span className="text-sm text-pink-700">Tiến độ</span>
+                          <span className="text-sm text-pink-700">{classItem.progress}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-pink-50 rounded-full h-2">
                           <div 
-                            className="bg-primary h-2 rounded-full" 
+                            className="bg-pink-300 h-2 rounded-full" 
                             style={{ width: `${classItem.progress}%` }}
                           ></div>
                         </div>
@@ -288,8 +303,39 @@ const TeacherDashboard: React.FC = () => {
                         <label className="block text-sm font-medium mb-1">Hạn nộp</label>
                         <input type="date" name="deadline" className="w-full border rounded p-2" value={assignmentForm.deadline} onChange={handleFormChange} />
                       </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Đính kèm file (PDF, DOCX, ZIP)</label>
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            className="bg-pink-300 text-pink-900 font-semibold rounded px-4 py-2 border border-pink-400 hover:bg-pink-400 transition"
+                            onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                          >
+                            Chọn tệp
+                          </button>
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            name="attachment"
+                            className="hidden"
+                            accept=".pdf,.doc,.docx,.zip"
+                            multiple
+                            onChange={handleFileChange}
+                          />
+                          {uploadedFiles.length > 0 && (
+                            <ul className="text-sm text-gray-700">
+                              {uploadedFiles.map((file, idx) => (
+                                <li key={idx} className="flex items-center gap-2">
+                                  <span>{file.name}</span>
+                                  <button type="button" className="text-red-500 hover:underline" onClick={() => setUploadedFiles(uploadedFiles.filter((_, i) => i !== idx))}>Xóa</button>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      </div>
                       <div className="flex justify-end space-x-2">
-                        <Button type="button" variant="outline" onClick={() => setShowCreateModal(false)}>Hủy</Button>
+                        <Button type="button" variant="outline" onClick={() => { setShowCreateModal(false); setUploadedFiles([]); }}>Hủy</Button>
                         <Button type="submit">Gửi bài tập</Button>
                       </div>
                     </form>
@@ -316,7 +362,7 @@ const TeacherDashboard: React.FC = () => {
                         <td className="py-4 px-4 text-gray-600">{assignment.course}</td>
                         <td className="py-4 px-4 text-gray-600">{assignment.dueDate}</td>
                         <td className="py-4 px-4">
-                          <span className="bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded">
+                          <span className="bg-pink-50 text-pink-600 text-xs px-2 py-1 rounded">
                             {assignment.submissions}/{assignment.totalStudents}
                           </span>
                         </td>
@@ -435,13 +481,13 @@ const TeacherDashboard: React.FC = () => {
                     </div>
                   </div>
                   <div className="mt-4">
-                    <div className="flex justify-between text-sm text-gray-500 mb-1">
-                      <span>Tiến độ</span>
-                      <span>{cls.progress}%</span>
+                    <div className="flex justify-between text-sm text-pink-700 mb-1">
+                      <span className="text-pink-700">Tiến độ</span>
+                      <span className="text-pink-700">{cls.progress}%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-pink-50 rounded-full h-2">
                       <div
-                        className="bg-green-500 h-2 rounded-full"
+                        className="bg-pink-300 h-2 rounded-full"
                         style={{ width: `${cls.progress}%` }}
                       ></div>
                     </div>
@@ -452,8 +498,6 @@ const TeacherDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
-      <Footer />
     </div>
   );
 };

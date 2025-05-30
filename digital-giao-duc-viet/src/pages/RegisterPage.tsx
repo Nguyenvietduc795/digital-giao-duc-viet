@@ -3,7 +3,7 @@ import RegisterForm from '../components/RegisterForm.tsx';
 
 const RegisterPage: React.FC = () => {
     return (
-        <div>
+        <div className="min-h-screen flex items-center justify-center bg-pink-100">
             <RegisterForm />
         </div>
     );

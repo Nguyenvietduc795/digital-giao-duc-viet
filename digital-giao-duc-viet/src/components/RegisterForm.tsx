@@ -112,7 +112,9 @@ const RegisterForm: React.FC = () => {
                     </button>
                 </div>
                 <button type="submit">Đăng ký</button>
-                {message && <div className="message">{message}</div>}
+                {message && (
+                  <div className={`message${message === 'Đăng ký thành công!' ? ' text-green-600' : ''}`}>{message}</div>
+                )}
                 <div className="auth-links">
                     <Link to="/login">Đã có tài khoản? Đăng nhập</Link>
                 </div>

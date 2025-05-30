@@ -1,6 +1,6 @@
 .auth-page-container {
     font-family: Arial, sans-serif;
-    background-color: #fcdde8;
+    /* background-color: #fcdde8; */
     padding: 30px;
     max-width: 500px;
     margin: auto;
@@ -112,6 +112,10 @@
     color: red;
     font-size: 14px;
     text-align: center;
+}
+
+.auth-page-container .message.text-green-600 {
+    color: #16a34a !important; /* Tailwind green-600 */
 }
 
 .auth-page-container .auth-links {

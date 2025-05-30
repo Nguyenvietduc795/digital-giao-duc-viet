@@ -102,7 +102,9 @@ const LoginForm: React.FC = () => {
                 <button type="submit" disabled={isLoading}>
                     {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
                 </button>
-                {message && <div className="message">{message}</div>}
+                {message && (
+                  <div className={`message${message === 'Đăng nhập thành công!' ? ' text-green-600' : ''}`}>{message}</div>
+                )}
                 <div className="auth-links">
                     <Link to="/forgot-password">Quên mật khẩu?</Link>
                     <Link to="/register">Đăng ký tài khoản mới</Link>

@@ -6,10 +6,10 @@ import { ArrowRight } from 'lucide-react';
 
 const HomePage: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-pink-500">
       <main className="flex-grow py-8 bg-pink-50">
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-pink-600 to-pink-500 text-white py-16 md:py-24">
+        <section className="bg-pink-500 text-white py-16 md:py-24">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center">
               <div className="md:w-1/2 mb-8 md:mb-0">

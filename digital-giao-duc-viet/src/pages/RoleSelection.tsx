@@ -6,7 +6,7 @@ const RoleSelection: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
       {/* Background gradient/color split */}
-      <div className="absolute top-0 left-0 w-full h-1/2 bg-pink-100"></div>
+      <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-r from-pink-100 via-pink-200 via-pink-300 via-pink-400 to-pink-500"></div>
       <div className="absolute bottom-0 left-0 w-full h-1/2 bg-white"></div>
 
       <div className="relative z-10 text-center mb-12 mt-8">
@@ -25,7 +25,7 @@ const RoleSelection: React.FC = () => {
           <Link to="/hoc-sinh" className="block w-full mt-auto">
             <Button
               variant="default"
-              className="w-full py-6 text-lg bg-pink-500 hover:bg-pink-600 text-white font-bold"
+              className="w-full py-6 text-lg bg-pink-300 hover:bg-pink-400 text-white font-bold"
             >
               Tôi là Học viên
             </Button>
@@ -39,8 +39,8 @@ const RoleSelection: React.FC = () => {
           <p className="text-gray-600 mb-8">Trở thành một phần của cộng đồng giáo viên uy tín. Tận dụng bộ công cụ mạnh mẽ để dễ dàng tạo, quản lý và phát triển các khóa học chuyên sâu. Tiếp cận hàng nghìn học viên tiềm năng và gia tăng thu nhập thông qua nền tảng trực tuyến hàng đầu.</p>
           <Link to="/giao-vien" className="block w-full mt-auto">
             <Button
-              variant="outline"
-              className="w-full py-6 text-lg border-pink-500 text-pink-500 hover:bg-pink-50 hover:text-pink-600 font-bold"
+              variant="default"
+              className="w-full py-6 text-lg bg-pink-300 hover:bg-pink-400 text-white font-bold border-0"
             >
               Tôi là Giáo viên
             </Button>

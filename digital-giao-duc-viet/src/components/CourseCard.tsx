@@ -37,7 +37,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       <div className="flex items-center text-sm text-gray-500 mb-4">
         <span>Giảng viên: {course.teacher}</span>
       </div>
-      <Button asChild className="w-full mt-auto">
+      <Button asChild className="w-full mt-auto bg-pink-500 hover:bg-pink-600 border-0">
         <Link to={`/khoa-hoc/${course.id}`}>Xem chi tiết</Link>
       </Button>
     </div>

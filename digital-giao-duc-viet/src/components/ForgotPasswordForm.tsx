@@ -118,7 +118,9 @@ const ForgotPasswordForm: React.FC = () => {
                     </button>
                 </div>
                 <button type="submit">Đặt lại mật khẩu</button>
-                {message && <div className="message">{message}</div>}
+                {message && (
+                  <div className={`message${message === 'Đặt lại mật khẩu thành công!' ? ' text-green-600' : ''}`}>{message}</div>
+                )}
                 <div className="auth-links">
                     <Link to="/login">Quay lại đăng nhập</Link>
                 </div>
