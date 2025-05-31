@@ -111,8 +111,6 @@ const CourseList: React.FC = () => {
           )}
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };

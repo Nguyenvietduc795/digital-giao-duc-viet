@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
+import { Eye, EyeOff } from 'lucide-react';
 
 const DEFAULT_AVATAR = '';
 const STORAGE_KEY = 'profile-data';
@@ -26,6 +27,7 @@ const Profile = () => {
     confirm: ""
   });
   const [avatarPreview, setAvatarPreview] = useState<string | undefined>(userData.avatar);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Load từ localStorage khi vào trang
   useEffect(() => {
@@ -177,38 +179,59 @@ const Profile = () => {
               </TabsContent>
               <TabsContent value="security" className="space-y-6">
                 <div className="grid gap-4">
-                  <div className="grid gap-2">
+                  <div className="grid gap-2 relative">
                     <Label htmlFor="current-password">Mật khẩu hiện tại</Label>
                     <Input
                       id="current-password"
                       name="current"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Nhập mật khẩu hiện tại"
                       value={passwords.current}
                       onChange={handlePasswordChange}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center pt-6"
+                    >
+                      {showPassword ? <EyeOff className="h-5 w-5 text-gray-500" /> : <Eye className="h-5 w-5 text-gray-500" />}
+                    </button>
                   </div>
-                  <div className="grid gap-2">
+                  <div className="grid gap-2 relative">
                     <Label htmlFor="new-password">Mật khẩu mới</Label>
                     <Input
                       id="new-password"
                       name="new"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Nhập mật khẩu mới"
                       value={passwords.new}
                       onChange={handlePasswordChange}
                     />
+                     <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center pt-6"
+                    >
+                      {showPassword ? <EyeOff className="h-5 w-5 text-gray-500" /> : <Eye className="h-5 w-5 text-gray-500" />}
+                    </button>
                   </div>
-                  <div className="grid gap-2">
+                  <div className="grid gap-2 relative">
                     <Label htmlFor="confirm-password">Xác nhận mật khẩu mới</Label>
                     <Input
                       id="confirm-password"
                       name="confirm"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Nhập lại mật khẩu mới"
                       value={passwords.confirm}
                       onChange={handlePasswordChange}
                     />
+                     <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center pt-6"
+                    >
+                      {showPassword ? <EyeOff className="h-5 w-5 text-gray-500" /> : <Eye className="h-5 w-5 text-gray-500" />}
+                    </button>
                   </div>
                 </div>
               </TabsContent>
