@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { setUser } from '../utils/storage.tsx';
 import '../styles/auth-pages.css';
+import { Eye, EyeOff } from 'lucide-react';
 
 const RegisterForm: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -53,7 +54,6 @@ const RegisterForm: React.FC = () => {
     return (
         <div className="auth-page-container">
             <div className="logo">Digital Education</div>
-            <h2>Đăng ký tài khoản</h2>
             <form onSubmit={handleSubmit}>
                 <input
                     type="email"
@@ -86,10 +86,11 @@ const RegisterForm: React.FC = () => {
                     />
                     <button
                         type="button"
-                        className="togglePassword"
                         onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#7266f0] transition"
+                        tabIndex={-1}
                     >
-                        {showPassword ? 'Ẩn' : 'Hiện'}
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                 </div>
                 <div className="password-wrapper">
@@ -105,10 +106,11 @@ const RegisterForm: React.FC = () => {
                     />
                     <button
                         type="button"
-                        className="togglePassword"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#7266f0] transition"
+                        tabIndex={-1}
                     >
-                        {showConfirmPassword ? 'Ẩn' : 'Hiện'}
+                        {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                 </div>
                 <button type="submit">Đăng ký</button>

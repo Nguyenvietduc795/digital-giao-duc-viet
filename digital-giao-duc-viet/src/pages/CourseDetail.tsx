@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { courses } from '@/data/courseData';
 
@@ -16,7 +14,6 @@ const CourseDetail: React.FC = () => {
   if (!course) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
         <main className="flex-grow flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Không tìm thấy khóa học</h1>
@@ -26,15 +23,12 @@ const CourseDetail: React.FC = () => {
             </Button>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      
       <main className="flex-grow py-8 bg-gray-50">
         <div className="container mx-auto px-4">
           {/* Course Header */}
@@ -300,8 +294,6 @@ const CourseDetail: React.FC = () => {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };

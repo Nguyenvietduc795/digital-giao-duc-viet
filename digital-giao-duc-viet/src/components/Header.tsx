@@ -12,6 +12,7 @@ type NavItem = {
 const navItems: NavItem[] = [
   { label: 'Trang chủ', href: '/hoc-sinh' },
   { label: 'Khóa học', href: '/khoa-hoc' },
+  { label: 'Khóa học của tôi', href: '/hoc-vien' },
   { label: 'Giới thiệu', href: '/gioi-thieu' },
   { label: 'Liên hệ', href: '/lien-he' },
 ];
@@ -49,19 +50,47 @@ const Header: React.FC = () => {
 
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center space-x-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={`font-medium ${
-                location.pathname === item.href
-                  ? 'text-primary'
-                  : 'text-gray-600 hover:text-primary'
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {navItems.filter(item => item.label !== 'Khóa học của tôi').map((item, idx, arr) => {
+            if (item.label === 'Khóa học' && user) {
+              return [
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={`font-medium ${
+                    location.pathname === item.href
+                      ? 'text-primary'
+                      : 'text-gray-600 hover:text-primary'
+                  }`}
+                >
+                  {item.label}
+                </Link>,
+                <Link
+                  key="/hoc-vien"
+                  to="/hoc-vien"
+                  className={`font-medium ${
+                    location.pathname === '/hoc-vien'
+                      ? 'text-primary'
+                      : 'text-gray-600 hover:text-primary'
+                  }`}
+                >
+                  Khóa học của tôi
+                </Link>
+              ];
+            }
+            return (
+              <Link
+                key={item.href}
+                to={item.href}
+                className={`font-medium ${
+                  location.pathname === item.href
+                    ? 'text-primary'
+                    : 'text-gray-600 hover:text-primary'
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
           {user ? (
             <div className="flex items-center space-x-4">
               <Link
@@ -95,20 +124,50 @@ const Header: React.FC = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white py-4 px-4 shadow-md">
           <nav className="flex flex-col space-y-4">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setIsMenuOpen(false)}
-                className={`font-medium py-2 ${
-                  location.pathname === item.href
-                    ? 'text-primary'
-                    : 'text-gray-600'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.filter(item => item.label !== 'Khóa học của tôi').map((item, idx, arr) => {
+              if (item.label === 'Khóa học' && user) {
+                return [
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`font-medium py-2 ${
+                      location.pathname === item.href
+                        ? 'text-primary'
+                        : 'text-gray-600'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>,
+                  <Link
+                    key="/hoc-vien"
+                    to="/hoc-vien"
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`font-medium py-2 ${
+                      location.pathname === '/hoc-vien'
+                        ? 'text-primary'
+                        : 'text-gray-600'
+                    }`}
+                  >
+                    Khóa học của tôi
+                  </Link>
+                ];
+              }
+              return (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`font-medium py-2 ${
+                    location.pathname === item.href
+                      ? 'text-primary'
+                      : 'text-gray-600'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
             {user ? (
               <>
                 <Link

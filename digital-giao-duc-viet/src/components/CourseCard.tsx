@@ -37,7 +37,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       <div className="flex items-center text-sm text-gray-500 mb-4">
         <span>Giảng viên: {course.teacher}</span>
       </div>
-      <Button asChild className="w-full mt-auto bg-pink-500 hover:bg-pink-600 border-0">
+      <Button asChild className="w-full mt-auto" style={{ backgroundColor: '#f472b6', border: '1px solid #f472b6' }} onMouseOver={e => e.currentTarget.style.backgroundColor = '#ec4899'} onMouseOut={e => e.currentTarget.style.backgroundColor = '#f472b6'}>
         <Link to={`/khoa-hoc/${course.id}`}>Xem chi tiết</Link>
       </Button>
     </div>

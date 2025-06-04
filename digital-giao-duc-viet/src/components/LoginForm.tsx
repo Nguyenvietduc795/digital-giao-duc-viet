@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getUser } from '../utils/storage.tsx';
 import '../styles/auth-pages.css';
+import { Eye, EyeOff } from 'lucide-react';
 
 const LoginForm: React.FC = () => {
     const [loginInput, setLoginInput] = useState('');
@@ -66,7 +67,6 @@ const LoginForm: React.FC = () => {
     return (
         <div className="auth-page-container">
             <div className="logo">Digital Education</div>
-            <h2>Đăng nhập</h2>
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -93,10 +93,11 @@ const LoginForm: React.FC = () => {
                     />
                     <button
                         type="button"
-                        className="togglePassword"
+                        className="togglePassword bg-gray-100 rounded-full flex items-center justify-center w-8 h-8 p-0 hover:bg-gray-200 transition absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
                         onClick={() => setShowPassword(!showPassword)}
+                        tabIndex={-1}
                     >
-                        {showPassword ? 'Ẩn' : 'Hiện'}
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                 </div>
                 <button type="submit" disabled={isLoading}>

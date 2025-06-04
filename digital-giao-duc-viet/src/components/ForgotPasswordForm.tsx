@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getUser, setUser } from '../utils/storage.tsx';
 import '../styles/auth-pages.css';
+import { Eye, EyeOff } from 'lucide-react';
 
 const ForgotPasswordForm: React.FC = () => {
     const [identifier, setIdentifier] = useState('');
@@ -67,7 +68,6 @@ const ForgotPasswordForm: React.FC = () => {
     return (
         <div className="auth-page-container">
             <div className="logo">Digital Education</div>
-            <h2>Khôi phục mật khẩu</h2>
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -92,10 +92,11 @@ const ForgotPasswordForm: React.FC = () => {
                     />
                     <button
                         type="button"
-                        className="togglePassword"
                         onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#7266f0] transition"
+                        tabIndex={-1}
                     >
-                        {showNewPassword ? 'Ẩn' : 'Hiện'}
+                        {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                 </div>
                 <div className="password-wrapper">
@@ -111,10 +112,11 @@ const ForgotPasswordForm: React.FC = () => {
                     />
                     <button
                         type="button"
-                        className="togglePassword"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#7266f0] transition"
+                        tabIndex={-1}
                     >
-                        {showConfirmPassword ? 'Ẩn' : 'Hiện'}
+                        {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                 </div>
                 <button type="submit">Đặt lại mật khẩu</button>
