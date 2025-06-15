@@ -3,21 +3,13 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
-// Slider images cho phần nền hero
+// Slider images for the new hero section
 const sliderImages = [
-  "https://images.unsplash.com/photo-1503676382389-4809596d5290", // ảnh trường học tung mũ tốt nghiệp
-  "https://images.unsplash.com/photo-1513258496099-48168024aec0", // ảnh nhóm học sinh học tập
-  "https://images.unsplash.com/photo-1461749280684-dccba630e2f6"  // ảnh màn hình code
+  "https://images.unsplash.com/photo-1503676382389-4809596d5290", // graduate caps
+  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80", // students studying
+  "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80", // students
+  "https://images.unsplash.com/photo-1461749280684-dccba630e2f6" // code screen
 ];
-
-// Slider images cho carousel khóa học tiêu biểu
-const featuredSliderImages = [
-  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80",
-  "https://images.unsplash.com/photo-1461749280684-dccba630e2f6"
-];
-
-const heroImage = "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80";
 
 const HomePage: React.FC = () => {
   const [sliderIdx, setSliderIdx] = useState(0);
@@ -32,61 +24,68 @@ const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-pink-500">
       <main className="flex-grow pt-0 pb-8 bg-pink-50">
-        {/* Hero Section */}
-        <section className="relative pt-0 md:pt-4 pb-8 md:pb-16">
+        {/* Hero Section (formerly Featured Courses Carousel) */}
+        <section className="relative pt-0 pb-8 md:pb-16">
           <div className="w-full px-0 relative flex justify-center">
-            {/* Ảnh lớn nằm bên trên, phủ lên khối hồng bán trong suốt */}
-            <div className="hidden md:block">
-              <img
-                src={heroImage}
-                alt="Học sinh đang học"
-                className="absolute z-20 rounded-2xl shadow-2xl"
-                style={{
-                  right: "4vw", // luôn cách phải 1 khoảng nhỏ, responsive
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  width: "28vw", // responsive theo viewport width
-                  maxWidth: 420,
-                  minWidth: 240,
-                  height: "38vw", // responsive theo viewport height
-                  maxHeight: 340,
-                  minHeight: 180,
-                  objectFit: "cover",
-                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.18)"
-                }}
-              />
-            </div>
-            {/* Khối màu hồng bán trong suốt với slider nền và nội dung */}
-            <div
-              // === CHỈNH KÍCH THƯỚC KHỐI MÀU HỒNG BÁN TRONG SUỐT Ở ĐÂY ===
-              className="relative w-full rounded-2xl overflow-hidden shadow-lg min-h-[600px] flex items-center justify-start"
-              style={{ width: "100vw", maxWidth: "100vw" }} // <-- full chiều dài màn hình
-            >
-              {/* Slider nền phủ toàn bộ */}
-              <img
-                src={sliderImages[sliderIdx]}
-                alt={`slide ${sliderIdx + 1}`}
-                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
-                style={{zIndex: 0, filter: "blur(2px) brightness(0.7)"}}
-              />
-              {/* Overlay hồng bán trong suốt */}
-              <div
-                className="absolute inset-0 z-10"
-                style={{
-                  background: "linear-gradient(135deg, rgba(244, 143, 177, 0.85) 0%, rgba(123, 104, 238, 0.85) 100%)"
-                }}
-              />
-              {/* Nội dung nằm trên cùng */}
-              <div className="relative z-20 p-10 md:p-14 flex flex-col justify-center items-start w-full md:w-3/5">
-                <h1 className="text-3xl md:text-5xl font-bold mb-4 text-white drop-shadow-lg">
-                  Học tập là hành trình khám phá không ngừng
-                </h1>
-                <p className="text-lg mb-6 max-w-xl text-white drop-shadow flex items-center gap-2">
-                  cung cấp các khóa học chất lượng cao, giúp bạn phát triển kỹ năng và đạt được mục tiêu học tập trong thời đại số.
-                </p>
-                <Button asChild size="lg" className="bg-yellow-300 text-black hover:bg-yellow-400">
-                  <Link to="/dang-ky">Đăng ký học thử</Link>
-                </Button>
+            <div className="relative w-full rounded-2xl overflow-hidden shadow-lg min-h-[1300px] flex items-center justify-start" style={{ width: "100vw", maxWidth: "100vw" }}>
+              <div id="carousel-images" className="w-full h-[1240px] rounded-3xl overflow-hidden shadow-2xl bg-white flex items-center justify-center relative">
+                <img
+                  src={sliderImages[sliderIdx]}
+                  alt={`slide ${sliderIdx + 1}`}
+                  className="w-full h-full object-cover transition-all duration-500"
+                  draggable={false}
+                />
+                {sliderIdx === 0 && (
+                  <div className="absolute bottom-80 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
+                    IELTS 6.0+ trong 3 tháng
+                  </div>
+                )}
+                {sliderIdx === 1 && (
+                  <div className="absolute bottom-80 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
+                    TOEIC 750+ trong 2 tháng
+                  </div>
+                )}
+                {sliderIdx === 2 && (
+                  <div className="absolute bottom-80 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
+                    Lập trình Python cơ bản
+                  </div>
+                )}
+                <div className="absolute bottom-40 left-1/2 -translate-x-1/2 z-20">
+                  <Button asChild size="lg" className="bg-yellow-300 text-black hover:bg-yellow-400">
+                    <Link to="/dang-ky">Đăng kí học ngay</Link>
+                  </Button>
+                </div>
+                <div className="flex items-center justify-center gap-4 absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+                  {sliderImages.map((_, idx) => (
+                    <button
+                      key={idx}
+                      className={`w-5 h-5 rounded-full border-2 border-white ${sliderIdx === idx ? 'bg-pink-400' : 'bg-gray-300'} transition-all`}
+                      style={{ boxShadow: sliderIdx === idx ? '0 0 0 2px #f472b6' : undefined }}
+                      onClick={() => setSliderIdx(idx)}
+                      aria-label={`Chọn ảnh ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="absolute top-1/2 left-0 -translate-y-1/2 z-20">
+                <button
+                  onClick={() => setSliderIdx((sliderIdx - 1 + sliderImages.length) % sliderImages.length)}
+                  className="bg-white/90 hover:bg-white rounded-full shadow-xl p-4 text-2xl"
+                  aria-label="Trước"
+                  style={{ minWidth: 56, minHeight: 56 }}
+                >
+                  &#8592;
+                </button>
+              </div>
+              <div className="absolute top-1/2 right-0 -translate-y-1/2 z-20">
+                <button
+                  onClick={() => setSliderIdx((sliderIdx + 1) % sliderImages.length)}
+                  className="bg-white/90 hover:bg-white rounded-full shadow-xl p-4 text-2xl"
+                  aria-label="Sau"
+                  style={{ minWidth: 56, minHeight: 56 }}
+                >
+                  &#8594;
+                </button>
               </div>
             </div>
           </div>
@@ -180,68 +179,6 @@ const HomePage: React.FC = () => {
             </div>
           </div>
         </section>
-
-        {/* Carousel khóa học tiêu biểu ở phần giao nhau giữa hồng và trắng */}
-        <div className="w-full flex justify-center" style={{ marginTop: '30px', marginBottom: '30px' }}>
-          <div className="relative w-full max-w-6xl h-[480px] flex flex-col items-center">
-            {/* Carousel images */}
-            <div id="carousel-images" className="w-full h-[420px] rounded-3xl overflow-hidden shadow-2xl bg-white flex items-center justify-center relative">
-              <img
-                src={featuredSliderImages[sliderIdx]}
-                alt={`slide ${sliderIdx + 1}`}
-                className="w-full h-full object-cover transition-all duration-500"
-                draggable={false}
-              />
-              {sliderIdx === 0 && (
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
-                  IELTS 6.0+ trong 3 tháng
-                </div>
-              )}
-              {sliderIdx === 1 && (
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
-                  TOEIC 750+ trong 2 tháng
-                </div>
-              )}
-              {sliderIdx === 2 && (
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
-                  Lập trình Python cơ bản
-                </div>
-              )}
-            </div>
-            {/* Dots and controls */}
-            <div className="flex items-center justify-center gap-4 mt-6">
-              {featuredSliderImages.map((_, idx) => (
-                <button
-                  key={idx}
-                  className={`w-5 h-5 rounded-full border-2 border-white ${sliderIdx === idx ? 'bg-pink-400' : 'bg-gray-300'} transition-all`}
-                  style={{ boxShadow: sliderIdx === idx ? '0 0 0 2px #f472b6' : undefined }}
-                  onClick={() => setSliderIdx(idx)}
-                  aria-label={`Chọn ảnh ${idx + 1}`}
-                />
-              ))}
-            </div>
-            <div className="absolute top-1/2 left-0 -translate-y-1/2">
-              <button
-                onClick={() => setSliderIdx((sliderIdx - 1 + featuredSliderImages.length) % featuredSliderImages.length)}
-                className="bg-white/90 hover:bg-white rounded-full shadow-xl p-4 text-2xl"
-                aria-label="Trước"
-                style={{ minWidth: 56, minHeight: 56 }}
-              >
-                &#8592;
-              </button>
-            </div>
-            <div className="absolute top-1/2 right-0 -translate-y-1/2">
-              <button
-                onClick={() => setSliderIdx((sliderIdx + 1) % featuredSliderImages.length)}
-                className="bg-white/90 hover:bg-white rounded-full shadow-xl p-4 text-2xl"
-                aria-label="Sau"
-                style={{ minWidth: 56, minHeight: 56 }}
-              >
-                &#8594;
-              </button>
-            </div>
-          </div>
-        </div>
 
         {/* CTA Section */}
         <section className="bg-primary py-16">
