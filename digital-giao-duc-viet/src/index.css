@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 210 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 47 100% 70%;
+    --secondary-foreground: 0 0% 0%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 210 100% 50%;
+
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors font-medium;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-black py-2 px-4 rounded-md hover:bg-yellow-300 transition-colors font-medium;
+  }
+
+  .btn-outline {
+    @apply border border-primary text-primary py-2 px-4 rounded-md hover:bg-primary hover:text-white transition-colors;
+  }
+
+  .btn-ghost {
+    @apply text-primary py-2 px-4 rounded-md hover:bg-blue-50 transition-colors;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow;
+  }
+}
+
+/* Cloud animation: vào vị trí, sau đó lặp ngang */
+@keyframes cloud-in-left {
+  0% { transform: translateX(-200px); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes cloud-in-right {
+  0% { transform: translateX(200px); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes cloud-move-left {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(40px); }
+  100% { transform: translateX(0); }
+}
+@keyframes cloud-move-right {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-40px); }
+  100% { transform: translateX(0); }
+}
+
+/* Cloud fly full screen and loop */
+@keyframes cloud-fly-left-to-right {
+  0% {
+    transform: translateX(-150%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(120vw);
+    opacity: 0;
+  }
+}
+@keyframes cloud-fly-right-to-left {
+  0% {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-120vw);
+    opacity: 0;
+  }
+}
+
+.cloud-top-left {
+  animation:
+    cloud-in-left 1.2s cubic-bezier(.5,1.5,.5,1) 0s 1,
+    cloud-move-left 7s ease-in-out 1.2s infinite;
+}
+.cloud-bottom-left {
+  animation:
+    cloud-in-left 1.4s cubic-bezier(.5,1.5,.5,1) 0s 1,
+    cloud-move-left 8s ease-in-out 1.4s infinite;
+}
+.cloud-top-right {
+  animation:
+    cloud-in-right 1.2s cubic-bezier(.5,1.5,.5,1) 0s 1,
+    cloud-move-right 7s ease-in-out 1.2s infinite;
+}
+.cloud-bottom-right {
+  animation:
+    cloud-in-right 1.4s cubic-bezier(.5,1.5,.5,1) 0s 1,
+    cloud-move-right 8s ease-in-out 1.4s infinite;
+}
+
+.cloud-top-left,
+.cloud-bottom-left {
+  animation: cloud-fly-left-to-right 18s linear infinite;
+}
+.cloud-top-right,
+.cloud-bottom-right {
+  animation: cloud-fly-right-to-left 20s linear infinite;
+}
