@@ -101,7 +101,7 @@ const Footer: React.FC = () => {
                 Hotline: 1900 1234
               </li>
               <li className="text-gray-600">
-                Địa chỉ: 123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh
+                Địa chỉ: 211 Nguyễn Văn Cừ, Phường An Bình, Quận Ninh Kiều, TP. Cần Thơ
               </li>
             </ul>
           </div>
