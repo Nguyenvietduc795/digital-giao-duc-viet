@@ -14,9 +14,10 @@ export interface Course {
 
 interface CourseCardProps {
   course: Course;
+  isPaid?: boolean;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+const CourseCard: React.FC<CourseCardProps> = ({ course, isPaid }) => {
   return (
     <div className="card flex flex-col h-full">
       <img 
@@ -38,7 +39,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         <span>Giảng viên: {course.teacher}</span>
       </div>
       <Button asChild className="w-full mt-auto" style={{ backgroundColor: '#f472b6', border: '1px solid #f472b6' }} onMouseOver={e => e.currentTarget.style.backgroundColor = '#ec4899'} onMouseOut={e => e.currentTarget.style.backgroundColor = '#f472b6'}>
-        <Link to={`/khoa-hoc/${course.id}`}>Xem chi tiết</Link>
+        <Link to={`/khoa-hoc/${course.id}`}>{isPaid ? 'Đã đăng kí' : 'Xem chi tiết'}</Link>
       </Button>
     </div>
   );

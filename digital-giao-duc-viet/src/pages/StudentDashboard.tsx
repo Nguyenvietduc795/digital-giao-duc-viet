@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { usePaidCourses } from '@/context/PaidCoursesContext';
+import { courses as allCourses } from '@/data/courseData';
+import CourseCard from '@/components/CourseCard';
 
 enum TabType {
+  Registered = 'registered',
   Documents = 'documents',
   Assignments = 'assignments',
   Schedule = 'schedule'
 }
 
 const StudentDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<TabType>(TabType.Documents);
+  const [activeTab, setActiveTab] = useState<TabType>(TabType.Registered);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedAssignment, setSelectedAssignment] = useState<{title: string; description: string; dueDate: string; status: string; score?: number; teacherComment?: string; submittedFile?: { name: string; url: string }; submittedAt?: string} | null>(null);
   const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
   const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false);
   const [uploadFiles, setUploadFiles] = useState<File[]>([]);
   const [now, setNow] = useState(new Date());
+  const { paidCourses } = usePaidCourses();
 
   const courseProgress = 30; // 30% progress
   const studentName = "Nguyễn Văn A";
@@ -85,6 +90,12 @@ const StudentDashboard: React.FC = () => {
             {/* Tabs Navigation */}
             <div className="flex border-b">
               <button
+                className={`px-4 py-3 text-center flex-1 ${activeTab === TabType.Registered ? 'border-b-2 border-primary text-primary font-medium' : 'text-gray-600'}`}
+                onClick={() => setActiveTab(TabType.Registered)}
+              >
+                Đã đăng kí
+              </button>
+              <button
                 className={`px-4 py-3 text-center flex-1 ${activeTab === TabType.Documents ? 'border-b-2 border-primary text-primary font-medium' : 'text-gray-600'}`}
                 onClick={() => setActiveTab(TabType.Documents)}
               >
@@ -106,6 +117,30 @@ const StudentDashboard: React.FC = () => {
 
             {/* Tab Content */}
             <div className="p-6">
+              {activeTab === TabType.Registered && (
+                <div>
+                  <h2 className="text-xl font-bold mb-4">Khóa học đã đăng kí</h2>
+                  {paidCourses.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      {paidCourses.map(courseId => {
+                        const course = allCourses.find(c => c.id === courseId);
+                        return course ? <CourseCard key={course.id} course={course} isPaid={true} /> : null;
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12 bg-white rounded-lg shadow">
+                      <h3 className="text-lg font-semibold mb-2">Bạn chưa đăng kí khóa học nào</h3>
+                      <p className="text-gray-600 mb-6">
+                        Khám phá các khóa học hấp dẫn của chúng tôi và đăng kí ngay hôm nay!
+                      </p>
+                      <Button asChild>
+                        <Link to="/khoa-hoc">Khám phá khóa học</Link>
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {activeTab === TabType.Documents && (
                 <div>
                   <h2 className="text-xl font-bold mb-4">Tài liệu khóa học</h2>
@@ -438,7 +473,7 @@ const StudentDashboard: React.FC = () => {
             <div className="mb-4 text-gray-600">{selectedAssignment.description}</div>
             <form onSubmit={e => { e.preventDefault(); /* Xử lý nộp bài ở đây */ setShowSubmitModal(false); setUploadFiles([]); }}>
               <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Chọn tệp để nộp (có thể chọn nhiều tệp)</label>
+                <label htmlFor="student-upload-input" className="block text-sm font-medium mb-1">Chọn tệp để nộp (có thể chọn nhiều tệp)</label>
                 <div className="flex items-center gap-3">
                   <button
                     type="button"

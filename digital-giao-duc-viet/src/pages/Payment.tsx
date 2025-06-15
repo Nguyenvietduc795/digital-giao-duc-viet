@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { useLocation } from 'react-router-dom';
 
 type PackageType = 'single' | 'combo' | 'test';
 
@@ -15,6 +16,8 @@ interface PackageOption {
 
 const Payment: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const courseId = (location.state as { courseId?: number })?.courseId;
   const [selectedPackage, setSelectedPackage] = useState<PackageType>('single');
   const [paymentMethod, setPaymentMethod] = useState<'momo' | 'zalopay' | 'bank'>('momo');
   const [loading, setLoading] = useState(false);
@@ -65,7 +68,7 @@ const Payment: React.FC = () => {
     setTimeout(() => {
       setLoading(false);
       toast.success("Thanh toán thành công!");
-      navigate('/thanh-toan/thanh-cong');
+      navigate('/thanh-toan/thanh-cong', { state: { courseId: courseId } });
     }, 2000);
   };
 

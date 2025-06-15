@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { PaidCoursesProvider } from "./context/PaidCoursesContext";
 import { MainLayout } from "./components/layout/MainLayout";
 import RoleSelection from "./pages/RoleSelection";
 import HomePage from "./pages/HomePage";
@@ -29,30 +30,32 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <MainLayout>
-          <Routes>
-            <Route path="/" element={<RoleSelection />} />
-            <Route path="/hoc-sinh" element={<HomePage />} />
-            <Route path="/khoa-hoc" element={<CourseList />} />
-            <Route path="/khoa-hoc/:id" element={<CourseDetail />} />
-            <Route path="/dang-ky" element={<Registration />} />
-            <Route path="/dang-ky/thanh-cong" element={<RegistrationSuccess />} />
-            <Route path="/hoc-vien" element={<StudentDashboard />} />
-            <Route path="/thanh-toan" element={<Payment />} />
-            <Route path="/thanh-toan/thanh-cong" element={<PaymentSuccess />} />
-            <Route path="/giao-vien" element={<TeacherDashboard />} />
-            <Route path="/giao-vien/dashboard" element={<TeacherDashboard />} />
-            <Route path="/gioi-thieu" element={<About />} />
-            <Route path="/lien-he" element={<Contact />} />
-            <Route path="/ho-so" element={<Profile />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </MainLayout>
-      </BrowserRouter>
+      <PaidCoursesProvider>
+        <BrowserRouter>
+          <MainLayout>
+            <Routes>
+              <Route path="/" element={<RoleSelection />} />
+              <Route path="/hoc-sinh" element={<HomePage />} />
+              <Route path="/khoa-hoc" element={<CourseList />} />
+              <Route path="/khoa-hoc/:id" element={<CourseDetail />} />
+              <Route path="/dang-ky" element={<Registration />} />
+              <Route path="/dang-ky/thanh-cong" element={<RegistrationSuccess />} />
+              <Route path="/hoc-vien" element={<StudentDashboard />} />
+              <Route path="/thanh-toan" element={<Payment />} />
+              <Route path="/thanh-toan/thanh-cong" element={<PaymentSuccess />} />
+              <Route path="/giao-vien" element={<TeacherDashboard />} />
+              <Route path="/giao-vien/dashboard" element={<TeacherDashboard />} />
+              <Route path="/gioi-thieu" element={<About />} />
+              <Route path="/lien-he" element={<Contact />} />
+              <Route path="/ho-so" element={<Profile />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </MainLayout>
+        </BrowserRouter>
+      </PaidCoursesProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

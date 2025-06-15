@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import Footer from '@/components/Footer';
 import CourseCard from '@/components/CourseCard';
 import { courses } from '@/data/courseData';
+import { usePaidCourses } from '@/context/PaidCoursesContext';
 
 // Define course categories and levels for filters
 const categories = ["Tất cả", "Lập trình & CNTT", "Tiếng Anh & Chứng chỉ", "Toán học nâng cao", "Luyện thi đại học"];
@@ -11,6 +12,7 @@ const CourseList: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState("Tất cả");
   const [selectedLevel, setSelectedLevel] = useState("Tất cả");
   const [searchTerm, setSearchTerm] = useState("");
+  const { paidCourses } = usePaidCourses();
 
   // Filter courses based on selected filters and search term
   const filteredCourses = useMemo(() => {
@@ -98,7 +100,11 @@ const CourseList: React.FC = () => {
           {filteredCourses.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredCourses.map((course) => (
-                <CourseCard key={course.id} course={course} />
+                <CourseCard 
+                  key={course.id} 
+                  course={course} 
+                  isPaid={paidCourses.includes(course.id)}
+                />
               ))}
             </div>
           ) : (

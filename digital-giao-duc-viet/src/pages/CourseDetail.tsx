@@ -282,8 +282,8 @@ const CourseDetail: React.FC = () => {
                   </ul>
                 </div>
                 <div className="space-y-4">
-                  <Button asChild className="w-full">
-                    <Link to="/thanh-toan">Đăng ký ngay</Link>
+                  <Button asChild className="w-full" style={{ backgroundColor: '#f472b6', border: '1px solid #f472b6' }} onMouseOver={e => e.currentTarget.style.backgroundColor = '#ec4899'} onMouseOut={e => e.currentTarget.style.backgroundColor = '#f472b6'}>
+                    <Link to="/thanh-toan" state={{ courseId: course.id }}>Đăng ký ngay</Link>
                   </Button>
                   <Button asChild variant="outline" className="w-full">
                     <Link to="/dang-ky">Đăng ký học thử</Link>

@@ -1,8 +1,19 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { usePaidCourses } from '@/context/PaidCoursesContext';
 
 const PaymentSuccess: React.FC = () => {
+  const location = useLocation();
+  const { addPaidCourse } = usePaidCourses();
+  const courseId = (location.state as { courseId?: number })?.courseId;
+
+  useEffect(() => {
+    if (courseId) {
+      addPaidCourse(courseId);
+    }
+  }, [courseId, addPaidCourse]);
+
   // Generate a random order ID
   const orderId = `DGE${Math.floor(100000 + Math.random() * 900000)}`;
   
