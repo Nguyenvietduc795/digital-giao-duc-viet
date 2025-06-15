@@ -5,8 +5,10 @@ import '../styles/auth-pages.css';
 import { Eye, EyeOff } from 'lucide-react';
 
 const RegisterForm: React.FC = () => {
+    const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
+    const [gender, setGender] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +21,12 @@ const RegisterForm: React.FC = () => {
 
         if (password !== confirmPassword) {
             setMessage('Mật khẩu xác nhận không khớp.');
+            return;
+        }
+
+        // Basic validation for full name
+        if (!fullName.trim()) {
+            setMessage('Vui lòng nhập họ và tên.');
             return;
         }
 
@@ -42,7 +50,7 @@ const RegisterForm: React.FC = () => {
         }
 
         // Save user data
-        setUser({ email, phone, password });
+        setUser({ fullName, email, phone, gender, password });
         setMessage('Đăng ký thành công!');
         
         // Redirect to login page after successful registration
@@ -64,6 +72,16 @@ const RegisterForm: React.FC = () => {
             </div>
             <form onSubmit={handleSubmit}>
                 <input
+                    type="text"
+                    placeholder="Họ và tên"
+                    value={fullName}
+                    onChange={(e) => {
+                        setFullName(e.target.value);
+                        setMessage('');
+                    }}
+                    required
+                />
+                <input
                     type="email"
                     placeholder="Email"
                     value={email}
@@ -81,6 +99,20 @@ const RegisterForm: React.FC = () => {
                         setMessage('');
                     }}
                 />
+                <select
+                    value={gender}
+                    onChange={(e) => {
+                        setGender(e.target.value);
+                        setMessage('');
+                    }}
+                    className="input"
+                    title="Chọn giới tính"
+                >
+                    <option value="">Chọn giới tính</option>
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                    <option value="Khác">Khác</option>
+                </select>
                 <div className="password-wrapper">
                     <input
                         type={showPassword ? "text" : "password"}

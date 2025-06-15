@@ -19,6 +19,7 @@ const Profile = () => {
     name: "Nguyễn Văn A",
     email: "example@gmail.com",
     phone: "0123456789",
+    gender: "",
     password: "********"
   });
   const [passwords, setPasswords] = useState({
@@ -57,7 +58,7 @@ const Profile = () => {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setUserData(prev => ({ ...prev, [name]: value }));
   };
@@ -174,6 +175,22 @@ const Profile = () => {
                       value={userData.phone}
                       onChange={handleInputChange}
                     />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="gender">Giới tính</Label>
+                    <select
+                      id="gender"
+                      name="gender"
+                      value={userData.gender}
+                      onChange={handleInputChange}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      title="Giới tính"
+                    >
+                      <option value="">Chọn giới tính</option>
+                      <option value="Nam">Nam</option>
+                      <option value="Nữ">Nữ</option>
+                      <option value="Khác">Khác</option>
+                    </select>
                   </div>
                 </div>
               </TabsContent>

@@ -42,7 +42,7 @@ const Contact = () => {
             <div className="space-y-4">
               <div className="flex items-center gap-3"><Mail className="w-5 h-5 text-pink-400" /> <span>Email:</span> <a href="mailto:support@digitaleducation.vn" className="text-pink-500 hover:underline">support@digitaleducation.vn</a></div>
               <div className="flex items-center gap-3"><Phone className="w-5 h-5 text-pink-400" /> <span>Hotline:</span> <span className="text-pink-500">1900 1234</span></div>
-              <div className="flex items-center gap-3"><MapPin className="w-5 h-5 text-pink-400" /> <span>Địa chỉ:</span> <span>123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh</span></div>
+              <div className="flex items-center gap-3"><MapPin className="w-5 h-5 text-pink-400" /> <span>Địa chỉ:</span> <span>211 Nguyễn Văn Cừ, Phường An Bình, Quận Ninh Kiều, TP. Cần Thơ</span></div>
               <div className="flex items-center gap-3">
                 <Facebook className="w-5 h-5 text-pink-400" />
                 <a href="https://facebook.com/onlinehoc" target="_blank" rel="noopener noreferrer" className="text-pink-500 hover:underline">Facebook</a>
