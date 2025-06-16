@@ -4,6 +4,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { setUser } from '../utils/storage.tsx';
 import '../styles/auth-pages.css';
 import { Eye, EyeOff } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 const RegisterForm: React.FC = () => {
   const [fullName, setFullName] = useState('');
@@ -124,12 +126,23 @@ const RegisterForm: React.FC = () => {
         <input type="text" placeholder="Họ và tên" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <input type="tel" placeholder="Số điện thoại" value={phone} onChange={(e) => setPhone(e.target.value)} />
-        <select value={gender} onChange={(e) => setGender(e.target.value)} className="input" title="Chọn giới tính">
-          <option value="">Chọn giới tính</option>
-          <option value="Nam">Nam</option>
-          <option value="Nữ">Nữ</option>
-          <option value="Khác">Khác</option>
-        </select>
+        <div className="form-group">
+          <Label htmlFor="gender">Chọn giới tính</Label>
+          <RadioGroup value={gender} onValueChange={setGender} className="flex space-x-4 mt-2" id="gender">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="Nam" id="gender-male" />
+              <Label htmlFor="gender-male">Nam</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="Nữ" id="gender-female" />
+              <Label htmlFor="gender-female">Nữ</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="Khác" id="gender-other" />
+              <Label htmlFor="gender-other">Khác</Label>
+            </div>
+          </RadioGroup>
+        </div>
         <div className="password-wrapper">
           <input type={showPassword ? "text" : "password"} placeholder="Mật khẩu" value={password} onChange={(e) => setPassword(e.target.value)} required />
           <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#7266f0] transition" tabIndex={-1}>
