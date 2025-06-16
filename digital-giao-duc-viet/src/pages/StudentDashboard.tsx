@@ -424,33 +424,26 @@ const StudentDashboard: React.FC = () => {
                         {t('this_week')}
                       </div>
                       <div className="p-4">
-                        <div className="mb-6 last:mb-0">
-                          <div className="flex justify-between mb-2 items-center">
-                            <span className="font-medium">{t('basic_python_programming')}</span>
-                            <div className="flex items-center gap-2">
-                              <span className="text-pink-400 font-medium">{thisWeekSchedule[0]?.date || 'N/A'}</span>
-                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/9876543210', '_blank')}>{t('go_to_class')}</Button>
+                        {thisWeekSchedule.map((item, index) => {
+                          const course = allCourses.find(c => c.id === item.courseId);
+                          if (!course) return null; // Should not happen with valid courseIds
+
+                          return (
+                            <div key={index} className="mb-6 last:mb-0">
+                              <div className="flex justify-between mb-2 items-center">
+                                <span className="font-medium">{course.title}</span>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-pink-400 font-medium">{item.date}</span>
+                                  <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open(item.zoomLink, '_blank')}>{t('go_to_class')}</Button>
+                                </div>
+                              </div>
+                              <div className="flex justify-between text-sm text-gray-600">
+                                <div>{t('instructor')}: {course.teacher}</div>
+                                <div>{item.time}</div>
+                              </div>
                             </div>
-                          </div>
-                          <div className="flex justify-between text-sm text-gray-600">
-                            <div>{t('instructor')}: Thầy Nguyễn Văn A</div>
-                            <div>{thisWeekSchedule[0]?.time || 'N/A'}</div>
-                          </div>
-                        </div>
-                        
-                        <div className="mb-6 last:mb-0">
-                          <div className="flex justify-between mb-2 items-center">
-                            <span className="font-medium">{t('ielts_in_3_months')}</span>
-                            <div className="flex items-center gap-2">
-                              <span className="text-pink-400 font-medium">{thisWeekSchedule[1]?.date || 'N/A'}</span>
-                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/1234567890', '_blank')}>{t('go_to_class')}</Button>
-                            </div>
-                          </div>
-                          <div className="flex justify-between text-sm text-gray-600">
-                            <div>{t('instructor')}: Thầy Nguyễn Văn A</div>
-                            <div>{thisWeekSchedule[1]?.time || 'N/A'}</div>
-                          </div>
-                        </div>
+                          );
+                        })}
                       </div>
                     </div>
 
@@ -459,33 +452,26 @@ const StudentDashboard: React.FC = () => {
                         {t('next_week')}
                       </div>
                       <div className="p-4">
-                        <div className="mb-6 last:mb-0">
-                          <div className="flex justify-between mb-2 items-center">
-                            <span className="font-medium">{t('advanced_math_grade_12')}</span>
-                            <div className="flex items-center gap-2">
-                              <span className="text-pink-400 font-medium">{nextWeekSchedule[0]?.date || 'N/A'}</span>
-                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/9876543210', '_blank')}>{t('go_to_class')}</Button>
+                        {nextWeekSchedule.map((item, index) => {
+                          const course = allCourses.find(c => c.id === item.courseId);
+                          if (!course) return null; // Should not happen with valid courseIds
+
+                          return (
+                            <div key={index} className="mb-6 last:mb-0">
+                              <div className="flex justify-between mb-2 items-center">
+                                <span className="font-medium">{course.title}</span>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-pink-400 font-medium">{item.date}</span>
+                                  <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open(item.zoomLink, '_blank')}>{t('go_to_class')}</Button>
+                                </div>
+                              </div>
+                              <div className="flex justify-between text-sm text-gray-600">
+                                <div>{t('instructor')}: {course.teacher}</div>
+                                <div>{item.time}</div>
+                              </div>
                             </div>
-                          </div>
-                          <div className="flex justify-between text-sm text-gray-600">
-                            <div>{t('instructor')}: Thầy Nguyễn Văn A</div>
-                            <div>{nextWeekSchedule[0]?.time || 'N/A'}</div>
-                          </div>
-                        </div>
-                        
-                        <div className="mb-6 last:mb-0">
-                          <div className="flex justify-between mb-2 items-center">
-                            <span className="font-medium">{t('university_physics_prep')}</span>
-                            <div className="flex items-center gap-2">
-                              <span className="text-pink-400 font-medium">{nextWeekSchedule[1]?.date || 'N/A'}</span>
-                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/1234567890', '_blank')}>{t('go_to_class')}</Button>
-                            </div>
-                          </div>
-                          <div className="flex justify-between text-sm text-gray-600">
-                            <div>{t('instructor')}: Thầy Nguyễn Văn A</div>
-                            <div>{nextWeekSchedule[1]?.time || 'N/A'}</div>
-                          </div>
-                        </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
