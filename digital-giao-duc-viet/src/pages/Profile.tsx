@@ -30,7 +30,10 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       const { data: { user }, error } = await supabase.auth.getUser();
-      if (error || !user) return;
+      if (error || !user) {
+        toast({ title: "Lỗi", description: "Không thể tải hồ sơ", variant: "destructive" });
+        return;
+      }
 
       const { data: profile, error: fetchError } = await supabase
         .from("profiles")
@@ -55,7 +58,7 @@ const Profile = () => {
     };
 
     fetchProfile();
-  }, []);
+  }, [toast]);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

@@ -79,8 +79,12 @@ const RegisterForm: React.FC = () => {
           navigate("/login");
         }, 1500);
       }
-    } catch (err: any) {
-      setMessage("Lỗi không xác định: " + err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setMessage("Lỗi không xác định: " + err.message);
+      } else {
+        setMessage("Lỗi không xác định.");
+      }
     }
   };
 

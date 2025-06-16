@@ -50,8 +50,12 @@ const LoginForm: React.FC = () => {
 
         setTimeout(() => navigate('/'), 1500);
       }
-    } catch (error: any) {
-      setMessage("Có lỗi xảy ra: " + error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setMessage("Có lỗi xảy ra: " + error.message);
+      } else {
+        setMessage("Có lỗi xảy ra.");
+      }
     } finally {
       setIsLoading(false);
     }

@@ -41,8 +41,12 @@ const ForgotPasswordForm: React.FC = () => {
                     setMessage("Mã xác nhận đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư.");
                     setStep('enter_otp');
                 }
-            } catch (err: any) {
-                setMessage("Lỗi không xác định: " + err.message);
+            } catch (err: unknown) {
+                if (err instanceof Error) {
+                    setMessage("Lỗi không xác định: " + err.message);
+                } else {
+                    setMessage("Lỗi không xác định.");
+                }
             }
         } else if (step === 'enter_otp') {
             // Bước 2: Xác nhận mã OTP và đặt lại mật khẩu
@@ -84,8 +88,12 @@ const ForgotPasswordForm: React.FC = () => {
                         navigate('/login');
                     }, 2000);
                 }
-            } catch (err: any) {
-                setMessage("Lỗi không xác định: " + err.message);
+            } catch (err: unknown) {
+                if (err instanceof Error) {
+                    setMessage("Lỗi không xác định: " + err.message);
+                } else {
+                    setMessage("Lỗi không xác định.");
+                }
             }
         }
     };
