@@ -1,7 +1,10 @@
 import React from 'react';
 import { Info, Target, GraduationCap, Rocket, Users, Award, Heart } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 const About = () => {
+  const { t } = useLanguage();
+
   return (
     <div className="relative flex justify-center items-start min-h-[calc(100vh-80px)] py-8 bg-gradient-to-br from-[#fddde6] via-[#fbeff4] to-[#f8c6d8] overflow-hidden">
       {/* Nền trang trí */}
@@ -23,59 +26,58 @@ const About = () => {
           {/* Tiêu đề */}
           <div className="flex items-center justify-center mb-4">
             <Info className="w-8 h-8 text-pink-400 mr-2" />
-            <h1 className="text-3xl font-bold text-center text-pink-500">Về Chúng Tôi - Digital Education</h1>
+            <h1 className="text-3xl font-bold text-center text-pink-500">{t('about_us_digital_education')}</h1>
           </div>
           <p className="text-xl text-gray-700 text-center mb-6">
-            Trong một thế giới đang chuyển mình mạnh mẽ bởi công nghệ, <strong className="text-pink-500">giáo dục không còn là đặc quyền, mà là quyền lợi của tất cả mọi người</strong>.
+            {t('world_changing_by_tech_education_right')}
           </p>
           {/* Vision Section */}
           <div className="mb-8">
             <p className="text-lg text-gray-600 mb-6 text-center">
-              Chúng tôi tin rằng <em className="text-pink-500 font-medium">"mỗi cá nhân đều có tiềm năng vươn xa nếu được tiếp cận đúng tri thức, đúng phương pháp và đúng thời điểm"</em>.<br/>
-              Digital Education không chỉ đơn thuần là một nền tảng học trực tuyến, mà là một hệ sinh thái giáo dục toàn diện – nơi mọi người có thể học hỏi, kết nối và phát triển bền vững.
+              {t('vision_statement_part1')} <em className="text-pink-500 font-medium">{t('vision_statement_quote')}</em>.<br/>
+              {t('vision_statement_part2')}
             </p>
           </div>
           {/* Mission Section */}
           <div className="mb-12">
             <div className="flex items-center justify-center mb-4">
               <Target className="w-7 h-7 text-pink-400 mr-2" />
-              <h2 className="text-2xl font-bold text-gray-900">Sứ Mệnh Của Chúng Tôi</h2>
+              <h2 className="text-2xl font-bold text-gray-900">{t('our_mission')}</h2>
             </div>
             <div className="bg-white/80 rounded-2xl shadow p-6 mb-4">
               <p className="text-lg text-gray-600 text-center">
-                Sứ mệnh của chúng tôi là <strong className="text-pink-500">"Mang lại cơ hội học tập chất lượng cao cho mọi người, không phân biệt độ tuổi, nghề nghiệp hay nơi sinh sống"</strong>.<br/>
-                Dù bạn là học sinh, sinh viên, người đi làm hay người đang tìm hướng đi mới, Digital Education đều có thể trở thành người bạn đồng hành đáng tin cậy trong hành trình học tập của bạn.
+                {t('mission_statement_part1')} <strong className="text-pink-500">{t('mission_statement_quote')}</strong>.<br/>
+                {t('mission_statement_part2')}
               </p>
             </div>
           </div>
           {/* Features Grid */}
-          <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">Chúng Tôi Có Gì Đặc Biệt?</h2>
+          <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">{t('what_makes_us_special')}</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             <FeatureCard 
               icon={<GraduationCap className="w-6 h-6" />} 
-              title="500+ Khóa Học Chất Lượng" 
-              description="Được thiết kế bởi các chuyên gia đầu ngành, từ cơ bản đến nâng cao" 
+              title={t('feature_courses_title')} 
+              description={t('feature_courses_desc')} 
             />
             <FeatureCard 
               icon={<Rocket className="w-6 h-6" />} 
-              title="Nội Dung Cập Nhật" 
-              description="Bám sát xu hướng thực tiễn và nhu cầu thị trường" 
+              title={t('feature_content_title')} 
+              description={t('feature_content_desc')} 
             />
             <FeatureCard 
               icon={<Users className="w-6 h-6" />} 
-              title="Cộng Đồng Học Tập" 
-              description="Diễn đàn trao đổi, hỏi đáp và chia sẻ kinh nghiệm" 
+              title={t('feature_community_title')} 
+              description={t('feature_community_desc')} 
             />
           </div>
           {/* Development Journey */}
           <div className="mb-12">
             <div className="flex items-center justify-center mb-4">
               <Award className="w-7 h-7 text-pink-400 mr-2" />
-              <h2 className="text-2xl font-bold text-gray-900">Hành Trình Phát Triển</h2>
+              <h2 className="text-2xl font-bold text-gray-900">{t('development_journey_title')}</h2>
             </div>
             <p className="text-lg text-gray-600 text-center">
-              Bắt đầu từ một nhóm những người yêu giáo dục và công nghệ, chúng tôi đã không ngừng nỗ lực để xây dựng một nền tảng học tập uy tín.<br/>
-              Tính đến nay, Digital Education đã thu hút được hơn <strong className="text-pink-500">10.000 học viên</strong> trên toàn quốc và đang mở rộng ra thị trường quốc tế.
+              {t('development_journey_desc_part1')} <strong className="text-pink-500">{t('development_journey_desc_highlight')}</strong> {t('development_journey_desc_part2')}.
             </p>
           </div>
           {/* Call to Action */}
@@ -83,12 +85,12 @@ const About = () => {
             <div className="flex items-center justify-center mb-4">
               <Heart className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-2xl font-bold mb-2">Hãy Gia Nhập Cộng Đồng Học Tập Của Chúng Tôi!</h2>
+            <h2 className="text-2xl font-bold mb-2">{t('join_our_community_title')}</h2>
             <p className="text-lg text-pink-100 max-w-2xl mx-auto mb-4">
-              Nếu bạn đang tìm kiếm một nơi để nâng cao kiến thức, phát triển kỹ năng và chạm đến những ước mơ nghề nghiệp – thì bạn đã tìm đúng địa chỉ.
+              {t('join_our_community_desc')}
             </p>
             <p className="text-xl font-semibold">
-              Digital Education – Học tập không giới hạn, phát triển không ngừng.
+              {t('digital_education_slogan')}
             </p>
           </div>
           {/* Hiệu ứng gợn sóng phía dưới card */}
