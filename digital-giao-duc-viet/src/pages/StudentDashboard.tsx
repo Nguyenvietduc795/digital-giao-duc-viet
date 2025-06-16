@@ -36,6 +36,7 @@ const StudentDashboard: React.FC = () => {
   const [now, setNow] = useState(new Date());
   const { paidCourses } = usePaidCourses();
   const [detailCourse, setDetailCourse] = useState<any>(null);
+  const [showAllRegisteredCourses, setShowAllRegisteredCourses] = useState(false);
 
   const courseProgress = 30; // 30% progress
   const studentName = "Nguyễn Văn A";
@@ -183,10 +184,21 @@ const StudentDashboard: React.FC = () => {
             <div className="p-6">
               {activeTab === TabType.Registered && (
                 <div>
-                  <h2 className="text-xl font-bold mb-4">Khóa học đã đăng kí</h2>
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-bold">Lớp học của tôi</h2>
+                    {paidCourses.length > 3 && (
+                      <Button
+                        variant="ghost"
+                        onClick={() => setShowAllRegisteredCourses(!showAllRegisteredCourses)}
+                        className="text-primary hover:bg-primary/10"
+                      >
+                        {showAllRegisteredCourses ? "Thu gọn" : "Xem tất cả lớp học"}
+                      </Button>
+                    )}
+                  </div>
                   {paidCourses.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                      {paidCourses.map(courseId => {
+                      {(showAllRegisteredCourses ? paidCourses : paidCourses.slice(0, 3)).map(courseId => {
                         const course = allCourses.find(c => c.id === courseId);
                         return course ? <CourseCard key={course.id} course={course} isPaid={true} /> : null;
                       })}

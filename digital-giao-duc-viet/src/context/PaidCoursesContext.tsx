@@ -8,7 +8,7 @@ interface PaidCoursesContextType {
 const PaidCoursesContext = createContext<PaidCoursesContextType | undefined>(undefined);
 
 export const PaidCoursesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [paidCourses, setPaidCourses] = useState<number[]>([]);
+  const [paidCourses, setPaidCourses] = useState<number[]>([1, 2, 3, 4, 5]);
 
   const addPaidCourse = (courseId: number) => {
     setPaidCourses((prevCourses) => {
