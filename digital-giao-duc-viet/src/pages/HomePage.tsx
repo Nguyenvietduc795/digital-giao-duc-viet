@@ -27,35 +27,35 @@ const HomePage: React.FC = () => {
         {/* Hero Section (formerly Featured Courses Carousel) */}
         <section className="relative pt-0 pb-8 md:pb-16">
           <div className="w-full px-0 relative flex justify-center">
-            <div className="relative w-full rounded-2xl overflow-hidden shadow-lg min-h-[1300px] flex items-center justify-start" style={{ width: "100vw", maxWidth: "100vw" }}>
-              <div id="carousel-images" className="w-full h-[1240px] rounded-3xl overflow-hidden shadow-2xl bg-white flex items-center justify-center relative">
+            <div className="relative w-full rounded-2xl overflow-hidden shadow-lg min-h-[800px] flex items-center justify-start" style={{ width: "100vw", maxWidth: "100vw" }}>
+              <div id="carousel-images" className="w-full h-[740px] rounded-3xl overflow-hidden shadow-2xl bg-white flex items-center justify-center relative">
                 <img
                   src={sliderImages[sliderIdx]}
                   alt={`slide ${sliderIdx + 1}`}
                   className="w-full h-full object-cover transition-all duration-500"
                   draggable={false}
                 />
-                {sliderIdx === 0 && (
-                  <div className="absolute bottom-80 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
-                    IELTS 6.0+ trong 3 tháng
-                  </div>
-                )}
-                {sliderIdx === 1 && (
-                  <div className="absolute bottom-80 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
-                    TOEIC 750+ trong 2 tháng
-                  </div>
-                )}
-                {sliderIdx === 2 && (
-                  <div className="absolute bottom-80 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
-                    Lập trình Python cơ bản
-                  </div>
-                )}
-                <div className="absolute bottom-40 left-1/2 -translate-x-1/2 z-20">
+                <div className="absolute bottom-260 left-1/2 -translate-x-1/2 z-20">
                   <Button asChild size="lg" className="bg-yellow-300 text-black hover:bg-yellow-400">
                     <Link to="/dang-ky">Đăng kí học ngay</Link>
                   </Button>
                 </div>
-                <div className="flex items-center justify-center gap-4 absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+                {sliderIdx === 0 && (
+                  <div className="absolute bottom-100 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
+                    IELTS 6.0+ trong 3 tháng
+                  </div>
+                )}
+                {sliderIdx === 1 && (
+                  <div className="absolute bottom-100 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
+                    TOEIC 750+ trong 2 tháng
+                  </div>
+                )}
+                {sliderIdx === 2 && (
+                  <div className="absolute bottom-100 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
+                    Lập trình Python cơ bản
+                  </div>
+                )}
+                <div className="flex items-center justify-center gap-4 absolute bottom-20 left-1/2 -translate-x-1/2 z-20">
                   {sliderImages.map((_, idx) => (
                     <button
                       key={idx}

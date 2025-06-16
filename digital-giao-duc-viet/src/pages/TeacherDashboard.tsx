@@ -9,6 +9,7 @@ interface ClassItem {
   schedule: string;
   students: number;
   progress: number;
+  joinLink: string;
 }
 
 interface Student {
@@ -90,30 +91,78 @@ const TeacherDashboard: React.FC = () => {
   const [showAllClasses, setShowAllClasses] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [editingClassLink, setEditingClassLink] = useState<string>('');
 
-  const classes: ClassItem[] = [
+  const [classes, setClasses] = useState<ClassItem[]>([
     {
       id: 1,
       name: "Lập trình Python cơ bản - Lớp A",
       schedule: "Thứ 3, Thứ 5 (19:00 - 21:00)",
       students: 20,
-      progress: 30
+      progress: 30,
+      joinLink: "https://meet.google.com/abc-defg-hij"
     },
     {
       id: 2,
       name: "TOEIC 750+ - Lớp B",
       schedule: "Thứ 2, Thứ 4, Thứ 6 (18:00 - 19:30)",
       students: 25,
-      progress: 45
+      progress: 45,
+      joinLink: "https://zoom.us/j/1234567890"
     },
     {
       id: 3,
       name: "Thiết kế web với HTML, CSS và JavaScript - Lớp C",
       schedule: "Thứ 7, Chủ nhật (9:00 - 12:00)",
       students: 15,
-      progress: 60
+      progress: 60,
+      joinLink: "https://teams.microsoft.com/l/meetup/"
+    },
+    {
+      id: 4,
+      name: "Phân tích dữ liệu với Excel - Lớp D",
+      schedule: "Thứ 2, Thứ 6 (9:00 - 11:00)",
+      students: 18,
+      progress: 75,
+      joinLink: "https://zoom.us/j/1234567890"
+    },
+    {
+      id: 5,
+      name: "Marketing số cơ bản - Lớp E",
+      schedule: "Thứ 4, Chủ nhật (14:00 - 16:00)",
+      students: 22,
+      progress: 50,
+      joinLink: "https://teams.microsoft.com/l/meetup/"
+    },
+    {
+      id: 6,
+      name: "Kế toán doanh nghiệp - Lớp F",
+      schedule: "Thứ 3, Thứ 7 (17:00 - 19:00)",
+      students: 17,
+      progress: 85,
+      joinLink: "https://jitsi.org/meet/ketoan-doanhnghiep"
     }
-  ];
+  ]);
+
+  const displayedClasses = showAllClasses ? classes : classes.slice(0, 3);
+
+  useEffect(() => {
+    if (detailClass) {
+      setEditingClassLink(detailClass.joinLink);
+    }
+  }, [detailClass]);
+
+  const handleSaveClassLink = () => {
+    if (detailClass) {
+      setClasses(prevClasses =>
+        prevClasses.map(cls =>
+          cls.id === detailClass.id ? { ...cls, joinLink: editingClassLink } : cls
+        )
+      );
+      setDetailClass(null);
+      toast.success("Đã cập nhật link lớp học!");
+    }
+  };
 
   const deleteAssignment = (id: number) => {
     setAssignments(assignments.filter(assignment => assignment.id !== id));
@@ -121,7 +170,12 @@ const TeacherDashboard: React.FC = () => {
   };
 
   const sendZoomLink = (classId: number) => {
-    toast.success("Đã gửi link Zoom cho lớp học!");
+    const classToSend = classes.find(cls => cls.id === classId);
+    if (classToSend) {
+      toast.success(`Đã gửi link Zoom cho lớp học "${classToSend.name}": ${classToSend.joinLink}. (Giả lập: Đã gửi đến ${classToSend.students} học viên)`);
+    } else {
+      toast.error("Không tìm thấy lớp học này!");
+    }
   };
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -199,13 +253,15 @@ const TeacherDashboard: React.FC = () => {
           <div className="p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold">Lớp học của tôi</h2>
-              <Button variant="outline" onClick={() => setShowAllClasses(true)}>
-                Xem tất cả lớp học
-              </Button>
+              {!showAllClasses && (
+                <Button variant="outline" onClick={() => setShowAllClasses(true)}>
+                  Xem tất cả lớp học
+                </Button>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {classes.map((classItem) => (
+              {displayedClasses.map((classItem) => (
                 <div key={classItem.id} className="border rounded-lg overflow-hidden">
                   <div className="p-6">
                     <h3 className="font-bold text-lg mb-2">{classItem.name}</h3>
@@ -250,6 +306,7 @@ const TeacherDashboard: React.FC = () => {
                         size="sm" 
                         className="flex-1"
                         onClick={() => sendZoomLink(classItem.id)}
+                        title="Gửi Zoom"
                       >
                         Gửi Zoom
                       </Button>
@@ -278,64 +335,139 @@ const TeacherDashboard: React.FC = () => {
                   <h3 className="text-xl font-bold mb-4">Tạo bài tập mới</h3>
                   <form onSubmit={handleFormSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-1">Tiêu đề</label>
-                      <input type="text" name="title" className="w-full border rounded p-2" value={assignmentForm.title} onChange={handleFormChange} />
+                      <label htmlFor="assignmentTitle" className="block text-sm font-medium text-gray-700 mb-1">Tiêu đề bài tập</label>
+                      <input
+                        type="text"
+                        id="assignmentTitle"
+                        name="title"
+                        value={assignmentForm.title}
+                        onChange={handleFormChange}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        placeholder="Nhập tiêu đề bài tập"
+                        title="Tiêu đề bài tập"
+                      />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1">Lớp học</label>
-                      <input type="text" name="class" className="w-full border rounded p-2" value={assignmentForm.class} onChange={handleFormChange} />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Loại bài tập</label>
-                      <select name="type" className="w-full border rounded p-2" value={assignmentForm.type} onChange={handleFormChange}>
-                        <option value="">-- Chọn loại --</option>
-                        <option value="Tự luận">Tự luận</option>
-                        <option value="Trắc nghiệm">Trắc nghiệm</option>
-                        <option value="Bài tập nhóm">Bài tập nhóm</option>
+                      <label htmlFor="assignmentClass" className="block text-sm font-medium text-gray-700 mb-1">Lớp học</label>
+                      <select
+                        id="assignmentClass"
+                        name="class"
+                        value={assignmentForm.class}
+                        onChange={handleFormChange}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        title="Chọn lớp học"
+                      >
+                        <option value="">Chọn lớp học</option>
+                        {classes.map(cls => (
+                          <option key={cls.id} value={cls.name}>{cls.name}</option>
+                        ))}
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1">Mô tả</label>
-                      <textarea name="description" className="w-full border rounded p-2" value={assignmentForm.description} onChange={handleFormChange} rows={3} />
+                      <label htmlFor="assignmentType" className="block text-sm font-medium text-gray-700 mb-1">Loại bài tập</label>
+                      <select
+                        id="assignmentType"
+                        name="type"
+                        value={assignmentForm.type}
+                        onChange={handleFormChange}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        title="Chọn loại bài tập"
+                      >
+                        <option value="">Chọn loại</option>
+                        <option value="Tự luận">Tự luận</option>
+                        <option value="Trắc nghiệm">Trắc nghiệm</option>
+                      </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1">Hạn nộp</label>
-                      <input type="date" name="deadline" className="w-full border rounded p-2" value={assignmentForm.deadline} onChange={handleFormChange} />
+                      <label htmlFor="assignmentDescription" className="block text-sm font-medium text-gray-700 mb-1">Mô tả (tùy chọn)</label>
+                      <textarea
+                        id="assignmentDescription"
+                        name="description"
+                        value={assignmentForm.description}
+                        onChange={handleFormChange}
+                        rows={3}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        placeholder="Mô tả chi tiết bài tập..."
+                        title="Mô tả bài tập"
+                      ></textarea>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1">Đính kèm file (PDF, DOCX, ZIP)</label>
-                      <div className="flex items-center gap-3">
-                        <button
-                          type="button"
-                          className="bg-pink-300 text-pink-900 font-semibold rounded px-4 py-2 border border-pink-400 hover:bg-pink-400 transition"
-                          onClick={() => fileInputRef.current && fileInputRef.current.click()}
-                        >
-                          Chọn tệp
-                        </button>
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          name="attachment"
-                          className="hidden"
-                          accept=".pdf,.doc,.docx,.zip"
-                          multiple
-                          onChange={handleFileChange}
-                        />
-                        {uploadedFiles.length > 0 && (
-                          <ul className="text-sm text-gray-700">
-                            {uploadedFiles.map((file, idx) => (
-                              <li key={idx} className="flex items-center gap-2">
-                                <span>{file.name}</span>
-                                <button type="button" className="text-red-500 hover:underline" onClick={() => setUploadedFiles(uploadedFiles.filter((_, i) => i !== idx))}>Xóa</button>
-                              </li>
+                      <label htmlFor="assignmentDeadline" className="block text-sm font-medium text-gray-700 mb-1">Hạn nộp</label>
+                      <input
+                        type="date"
+                        id="assignmentDeadline"
+                        name="deadline"
+                        value={assignmentForm.deadline}
+                        onChange={handleFormChange}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        title="Hạn nộp bài tập"
+                      />
+                    </div>
+                    {/* File Upload Section */}
+                    <div className="mb-4">
+                      <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700 mb-1">Tệp đính kèm (tùy chọn)</label>
+                      <div
+                        className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          const files = Array.from(e.dataTransfer.files);
+                          const allowedTypes = [
+                            'application/pdf',
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                            'application/msword',
+                            'application/zip',
+                            'application/x-zip-compressed',
+                            'multipart/x-zip',
+                            'application/x-compressed',
+                          ];
+                          const filesArr = files.filter(f => allowedTypes.includes(f.type) || f.name.endsWith('.zip'));
+                          setUploadedFiles(filesArr);
+                        }}
+                      >
+                        <div className="space-y-1 text-center">
+                          <svg
+                            className="mx-auto h-12 w-12 text-gray-400"
+                            stroke="currentColor"
+                            fill="none"
+                            viewBox="0 0 48 48"
+                            aria-hidden="true"
+                          >
+                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L40 32" />
+                          </svg>
+                          <div className="flex text-sm text-gray-600">
+                            <label
+                              htmlFor="file-upload"
+                              className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                            >
+                              <span>Tải lên tệp</span>
+                              <input id="file-upload" name="file-upload" type="file" className="sr-only" multiple onChange={handleFileChange} ref={fileInputRef} title="Tải lên tệp" />
+                            </label>
+                            <p className="pl-1">hoặc kéo và thả</p>
+                          </div>
+                          <p className="text-xs text-gray-500">
+                            PDF, DOCX, ZIP (tối đa 10MB)
+                          </p>
+                        </div>
+                      </div>
+                      {uploadedFiles.length > 0 && (
+                        <div className="mt-4">
+                          <p className="text-sm font-medium text-gray-700">Tệp đã chọn:</p>
+                          <ul className="mt-2 text-sm text-gray-600">
+                            {uploadedFiles.map((file, index) => (
+                              <li key={index}>{file.name}</li>
                             ))}
                           </ul>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
-                    <div className="flex justify-end space-x-2">
-                      <Button type="button" variant="outline" onClick={() => { setShowCreateModal(false); setUploadedFiles([]); }}>Hủy</Button>
-                      <Button type="submit">Gửi bài tập</Button>
+                    <div className="flex justify-end space-x-2 mt-6">
+                      <Button variant="outline" onClick={() => setShowCreateModal(false)} title="Hủy tạo bài tập">Hủy</Button>
+                      <Button type="submit" title="Tạo bài tập mới">Tạo bài tập</Button>
                     </div>
                   </form>
                 </div>
@@ -378,6 +510,7 @@ const TeacherDashboard: React.FC = () => {
                           <button 
                             className="text-red-600 hover:text-red-800"
                             onClick={() => deleteAssignment(assignment.id)}
+                            title="Xóa bài tập"
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <polyline points="3 6 5 6 21 6"></polyline>
@@ -396,6 +529,72 @@ const TeacherDashboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Class Detail Modal */}
+      {detailClass && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-6">
+            <h2 className="text-xl font-bold mb-4">Chi tiết lớp học: {detailClass.name}</h2>
+            <p className="mb-2">Lịch học: {detailClass.schedule}</p>
+            <p className="mb-2">Số học viên: {detailClass.students}</p>
+            <p className="mb-4">Tiến độ: {detailClass.progress}%</p>
+
+            <div className="mb-4">
+              <label htmlFor="joinLinkInput" className="block text-sm font-medium text-gray-700 mb-1">Link vào học</label>
+              <input
+                type="text"
+                id="joinLinkInput"
+                value={editingClassLink}
+                onChange={(e) => setEditingClassLink(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Nhập link vào học"
+                title="Link vào học của lớp học"
+              />
+            </div>
+
+            <div className="flex justify-end space-x-2">
+              <Button asChild className="bg-green-500 text-white hover:bg-green-600">
+                <Link to={detailClass.joinLink} target="_blank" rel="noopener noreferrer">Vào học</Link>
+              </Button>
+              <Button onClick={handleSaveClassLink} className="bg-blue-500 text-white hover:bg-blue-600" title="Lưu link lớp học">Lưu</Button>
+              <Button onClick={() => setDetailClass(null)} title="Đóng chi tiết lớp học">Đóng</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Assignment Detail Modal */}
+      {detailAssignment && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-6">
+            <h2 className="text-xl font-bold mb-4">Chi tiết bài tập: {detailAssignment.title}</h2>
+            <p className="mb-2">Khóa học: {detailAssignment.course}</p>
+            <p className="mb-2">Loại: {detailAssignment.type}</p>
+            <p className="mb-2">Hạn nộp: {detailAssignment.dueDate}</p>
+            <p className="mb-4">Mô tả: {detailAssignment.description}</p>
+            <h3 className="text-lg font-bold mb-2">Danh sách nộp bài ({detailAssignment.submissions}/{detailAssignment.totalStudents})</h3>
+            {detailAssignment.students && detailAssignment.students.length > 0 ? (
+              <ul className="list-disc pl-5 mb-4 max-h-40 overflow-y-auto">
+                {detailAssignment.students.map(student => (
+                  <li key={student.id} className="flex justify-between items-center">
+                    <span>{student.name}</span>
+                    {student.submitted ? (
+                      <span className="text-green-600">Đã nộp</span>
+                    ) : (
+                      <span className="text-red-600">Chưa nộp</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-600 mb-4">Chưa có sinh viên nào nộp bài.</p>
+            )}
+            <div className="flex justify-end space-x-2">
+              <Button onClick={() => setDetailAssignment(null)} title="Đóng chi tiết bài tập">Đóng</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
