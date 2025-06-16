@@ -4,12 +4,26 @@ import { Button } from '@/components/ui/button';
 import { usePaidCourses } from '@/context/PaidCoursesContext';
 import { courses as allCourses } from '@/data/courseData';
 import CourseCard from '@/components/CourseCard';
+import { toast } from 'sonner';
+import { supabase } from "@/lib/supabase";
 
 enum TabType {
   Registered = 'registered',
   Documents = 'documents',
   Assignments = 'assignments',
   Schedule = 'schedule'
+}
+
+interface ClassItem {
+  description: string;
+}
+
+interface DocumentItem {
+  id: number;
+  name: string;
+  type: string;
+  size: string;
+  url: string;
 }
 
 const StudentDashboard: React.FC = () => {
@@ -21,10 +35,60 @@ const StudentDashboard: React.FC = () => {
   const [uploadFiles, setUploadFiles] = useState<File[]>([]);
   const [now, setNow] = useState(new Date());
   const { paidCourses } = usePaidCourses();
+  const [detailCourse, setDetailCourse] = useState<any>(null);
 
   const courseProgress = 30; // 30% progress
   const studentName = "Nguyễn Văn A";
   const courseTitle = "Lập trình Python cơ bản";
+
+  const [documents, setDocuments] = useState<DocumentItem[]>([
+    {
+      id: 1,
+      name: "Giới thiệu về Python",
+      type: "PDF",
+      size: "2.3 MB",
+      url: "/files/gioi_thieu_python.pdf", // Placeholder URL - replace with actual path or Supabase URL
+    },
+    {
+      id: 2,
+      name: "Cú pháp cơ bản trong Python",
+      type: "PDF",
+      size: "4.1 MB",
+      url: "/files/cu_phap_co_ban_python.pdf", // Placeholder URL
+    },
+    {
+      id: 3,
+      name: "Hướng dẫn cài đặt Python",
+      type: "Video",
+      size: "10:23",
+      url: "https://www.youtube.com/embed/your_video_id", // Example YouTube embed or direct video URL
+    },
+    {
+      id: 4,
+      name: "Bài tập thực hành tuần 1",
+      type: "ZIP",
+      size: "1.7 MB",
+      url: "/files/bai_tap_tuan_1.zip", // Placeholder URL
+    },
+  ]);
+
+  const handleDownload = (url: string, fileName: string) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName; 
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success(`Đang tải xuống: ${fileName}`);
+  };
+
+  const handleView = (url: string, type: string) => {
+    if (type === "Video" || type === "PDF") {
+      window.open(url, '_blank'); // Open in new tab
+    } else {
+      toast.error("Không thể xem trực tiếp loại tệp này. Vui lòng tải xuống.");
+    }
+  };
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);
@@ -145,97 +209,36 @@ const StudentDashboard: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-bold mb-4">Tài liệu khóa học</h2>
                   <div className="space-y-4">
-                    <div className="border rounded-lg p-4">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center">
-                          <div className="bg-pink-100 p-2 rounded mr-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                              <polyline points="14 2 14 8 20 8"></polyline>
-                              <line x1="16" y1="13" x2="8" y2="13"></line>
-                              <line x1="16" y1="17" x2="8" y2="17"></line>
-                              <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
+                    {documents.map((doc) => (
+                      <div key={doc.id} className="border rounded-lg p-4">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center">
+                            <div className="bg-pink-100 p-2 rounded mr-3">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                              </svg>
+                            </div>
+                            <div>
+                              <h3 className="font-medium">{doc.name}</h3>
+                              <p className="text-sm text-gray-600">{doc.type} • {doc.size}</p>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="font-medium">Giới thiệu về Python</h3>
-                            <p className="text-sm text-gray-600">PDF • 2.3 MB</p>
-                          </div>
+                          {doc.type === "Video" ? (
+                            <Button variant="outline" size="sm" onClick={() => handleView(doc.url, doc.type)}>
+                              Xem
+                            </Button>
+                          ) : (
+                            <Button variant="outline" size="sm" onClick={() => handleDownload(doc.url, doc.name)}>
+                              Tải xuống
+                            </Button>
+                          )}
                         </div>
-                        <Button variant="outline" size="sm">
-                          Tải xuống
-                        </Button>
                       </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center">
-                          <div className="bg-pink-100 p-2 rounded mr-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                              <polyline points="14 2 14 8 20 8"></polyline>
-                              <line x1="16" y1="13" x2="8" y2="13"></line>
-                              <line x1="16" y1="17" x2="8" y2="17"></line>
-                              <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                          </div>
-                          <div>
-                            <h3 className="font-medium">Cú pháp cơ bản trong Python</h3>
-                            <p className="text-sm text-gray-600">PDF • 4.1 MB</p>
-                          </div>
-                        </div>
-                        <Button variant="outline" size="sm">
-                          Tải xuống
-                        </Button>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center">
-                          <div className="bg-pink-100 p-2 rounded mr-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                              <polyline points="14 2 14 8 20 8"></polyline>
-                              <line x1="16" y1="13" x2="8" y2="13"></line>
-                              <line x1="16" y1="17" x2="8" y2="17"></line>
-                              <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                          </div>
-                          <div>
-                            <h3 className="font-medium">Hướng dẫn cài đặt Python</h3>
-                            <p className="text-sm text-gray-600">Video • 10:23</p>
-                          </div>
-                        </div>
-                        <Button variant="outline" size="sm">
-                          Xem
-                        </Button>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center">
-                          <div className="bg-pink-100 p-2 rounded mr-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                              <polyline points="14 2 14 8 20 8"></polyline>
-                              <line x1="16" y1="13" x2="8" y2="13"></line>
-                              <line x1="16" y1="17" x2="8" y2="17"></line>
-                              <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                          </div>
-                          <div>
-                            <h3 className="font-medium">Bài tập thực hành tuần 1</h3>
-                            <p className="text-sm text-gray-600">ZIP • 1.7 MB</p>
-                          </div>
-                        </div>
-                        <Button variant="outline" size="sm">
-                          Tải xuống
-                        </Button>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               )}

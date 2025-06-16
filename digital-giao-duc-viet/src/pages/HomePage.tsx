@@ -62,26 +62,6 @@ const HomePage: React.FC = () => {
                   ))}
                 </div>
               </div>
-              <div className="absolute top-1/2 left-0 -translate-y-1/2 z-20">
-                <button
-                  onClick={() => setSliderIdx((sliderIdx - 1 + sliderImages.length) % sliderImages.length)}
-                  className="bg-white/90 hover:bg-white rounded-full shadow-xl p-4 text-2xl"
-                  aria-label="Trước"
-                  style={{ minWidth: 56, minHeight: 56 }}
-                >
-                  &#8592;
-                </button>
-              </div>
-              <div className="absolute top-1/2 right-0 -translate-y-1/2 z-20">
-                <button
-                  onClick={() => setSliderIdx((sliderIdx + 1) % sliderImages.length)}
-                  className="bg-white/90 hover:bg-white rounded-full shadow-xl p-4 text-2xl"
-                  aria-label="Sau"
-                  style={{ minWidth: 56, minHeight: 56 }}
-                >
-                  &#8594;
-                </button>
-              </div>
             </div>
           </div>
         </section>
