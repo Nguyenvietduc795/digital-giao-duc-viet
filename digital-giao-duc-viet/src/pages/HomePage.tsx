@@ -28,30 +28,25 @@ const HomePage: React.FC = () => {
         <section className="relative pt-0 pb-8 md:pb-16">
           <div className="w-full px-0 relative flex justify-center">
             <div className="relative w-full rounded-2xl overflow-hidden shadow-lg min-h-[800px] flex items-center justify-start" style={{ width: "100vw", maxWidth: "100vw" }}>
-              <div id="carousel-images" className="w-full h-[740px] rounded-3xl overflow-hidden shadow-2xl bg-white flex items-center justify-center relative">
+              <div id="carousel-images" className="w-full h-[650px] rounded-3xl overflow-hidden shadow-2xl bg-white flex items-center justify-center relative">
                 <img
                   src={sliderImages[sliderIdx]}
                   alt={`slide ${sliderIdx + 1}`}
                   className="w-full h-full object-cover transition-all duration-500"
                   draggable={false}
                 />
-                <div className="absolute bottom-260 left-1/2 -translate-x-1/2 z-20">
-                  <Button asChild size="lg" className="bg-yellow-300 text-black hover:bg-yellow-400">
-                    <Link to="/dang-ky">Đăng kí học ngay</Link>
-                  </Button>
-                </div>
                 {sliderIdx === 0 && (
-                  <div className="absolute bottom-100 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
+                  <div className="absolute bottom-40 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
                     IELTS 6.0+ trong 3 tháng
                   </div>
                 )}
                 {sliderIdx === 1 && (
-                  <div className="absolute bottom-100 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
+                  <div className="absolute bottom-40 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
                     TOEIC 750+ trong 2 tháng
                   </div>
                 )}
                 {sliderIdx === 2 && (
-                  <div className="absolute bottom-100 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
+                  <div className="absolute bottom-40 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
                     Lập trình Python cơ bản
                   </div>
                 )}
@@ -92,7 +87,7 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* Courses Categories */}
-        <section className="py-16 bg-gray-50">
+        <section className="pt-8 pb-16 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Khám phá lĩnh vực yêu thích</h2>
             

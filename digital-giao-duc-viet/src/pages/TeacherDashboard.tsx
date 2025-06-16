@@ -178,6 +178,13 @@ const TeacherDashboard: React.FC = () => {
     }
   };
 
+  // Hàm tiện ích để định dạng ngày sang DD/MM/YYYY
+  const formatDateToDDMMYYYY = (dateString: string) => {
+    if (!dateString) return '';
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
+  };
+
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setAssignmentForm(prev => ({ ...prev, [name]: value }));
@@ -210,7 +217,7 @@ const TeacherDashboard: React.FC = () => {
       id: Date.now(),
       title: assignmentForm.title,
       course: assignmentForm.class,
-      dueDate: assignmentForm.deadline,
+      dueDate: formatDateToDDMMYYYY(assignmentForm.deadline),
       submissions: 0,
       totalStudents: 0,
       type: assignmentForm.type,
