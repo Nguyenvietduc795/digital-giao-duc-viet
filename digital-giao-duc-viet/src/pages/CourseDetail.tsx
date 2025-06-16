@@ -133,61 +133,21 @@ const CourseDetail: React.FC = () => {
                     <div>
                       <h2 className="text-xl font-bold mb-4">Chương trình học</h2>
                       <div className="space-y-4">
-                        <div className="border rounded-md overflow-hidden">
-                          <div className="bg-gray-50 p-4 font-medium">
-                            Phần 1: Giới thiệu
-                          </div>
-                          <div className="p-4 space-y-2">
-                            <div className="flex items-center">
-                              <span className="mr-2">✅</span>
-                              <span>Bài 1: Tổng quan về {course.title}</span>
+                        {course.curriculum && course.curriculum.map((section, sectionIndex) => (
+                          <div key={sectionIndex} className="border rounded-md overflow-hidden">
+                            <div className="bg-gray-50 p-4 font-medium">
+                              {section.title}
                             </div>
-                            <div className="flex items-center">
-                              <span className="mr-2">✅</span>
-                              <span>Bài 2: Cài đặt môi trường làm việc</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="border rounded-md overflow-hidden">
-                          <div className="bg-gray-50 p-4 font-medium">
-                            Phần 2: Kiến thức cơ bản
-                          </div>
-                          <div className="p-4 space-y-2">
-                            <div className="flex items-center">
-                              <span className="mr-2">✅</span>
-                              <span>Bài 3: Nguyên lý hoạt động</span>
-                            </div>
-                            <div className="flex items-center">
-                              <span className="mr-2">✅</span>
-                              <span>Bài 4: Các kỹ thuật cơ bản</span>
-                            </div>
-                            <div className="flex items-center">
-                              <span className="mr-2">✅</span>
-                              <span>Bài 5: Giải quyết vấn đề đơn giản</span>
+                            <div className="p-4 space-y-2">
+                              {section.lessons.map((lesson, lessonIndex) => (
+                                <div key={lessonIndex} className="flex items-center">
+                                  <span className="mr-2">✅</span>
+                                  <span>{lesson.title}</span>
+                                </div>
+                              ))}
                             </div>
                           </div>
-                        </div>
-
-                        <div className="border rounded-md overflow-hidden">
-                          <div className="bg-gray-50 p-4 font-medium">
-                            Phần 3: Kiến thức nâng cao
-                          </div>
-                          <div className="p-4 space-y-2">
-                            <div className="flex items-center">
-                              <span className="mr-2">✅</span>
-                              <span>Bài 6: Phương pháp tiếp cận nâng cao</span>
-                            </div>
-                            <div className="flex items-center">
-                              <span className="mr-2">✅</span>
-                              <span>Bài 7: Dự án thực tế</span>
-                            </div>
-                            <div className="flex items-center">
-                              <span className="mr-2">✅</span>
-                              <span>Bài 8: Đánh giá và tối ưu hóa</span>
-                            </div>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   )}

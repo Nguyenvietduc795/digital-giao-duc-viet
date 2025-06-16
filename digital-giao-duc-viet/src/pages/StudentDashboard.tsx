@@ -28,10 +28,22 @@ interface DocumentItem {
   url: string;
 }
 
+interface AssignmentItem {
+  id: number;
+  title: string;
+  description: string;
+  dueDate: string; // YYYY-MM-DD format for consistency with getTimeLeft
+  status: 'completed' | 'in_progress' | 'not_opened';
+  score?: number;
+  teacherComment?: string;
+  submittedFile?: { name: string; url: string };
+  submittedAt?: string;
+}
+
 const StudentDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>(TabType.Registered);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [selectedAssignment, setSelectedAssignment] = useState<{title: string; description: string; dueDate: string; status: string; score?: number; teacherComment?: string; submittedFile?: { name: string; url: string }; submittedAt?: string} | null>(null);
+  const [selectedAssignment, setSelectedAssignment] = useState<AssignmentItem | null>(null);
   const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
   const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false);
   const [uploadFiles, setUploadFiles] = useState<File[]>([]);
@@ -40,6 +52,56 @@ const StudentDashboard: React.FC = () => {
   const [detailCourse, setDetailCourse] = useState<Course | null>(null);
   const [showAllRegisteredCourses, setShowAllRegisteredCourses] = useState(false);
   const { t, language } = useLanguage();
+
+  const [scheduledCourses, setScheduledCourses] = useState<{
+    courseId: number;
+    date: string;
+    time: string;
+    zoomLink: string;
+  }[]>([
+    { courseId: 1, date: "18/06/2025", time: "19:00 - 21:00", zoomLink: "https://zoom.us/j/9876543210" }, // Lập trình Python cơ bản - Tuần này
+    { courseId: 2, date: "20/06/2025", time: "19:00 - 21:00", zoomLink: "https://zoom.us/j/1234567890" }, // IELTS 6.0+ trong 3 tháng - Tuần này
+    { courseId: 1, date: "25/06/2025", time: "19:00 - 21:00", zoomLink: "https://zoom.us/j/9876543210" }, // Lập trình Python cơ bản - Tuần sau
+    { courseId: 2, date: "27/06/2025", time: "19:00 - 21:00", zoomLink: "https://zoom.us/j/1234567890" }, // IELTS 6.0+ trong 3 tháng - Tuần sau
+  ]);
+
+  const thisWeekSchedule = scheduledCourses.filter(item => ["18/06/2025", "20/06/2025"].includes(item.date));
+  const nextWeekSchedule = scheduledCourses.filter(item => ["25/06/2025", "27/06/2025"].includes(item.date));
+
+  const [assignments, setAssignments] = useState<AssignmentItem[]>([
+    {
+      id: 1,
+      title: "Chi tiết bài tập 1: Lập trình Python cơ bản",
+      description: "Thực hành xây dựng một ứng dụng Python đơn giản, bao gồm các kiến thức về biến, kiểu dữ liệu, cấu trúc điều khiển và hàm.",
+      dueDate: "2025-07-05",
+      status: "in_progress",
+    },
+    {
+      id: 2,
+      title: "Chi tiết bài tập 1: IELTS 6.0+ trong 3 tháng",
+      description: "Bài test cơ bản đã hoàn thành.",
+      dueDate: "2025-06-18",
+      status: "completed",
+      score: 10,
+      teacherComment: "Bạn đã hoàn thành rất tốt bài test cơ bản của khóa học IELTS!",
+      submittedFile: { name: "ielts_test_1.pdf", url: "/files/ielts_test_1.pdf" },
+      submittedAt: "2025-06-30 10:00",
+    },
+    {
+      id: 3,
+      title: "Chi tiết bài tập 2: IELTS 6.0+ trong 3 tháng",
+      description: "Luyện tập kỹ năng Viết IELTS Task 1 (mô tả biểu đồ) và Task 2 (viết luận) theo các chủ đề phổ biến.",
+      dueDate: "2025-07-12",
+      status: "in_progress",
+    },
+    {
+      id: 4,
+      title: "Chi tiết bài tập 3: IELTS 6.0+ trong 3 tháng",
+      description: "Chuẩn bị và thực hành bài thi Nói IELTS Part 1, 2, 3. Tập trung vào từ vựng, ngữ pháp và sự trôi chảy.",
+      dueDate: "2025-07-19",
+      status: "not_opened",
+    },
+  ]);
 
   const courseProgress = 30; // 30% progress
   const studentName = "Nguyễn Văn A";
@@ -263,94 +325,76 @@ const StudentDashboard: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-bold mb-4">{t('course_assignments')}</h2>
                   
-                  <div className="space-y-6">
-                    <div className="border rounded-lg p-6">
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <h3 className="font-medium text-lg">{t('assignment_details')} 1: {t('basic_python_programming')}</h3>
-                          <span className="text-gray-600 mb-2">{t('due_date')}: {getTimeLeft('2025-05-15') !== t('expired') ? '15/05/2025' : t('expired')}</span>
+                  <div className="space-y-6 overflow-y-auto max-h-[calc(100vh-200px)]">
+                    {assignments.map(assignment => (
+                      <div key={assignment.id} className="border rounded-lg p-6">
+                        <div className="flex justify-between items-start mb-4">
+                          <div>
+                            <h3 className="font-medium text-lg">{assignment.title}</h3>
+                            <span className="text-gray-600 mb-2">Hạn nộp: {getTimeLeft(assignment.dueDate) !== t('expired') ? assignment.dueDate.split('-').reverse().join('/') : t('expired')}</span>
+                          </div>
+                          <div className={`text-xs px-2 py-1 rounded ${
+                            assignment.status === 'completed' ? 'bg-green-100 text-green-800' :
+                            assignment.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {assignment.status === 'completed' ? t('completed') :
+                            assignment.status === 'in_progress' ? t('in_progress') :
+                            t('not_opened')}
+                          </div>
                         </div>
-                        <div className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
-                          {t('completed')}
+                        <div className="mb-4">
+                          <p className="text-gray-700">
+                            {assignment.description}
+                          </p>
                         </div>
-                      </div>
-                      <div className="mb-4">
-                        <p className="text-gray-700">
-                          {t('learn_programming_desc')}
-                        </p>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-500">{t('score')}: 10/10</span>
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm" className="bg-white text-black border border-gray-300" onClick={() => { setSelectedAssignment({
-                            title: t('assignment_details') + ': ' + t('basic_python_programming'),
-                            description: t('learn_programming_desc'),
-                            dueDate: "15/05/2025",
-                            status: t('completed'),
-                            score: 10,
-                            teacherComment: t('teacher_comment'),
-                            submittedFile: { name: "baitap1.py", url: "/files/baitap1.py" },
-                            submittedAt: "2024-06-10 14:30"
-                          }); setShowDetailModal(true); }}>{t('view_details')}</Button>
-                          <Button variant="outline" size="sm" className="bg-white text-black border border-gray-300" onClick={() => { setSelectedAssignment({
-                            title: t('assignment_details') + ': ' + t('basic_python_programming'),
-                            description: t('learn_programming_desc'),
-                            dueDate: "15/05/2025",
-                            status: t('completed'),
-                            score: 10,
-                            teacherComment: t('teacher_comment'),
-                            submittedFile: { name: "baitap1.py", url: "/files/baitap1.py" },
-                            submittedAt: "2024-06-10 14:30"
-                          }); setShowSubmitModal(true); }}>{t('submit_assignment')}</Button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-6">
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <h3 className="font-medium text-lg">{t('assignment_details')} 2: {t('basic_python_programming')}</h3>
-                          <span className="text-gray-600 mb-2">{t('due_date')}: {getTimeLeft('2025-05-22') !== t('expired') ? '22/05/2025' : t('expired')}</span>
-                        </div>
-                        <div className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">
-                          {t('in_progress')}
-                        </div>
-                      </div>
-                      <div className="mb-4">
-                        <p className="text-gray-700">
-                          {t('ielts_toeic_desc')}
-                        </p>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-500">{t('time_remaining')}: {getTimeLeft('2025-05-22')}</span>
-                        <Button variant="outline" size="sm" className="bg-white text-black border border-gray-300" onClick={() => { setSelectedAssignment({
-                          title: t('assignment_details') + ': ' + t('ielts_in_3_months'),
-                          description: t('ielts_toeic_desc'),
-                          dueDate: "22/05/2025",
-                          status: t('in_progress')
-                        }); setShowSubmitModal(true); }}>{t('submit_assignment')}</Button>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-6">
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <h3 className="font-medium text-lg">{t('assignment_details')} 3: {t('web_design_html_css_javascript')}</h3>
-                          <span className="text-gray-600 mb-2">{t('due_date')}: {getTimeLeft('2025-05-29') !== t('expired') ? '29/05/2025' : t('expired')}</span>
-                        </div>
-                        <div className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">
-                          {t('not_opened')}
+                        <div className="flex justify-between items-center">
+                          {assignment.status === 'completed' && assignment.score !== undefined ? (
+                            <span className="text-sm text-gray-500">Điểm: {assignment.score}/10</span>
+                          ) : assignment.status === 'in_progress' ? (
+                            <span className="text-sm text-gray-500">Thời gian còn lại: {getTimeLeft(assignment.dueDate)}</span>
+                          ) : (
+                            <span className="text-sm text-gray-500">Bài tập sẽ được mở sau khi bạn hoàn thành Bài tập 2.</span>
+                          )}
+                          <div className="flex gap-2">
+                            {assignment.status !== 'not_opened' && (
+                              <Button variant="outline" size="sm" className="bg-white text-black border border-gray-300"
+                                onClick={() => {
+                                  setSelectedAssignment({
+                                    id: assignment.id,
+                                    title: assignment.title,
+                                    description: assignment.description,
+                                    dueDate: assignment.dueDate.split('-').reverse().join('/'),
+                                    status: assignment.status,
+                                    score: assignment.score,
+                                    teacherComment: assignment.teacherComment,
+                                    submittedFile: assignment.submittedFile,
+                                    submittedAt: assignment.submittedAt
+                                  });
+                                  setShowDetailModal(true);
+                                }}>
+                                Xem chi tiết
+                              </Button>
+                            )}
+                            {assignment.status === 'in_progress' && (
+                              <Button variant="outline" size="sm" className="bg-white text-black border border-gray-300"
+                                onClick={() => {
+                                  setSelectedAssignment({
+                                    id: assignment.id,
+                                    title: assignment.title,
+                                    description: assignment.description,
+                                    dueDate: assignment.dueDate.split('-').reverse().join('/'),
+                                    status: 'in_progress',
+                                  });
+                                  setShowSubmitModal(true);
+                                }}>
+                                Nộp bài
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                      <div className="mb-4">
-                        <p className="text-gray-700">
-                          {t('web_design_html_css_javascript')}
-                        </p>
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {t('assignment_will_open')} 2.
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               )}
@@ -368,7 +412,7 @@ const StudentDashboard: React.FC = () => {
                       </svg>
                       <div>
                         <p className="text-sm text-yellow-700">
-                          {t('next_session')} (13/05/2025) {t('at')} 19:00. {t('please_prepare')}
+                          {t('next_session')} ({thisWeekSchedule[0]?.date || 'N/A'}) {t('at')} {thisWeekSchedule[0]?.time.split('-')[0] || 'N/A'}. {t('please_prepare')}
                         </p>
                       </div>
                     </div>
@@ -384,13 +428,13 @@ const StudentDashboard: React.FC = () => {
                           <div className="flex justify-between mb-2 items-center">
                             <span className="font-medium">{t('basic_python_programming')}</span>
                             <div className="flex items-center gap-2">
-                              <span className="text-pink-400 font-medium">13/05/2025</span>
-                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/123456789', '_blank')}>{t('go_to_class')}</Button>
+                              <span className="text-pink-400 font-medium">{thisWeekSchedule[0]?.date || 'N/A'}</span>
+                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/9876543210', '_blank')}>{t('go_to_class')}</Button>
                             </div>
                           </div>
                           <div className="flex justify-between text-sm text-gray-600">
                             <div>{t('instructor')}: Thầy Nguyễn Văn A</div>
-                            <div>19:00 - 21:00</div>
+                            <div>{thisWeekSchedule[0]?.time || 'N/A'}</div>
                           </div>
                         </div>
                         
@@ -398,13 +442,13 @@ const StudentDashboard: React.FC = () => {
                           <div className="flex justify-between mb-2 items-center">
                             <span className="font-medium">{t('ielts_in_3_months')}</span>
                             <div className="flex items-center gap-2">
-                              <span className="text-pink-400 font-medium">15/05/2025</span>
-                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/123456789', '_blank')}>{t('go_to_class')}</Button>
+                              <span className="text-pink-400 font-medium">{thisWeekSchedule[1]?.date || 'N/A'}</span>
+                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/1234567890', '_blank')}>{t('go_to_class')}</Button>
                             </div>
                           </div>
                           <div className="flex justify-between text-sm text-gray-600">
                             <div>{t('instructor')}: Thầy Nguyễn Văn A</div>
-                            <div>19:00 - 21:00</div>
+                            <div>{thisWeekSchedule[1]?.time || 'N/A'}</div>
                           </div>
                         </div>
                       </div>
@@ -419,13 +463,13 @@ const StudentDashboard: React.FC = () => {
                           <div className="flex justify-between mb-2 items-center">
                             <span className="font-medium">{t('advanced_math_grade_12')}</span>
                             <div className="flex items-center gap-2">
-                              <span className="text-pink-400 font-medium">20/05/2025</span>
-                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/123456789', '_blank')}>{t('go_to_class')}</Button>
+                              <span className="text-pink-400 font-medium">{nextWeekSchedule[0]?.date || 'N/A'}</span>
+                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/9876543210', '_blank')}>{t('go_to_class')}</Button>
                             </div>
                           </div>
                           <div className="flex justify-between text-sm text-gray-600">
                             <div>{t('instructor')}: Thầy Nguyễn Văn A</div>
-                            <div>19:00 - 21:00</div>
+                            <div>{nextWeekSchedule[0]?.time || 'N/A'}</div>
                           </div>
                         </div>
                         
@@ -433,13 +477,13 @@ const StudentDashboard: React.FC = () => {
                           <div className="flex justify-between mb-2 items-center">
                             <span className="font-medium">{t('university_physics_prep')}</span>
                             <div className="flex items-center gap-2">
-                              <span className="text-pink-400 font-medium">22/05/2025</span>
-                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/123456789', '_blank')}>{t('go_to_class')}</Button>
+                              <span className="text-pink-400 font-medium">{nextWeekSchedule[1]?.date || 'N/A'}</span>
+                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/1234567890', '_blank')}>{t('go_to_class')}</Button>
                             </div>
                           </div>
                           <div className="flex justify-between text-sm text-gray-600">
                             <div>{t('instructor')}: Thầy Nguyễn Văn A</div>
-                            <div>19:00 - 21:00</div>
+                            <div>{nextWeekSchedule[1]?.time || 'N/A'}</div>
                           </div>
                         </div>
                       </div>
@@ -473,7 +517,9 @@ const StudentDashboard: React.FC = () => {
                 <span className="ml-2 text-xs text-gray-500">({t('submitted_at')}: {selectedAssignment.submittedAt})</span>
               </div>
             )}
-            <Button onClick={() => { setShowDetailModal(false); setShowSubmitModal(true); }}>{t('submit_assignment')}</Button>
+            {selectedAssignment.status !== 'completed' && (
+              <Button onClick={() => { setShowDetailModal(false); setShowSubmitModal(true); }}>{t('submit_assignment')}</Button>
+            )}
           </div>
         </div>
       )}

@@ -2,6 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 
+export interface Lesson {
+  title: string;
+}
+
+export interface CurriculumSection {
+  title: string;
+  lessons: Lesson[];
+}
+
 export interface Course {
   id: number;
   title: string;
@@ -11,6 +20,7 @@ export interface Course {
   level: string;
   teacher: string;
   gender?: string;
+  curriculum?: CurriculumSection[];
 }
 
 interface CourseCardProps {

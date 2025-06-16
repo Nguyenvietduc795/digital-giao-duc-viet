@@ -46,7 +46,7 @@ function NotificationBell() {
           </div>
           <ul className="max-h-72 overflow-y-auto">
             <li className="px-4 py-3 hover:bg-pink-50 cursor-pointer text-sm text-gray-700">Tài liệu mới: "Cú pháp Python cơ bản" đã được đăng.</li>
-            <li className="px-4 py-3 hover:bg-pink-50 cursor-pointer text-sm text-gray-700">Bạn có bài tập sắp đến hạn nộp: "Bài tập 2: Biến và kiểu dữ liệu".</li>
+            <li className="px-4 py-3 hover:bg-pink-50 cursor-pointer text-sm text-gray-700">Bạn có bài tập mới của khóa IELTS 6.0+ trong 3 tháng</li>
             <li className="px-4 py-3 hover:bg-pink-50 cursor-pointer text-sm text-gray-700">Lịch học tuần này đã được cập nhật.</li>
           </ul>
         </div>
