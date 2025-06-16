@@ -123,6 +123,16 @@ const translations: Record<Language, Record<string, string>> = {
     'join_our_community_title': 'Hãy Gia Nhập Cộng Đồng Học Tập Của Chúng Tôi!',
     'join_our_community_desc': 'Nếu bạn đang tìm kiếm một nơi để nâng cao kiến thức, phát triển kỹ năng và chạm đến những ước mơ nghề nghiệp – thì bạn đã tìm đúng địa chỉ.',
     'digital_education_slogan': 'Digital Education – Học tập không giới hạn, phát triển không ngừng.',
+    'explore_courses': 'Khám phá các khóa học',
+    'explore_courses_desc': 'Tìm kiếm và đăng ký các khóa học phù hợp với nhu cầu và mục tiêu học tập của bạn.',
+    'search_courses': 'Tìm kiếm khóa học',
+    'search_courses_placeholder': 'Nhập tên khóa học, giáo viên...',
+    'field': 'Lĩnh vực',
+    'level': 'Trình độ',
+    'results': 'Kết quả',
+    'no_courses_found': 'Không tìm thấy khóa học nào',
+    'try_different_search_criteria': 'Vui lòng thử lại với các tiêu chí tìm kiếm khác.',
+    'all': 'Tất cả',
   },
   en: {
     'home': 'Home',
@@ -235,6 +245,16 @@ const translations: Record<Language, Record<string, string>> = {
     'join_our_community_title': 'Join Our Learning Community!',
     'join_our_community_desc': 'If you are looking for a place to enhance your knowledge, develop skills, and achieve your career dreams – then you have found the right place.',
     'digital_education_slogan': 'Digital Education – Learning without limits, continuous development.',
+    'explore_courses': 'Explore Courses',
+    'explore_courses_desc': 'Search and register for courses that fit your needs and learning goals.',
+    'search_courses': 'Search Courses',
+    'search_courses_placeholder': 'Enter course name, teacher...',
+    'field': 'Field',
+    'level': 'Level',
+    'results': 'Results',
+    'no_courses_found': 'No courses found',
+    'try_different_search_criteria': 'Please try again with different search criteria.',
+    'all': 'All',
   }
 };
 
