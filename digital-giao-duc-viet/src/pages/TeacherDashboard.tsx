@@ -120,7 +120,7 @@ const TeacherDashboard: React.FC = () => {
     },
     {
       id: 4,
-      name: "Phân tích dữ liệu với Excel - Lớp D",
+      name: "Toán cao cấp cho lớp 12",
       schedule: "Thứ 2, Thứ 6 (9:00 - 11:00)",
       students: 18,
       progress: 75,
@@ -128,7 +128,7 @@ const TeacherDashboard: React.FC = () => {
     },
     {
       id: 5,
-      name: "Marketing số cơ bản - Lớp E",
+      name: "Luyện thi đại học môn Vật lý",
       schedule: "Thứ 4, Chủ nhật (14:00 - 16:00)",
       students: 22,
       progress: 50,
@@ -136,7 +136,7 @@ const TeacherDashboard: React.FC = () => {
     },
     {
       id: 6,
-      name: "Kế toán doanh nghiệp - Lớp F",
+      name: "IELTS 6.0+ trong 3 tháng",
       schedule: "Thứ 3, Thứ 7 (17:00 - 19:00)",
       students: 17,
       progress: 85,
@@ -258,16 +258,19 @@ const TeacherDashboard: React.FC = () => {
         {/* Classes Section */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
           <div className="p-6">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Lớp học của tôi</h2>
-              {!showAllClasses && (
-                <Button variant="outline" onClick={() => setShowAllClasses(true)}>
-                  Xem tất cả lớp học
+              {classes.length > 3 && (
+                <Button
+                  variant="default"
+                  className="bg-pink-500 text-white hover:bg-pink-600"
+                  onClick={() => setShowAllClasses(!showAllClasses)}
+                >
+                  {showAllClasses ? "Thu gọn" : "Xem tất cả lớp học"}
                 </Button>
               )}
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {displayedClasses.map((classItem) => (
                 <div key={classItem.id} className="border rounded-lg overflow-hidden">
                   <div className="p-6">
