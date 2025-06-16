@@ -17,7 +17,7 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setSliderIdx(idx => (idx + 1) % sliderImages.length);
-    }, 2000);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -37,15 +37,20 @@ const HomePage: React.FC = () => {
                 />
                 {sliderIdx === 0 && (
                   <div className="absolute bottom-40 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
-                    IELTS 6.0+ trong 3 tháng
+                    Luyện nói tiếng Anh giao tiếp
                   </div>
                 )}
                 {sliderIdx === 1 && (
                   <div className="absolute bottom-40 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
-                    TOEIC 750+ trong 2 tháng
+                    IELTS 6.0+ trong 3 tháng
                   </div>
                 )}
                 {sliderIdx === 2 && (
+                  <div className="absolute bottom-40 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
+                    TOEIC 750+ trong 2 tháng
+                  </div>
+                )}
+                {sliderIdx === 3 && (
                   <div className="absolute bottom-40 left-1/2 -translate-x-1/2 bg-white/90 px-6 py-3 rounded-xl shadow text-xl font-bold text-pink-500">
                     Lập trình Python cơ bản
                   </div>

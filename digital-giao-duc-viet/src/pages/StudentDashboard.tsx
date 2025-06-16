@@ -187,13 +187,16 @@ const StudentDashboard: React.FC = () => {
                   <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-bold">Lớp học của tôi</h2>
                     {paidCourses.length > 3 && (
-                      <Button
-                        variant="ghost"
-                        onClick={() => setShowAllRegisteredCourses(!showAllRegisteredCourses)}
-                        className="text-primary hover:bg-primary/10"
+                      <span
+                        style={{ cursor: 'pointer', color: '#ec4899', fontWeight: '500' }}
+                        onClick={() => {
+                          console.log("Before click, showAllRegisteredCourses:", showAllRegisteredCourses);
+                          setShowAllRegisteredCourses(!showAllRegisteredCourses);
+                          console.log("After click (will show previous state), showAllRegisteredCourses:", !showAllRegisteredCourses);
+                        }}
                       >
                         {showAllRegisteredCourses ? "Thu gọn" : "Xem tất cả lớp học"}
-                      </Button>
+                      </span>
                     )}
                   </div>
                   {paidCourses.length > 0 ? (
