@@ -7,6 +7,7 @@ import CourseCard from '@/components/CourseCard';
 import { toast } from 'sonner';
 import { supabase } from "@/lib/supabase";
 import { useLanguage } from '@/context/LanguageContext';
+import { Course } from '@/components/CourseCard';
 
 enum TabType {
   Registered = 'registered',
@@ -36,7 +37,7 @@ const StudentDashboard: React.FC = () => {
   const [uploadFiles, setUploadFiles] = useState<File[]>([]);
   const [now, setNow] = useState(new Date());
   const { paidCourses } = usePaidCourses();
-  const [detailCourse, setDetailCourse] = useState<any>(null);
+  const [detailCourse, setDetailCourse] = useState<Course | null>(null);
   const [showAllRegisteredCourses, setShowAllRegisteredCourses] = useState(false);
   const { t, language } = useLanguage();
 

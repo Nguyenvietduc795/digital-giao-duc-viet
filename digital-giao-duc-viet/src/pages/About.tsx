@@ -29,7 +29,7 @@ const About = () => {
             <h1 className="text-3xl font-bold text-center text-pink-500">{t('about_us_digital_education')}</h1>
           </div>
           <p className="text-xl text-gray-700 text-center mb-6">
-            {t('world_changing_by_tech_education_right')}
+            {t('world_changing_part1')} <strong className="text-pink-500">{t('education_is_a_right')}</strong>.
           </p>
           {/* Vision Section */}
           <div className="mb-8">
