@@ -74,19 +74,19 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-bold mb-4">Hỗ trợ</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary">
+                <Link to="/lien-he" className="text-gray-600 hover:text-primary">
                   Trung tâm trợ giúp
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary">
+                <Link to="/dieu-khoan-su-dung" className="text-gray-600 hover:text-primary">
                   Điều khoản sử dụng
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary">
+                <Link to="/chinh-sach-bao-mat" className="text-gray-600 hover:text-primary">
                   Chính sách bảo mật
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

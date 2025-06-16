@@ -34,7 +34,7 @@ const StudentDashboard: React.FC = () => {
   const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false);
   const [uploadFiles, setUploadFiles] = useState<File[]>([]);
   const [now, setNow] = useState(new Date());
-  const { paidCourses } = usePaidCourses();
+  const [paidCourses, setPaidCourses] = useState<number[]>([1, 2, 3, 4, 5]);
   const [detailCourse, setDetailCourse] = useState<any>(null);
   const [showAllRegisteredCourses, setShowAllRegisteredCourses] = useState(false);
 
@@ -187,16 +187,23 @@ const StudentDashboard: React.FC = () => {
                   <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-bold">Lớp học của tôi</h2>
                     {paidCourses.length > 3 && (
-                      <span
-                        style={{ cursor: 'pointer', color: '#ec4899', fontWeight: '500' }}
+                      <div
+                        style={{
+                          cursor: 'pointer',
+                          backgroundColor: 'red', // Make it very visible
+                          color: 'white',
+                          padding: '10px',
+                          borderRadius: '5px',
+                          display: 'inline-block', // Make it behave like a button
+                        }}
                         onClick={() => {
                           console.log("Before click, showAllRegisteredCourses:", showAllRegisteredCourses);
                           setShowAllRegisteredCourses(!showAllRegisteredCourses);
                           console.log("After click (will show previous state), showAllRegisteredCourses:", !showAllRegisteredCourses);
                         }}
                       >
-                        {showAllRegisteredCourses ? "Thu gọn" : "Xem tất cả lớp học"}
-                      </span>
+                        {showAllRegisteredCourses ? "Thu gọn (TEST)" : "Xem tất cả lớp học (TEST)"}
+                      </div>
                     )}
                   </div>
                   {paidCourses.length > 0 ? (
