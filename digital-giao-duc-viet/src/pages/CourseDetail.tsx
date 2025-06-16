@@ -3,6 +3,25 @@ import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { courses } from '@/data/courseData';
 
+const getTeacherAvatarSrc = (teacherName: string, gender?: string): string => {
+  const specificAvatars: { [key: string]: string } = {
+    'Thầy Nguyễn Văn A': '/avatars/Thầy A.png',
+    'Cô Trần Thị B': '/avatars/Cô B.png',
+    'Thầy Lê Văn C': '/avatars/Thầy C.png',
+    'Cô Phạm Thị D': '/avatars/Cô D.png',
+    'Thầy Hoàng Văn E': '/avatars/Thầy E.png',
+    'Thầy Trần Văn F': '/avatars/Thầy F.png',
+    'Thầy Đặng Văn G': '/avatars/Thầy G.png',
+    'Cô Nguyễn Thị H': '/avatars/Cô H.png',
+  };
+
+  if (specificAvatars[teacherName]) {
+    return specificAvatars[teacherName];
+  } else {
+    return gender === 'Nam' ? '/avatars/male.png' : '/avatars/female.png';
+  }
+};
+
 const CourseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState<'overview' | 'curriculum' | 'teacher' | 'faq'>('overview');
@@ -179,7 +198,7 @@ const CourseDetail: React.FC = () => {
                       <div className="flex items-center mb-6">
                         <div className="w-24 h-24 rounded-full bg-gray-300 overflow-hidden mr-6">
                           <img 
-                            src={`https://i.pravatar.cc/200?u=${course.teacher}`} 
+                            src={getTeacherAvatarSrc(course.teacher, course.gender)} 
                             alt={course.teacher} 
                             className="w-full h-full object-cover"
                           />

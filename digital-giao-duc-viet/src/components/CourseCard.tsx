@@ -10,6 +10,7 @@ export interface Course {
   category: string;
   level: string;
   teacher: string;
+  gender?: string;
 }
 
 interface CourseCardProps {

@@ -1,4 +1,3 @@
-
 import { Course } from '../components/CourseCard';
 
 export const courses: Course[] = [
@@ -9,7 +8,8 @@ export const courses: Course[] = [
     image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80",
     category: "Lập trình & CNTT",
     level: "Cơ bản",
-    teacher: "Thầy Nguyễn Văn A"
+    teacher: "Thầy Nguyễn Văn A",
+    gender: "Nam"
   },
   {
     id: 2,
@@ -18,7 +18,8 @@ export const courses: Course[] = [
     image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80",
     category: "Tiếng Anh & Chứng chỉ",
     level: "Trung cấp",
-    teacher: "Cô Trần Thị B"
+    teacher: "Cô Trần Thị B",
+    gender: "Nữ"
   },
   {
     id: 3,
@@ -27,7 +28,8 @@ export const courses: Course[] = [
     image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=600&q=80",
     category: "Lập trình & CNTT",
     level: "Cơ bản",
-    teacher: "Thầy Lê Văn C"
+    teacher: "Thầy Lê Văn C",
+    gender: "Nam"
   },
   {
     id: 4,
@@ -36,7 +38,8 @@ export const courses: Course[] = [
     image: "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?auto=format&fit=crop&w=600&q=80",
     category: "Toán học nâng cao",
     level: "Nâng cao",
-    teacher: "Cô Phạm Thị D"
+    teacher: "Cô Phạm Thị D",
+    gender: "Nữ"
   },
   {
     id: 5,
@@ -45,7 +48,8 @@ export const courses: Course[] = [
     image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80",
     category: "Tiếng Anh & Chứng chỉ",
     level: "Cao cấp",
-    teacher: "Thầy Hoàng Văn E"
+    teacher: "Thầy Hoàng Văn E",
+    gender: "Nam"
   },
   {
     id: 6,
@@ -54,7 +58,8 @@ export const courses: Course[] = [
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80",
     category: "Lập trình & CNTT",
     level: "Nâng cao",
-    teacher: "Thầy Trần Văn F"
+    teacher: "Thầy Trần Văn F",
+    gender: "Nam"
   },
   {
     id: 7,
@@ -63,7 +68,8 @@ export const courses: Course[] = [
     image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=600&q=80",
     category: "Luyện thi đại học",
     level: "Nâng cao",
-    teacher: "Thầy Đặng Văn G"
+    teacher: "Thầy Đặng Văn G",
+    gender: "Nam"
   },
   {
     id: 8,
@@ -72,6 +78,7 @@ export const courses: Course[] = [
     image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&q=80",
     category: "Tiếng Anh & Chứng chỉ",
     level: "Cơ bản",
-    teacher: "Cô Nguyễn Thị H"
+    teacher: "Cô Nguyễn Thị H",
+    gender: "Nữ"
   }
 ];
