@@ -61,6 +61,7 @@ const RegisterForm: React.FC = () => {
         const { error: insertError } = await supabase.from("profiles").insert({
           id: data.user.id,
           name: fullName,
+          email: email,
           phone: phone || null,
           gender: gender || "Khác",
           role: "student",

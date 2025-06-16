@@ -1,4 +1,6 @@
+// src/pages/Profile.tsx
 import { useRef, useState, useEffect } from 'react';
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,35 +11,50 @@ import { useToast } from "@/components/ui/use-toast";
 import { Eye, EyeOff } from 'lucide-react';
 
 const DEFAULT_AVATAR = '';
-const STORAGE_KEY = 'profile-data';
 
 const Profile = () => {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [userData, setUserData] = useState({
     avatar: DEFAULT_AVATAR,
-    name: "Nguyễn Văn A",
-    email: "example@gmail.com",
-    phone: "0123456789",
-    gender: "",
-    password: "********"
+    name: '',
+    email: '',
+    phone: '',
+    gender: '',
+    password: '********'
   });
-  const [passwords, setPasswords] = useState({
-    current: "",
-    new: "",
-    confirm: ""
-  });
-  const [avatarPreview, setAvatarPreview] = useState<string | undefined>(userData.avatar);
+  const [passwords, setPasswords] = useState({ current: '', new: '', confirm: '' });
+  const [avatarPreview, setAvatarPreview] = useState<string | undefined>(DEFAULT_AVATAR);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Load từ localStorage khi vào trang
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setUserData(parsed);
-      setAvatarPreview(parsed.avatar);
-    }
+    const fetchProfile = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) return;
+
+      const { data: profile, error: fetchError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if (fetchError || !profile) {
+        toast({ title: "Lỗi", description: "Không thể tải hồ sơ", variant: "destructive" });
+        return;
+      }
+
+      setUserData({
+        avatar: profile.avatar || DEFAULT_AVATAR,
+        name: profile.name || '',
+        email: profile.email || '',
+        phone: profile.phone || '',
+        gender: profile.gender || '',
+        password: '********'
+      });
+      setAvatarPreview(profile.avatar || DEFAULT_AVATAR);
+    };
+
+    fetchProfile();
   }, []);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,39 +85,45 @@ const Profile = () => {
     setPasswords(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (passwords.new && passwords.new !== passwords.confirm) {
-      toast({
-        title: "Lỗi",
-        description: "Mật khẩu mới không khớp",
-        variant: "destructive"
-      });
+      toast({ title: "Lỗi", description: "Mật khẩu mới không khớp", variant: "destructive" });
       return;
     }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
-    toast({
-      title: "Thành công",
-      description: "Thông tin đã được lưu lại!",
-    });
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        avatar: avatarPreview,
+        name: userData.name,
+        email: userData.email,
+        phone: userData.phone,
+        gender: userData.gender,
+      })
+      .eq("id", user.id);
+
+    if (error) {
+      toast({ title: "Lỗi", description: "Không thể lưu thông tin", variant: "destructive" });
+    } else {
+      toast({ title: "Thành công", description: "Thông tin đã được cập nhật!" });
+    }
   };
 
   return (
     <div className="relative flex justify-center items-start min-h-[calc(100vh-80px)] py-8 bg-gradient-to-br from-[#fddde6] via-[#fbeff4] to-[#f8c6d8] overflow-hidden">
-      {/* Nền trang trí */}
       <div className="absolute inset-0 -z-20">
         <img src="/profile-bg.svg" alt="bg" className="w-full h-full object-cover opacity-70" />
-        {/* Blob lớn */}
         <div className="absolute top-[-120px] left-[-120px] w-[320px] h-[320px] bg-white opacity-20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-[-100px] right-[-100px] w-[260px] h-[260px] bg-pink-200 opacity-20 rounded-full blur-2xl animate-pulse"></div>
         <div className="absolute top-1/3 right-1/4 w-[180px] h-[180px] bg-white opacity-10 rounded-full blur-2xl"></div>
         <div className="absolute bottom-0 left-1/3 w-[200px] h-[200px] bg-pink-100 opacity-10 rounded-full blur-2xl"></div>
-        {/* Chấm tròn lớn nổi bật */}
         <div className="absolute top-[120px] left-[calc(50%-180px)] w-32 h-32 bg-pink-300 opacity-50 rounded-full blur-lg animate-pulse"></div>
         <div className="absolute bottom-[120px] right-[calc(50%-180px)] w-24 h-24 bg-pink-400 opacity-40 rounded-full blur-md animate-pulse"></div>
         <div className="absolute top-[60%] left-[20%] w-20 h-20 bg-pink-200 opacity-50 rounded-full blur-md animate-pulse"></div>
         <div className="absolute top-[30%] right-[15%] w-16 h-16 bg-pink-400 opacity-30 rounded-full blur animate-pulse"></div>
       </div>
-      {/* Hình tròn trắng lớn phía sau card */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] bg-white opacity-40 rounded-full blur-2xl -z-10"></div>
       <div className="w-full max-w-lg mx-auto px-2 relative z-10">
         <Card className="rounded-3xl shadow-2xl bg-white/70 border border-white/40 backdrop-blur-xl relative overflow-hidden pt-4 pb-4 px-6">
@@ -183,7 +206,7 @@ const Profile = () => {
                       name="gender"
                       value={userData.gender}
                       onChange={handleInputChange}
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2"
                       title="Giới tính"
                     >
                       <option value="">Chọn giới tính</option>
@@ -224,7 +247,7 @@ const Profile = () => {
                       value={passwords.new}
                       onChange={handlePasswordChange}
                     />
-                     <button
+                    <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute inset-y-0 right-0 pr-3 flex items-center pt-6"
@@ -242,7 +265,7 @@ const Profile = () => {
                       value={passwords.confirm}
                       onChange={handlePasswordChange}
                     />
-                     <button
+                    <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute inset-y-0 right-0 pr-3 flex items-center pt-6"
@@ -260,10 +283,9 @@ const Profile = () => {
           </CardContent>
         </Card>
       </div>
-      {/* Hiệu ứng gợn sóng phía dưới card */}
       <img src="/wave.svg" alt="wave" className="absolute left-0 bottom-0 w-full pointer-events-none select-none" style={{zIndex:0}} />
     </div>
   );
 };
 
-export default Profile; 
+export default Profile;
