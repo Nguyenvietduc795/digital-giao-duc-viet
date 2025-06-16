@@ -14,37 +14,6 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="text-lg font-bold mb-4">Liên kết nhanh</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/hoc-sinh" className="text-gray-600 hover:text-primary">
-                  Trang chủ
-                </Link>
-              </li>
-              <li>
-                <Link to="/khoa-hoc" className="text-gray-600 hover:text-primary">
-                  Khóa học
-                </Link>
-              </li>
-              <li>
-                <Link to="/gioi-thieu" className="text-gray-600 hover:text-primary">
-                  Giới thiệu
-                </Link>
-              </li>
-              <li>
-                <Link to="/lien-he" className="text-gray-600 hover:text-primary">
-                  Liên hệ
-                </Link>
-              </li>
-              <li>
-                <Link to="/ho-so" className="text-gray-600 hover:text-primary">
-                  Hồ sơ
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
             <h3 className="text-lg font-bold mb-4">Khóa học</h3>
             <ul className="space-y-2">
               <li>
@@ -71,6 +40,21 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
+            <h3 className="text-lg font-bold mb-4">Liên hệ</h3>
+            <ul className="space-y-2">
+              <li className="text-gray-600">
+                Email: support@digitaleducation.vn
+              </li>
+              <li className="text-gray-600">
+                Hotline: 1900 1234
+              </li>
+              <li className="text-gray-600">
+                Địa chỉ: 211 Nguyễn Văn Cừ, Phường An Bình, Quận Ninh Kiều, TP. Cần Thơ
+              </li>
+            </ul>
+          </div>
+
+          <div>
             <h3 className="text-lg font-bold mb-4">Hỗ trợ</h3>
             <ul className="space-y-2">
               <li>
@@ -87,21 +71,6 @@ const Footer: React.FC = () => {
                 <Link to="/chinh-sach-bao-mat" className="text-gray-600 hover:text-primary">
                   Chính sách bảo mật
                 </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-bold mb-4">Liên hệ</h3>
-            <ul className="space-y-2">
-              <li className="text-gray-600">
-                Email: support@digitaleducation.vn
-              </li>
-              <li className="text-gray-600">
-                Hotline: 1900 1234
-              </li>
-              <li className="text-gray-600">
-                Địa chỉ: 211 Nguyễn Văn Cừ, Phường An Bình, Quận Ninh Kiều, TP. Cần Thơ
               </li>
             </ul>
           </div>

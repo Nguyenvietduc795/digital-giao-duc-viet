@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, LogOut } from 'lucide-react';
 import { Button } from './ui/button';
 import { getUser, removeUser } from '../utils/storage.tsx';
+import { useLanguage } from '../context/LanguageContext';
 
 type NavItem = {
   label: string;
@@ -10,11 +11,11 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: 'Trang chủ', href: '/hoc-sinh' },
-  { label: 'Khóa học', href: '/khoa-hoc' },
-  { label: 'Khóa học của tôi', href: '/hoc-vien' },
-  { label: 'Giới thiệu', href: '/gioi-thieu' },
-  { label: 'Liên hệ', href: '/lien-he' },
+  { label: 'home', href: '/hoc-sinh' },
+  { label: 'courses', href: '/khoa-hoc' },
+  { label: 'my_courses', href: '/hoc-vien' },
+  { label: 'about_us', href: '/gioi-thieu' },
+  { label: 'contact', href: '/lien-he' },
 ];
 
 const Header: React.FC = () => {
@@ -22,6 +23,7 @@ const Header: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const user = getUser();
+  const { language, setLanguage, t } = useLanguage();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -34,6 +36,10 @@ const Header: React.FC = () => {
   const handleLogout = () => {
     removeUser();
     navigate('/login');
+  };
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'vi' ? 'en' : 'vi');
   };
 
   return (
@@ -67,8 +73,8 @@ const Header: React.FC = () => {
 
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center space-x-6">
-          {navItems.filter(item => item.label !== 'Khóa học của tôi').map((item, idx, arr) => {
-            if (item.label === 'Khóa học' && user) {
+          {navItems.filter(item => item.label !== 'my_courses').map((item, idx, arr) => {
+            if (item.label === 'courses' && user) {
               return [
                 <Link
                   key={item.href}
@@ -79,7 +85,7 @@ const Header: React.FC = () => {
                       : 'text-gray-600 hover:text-primary'
                   }`}
                 >
-                  {item.label}
+                  {t(item.label)}
                 </Link>,
                 <Link
                   key="/hoc-vien"
@@ -90,7 +96,7 @@ const Header: React.FC = () => {
                       : 'text-gray-600 hover:text-primary'
                   }`}
                 >
-                  Khóa học của tôi
+                  {t('my_courses')}
                 </Link>
               ];
             }
@@ -104,7 +110,7 @@ const Header: React.FC = () => {
                     : 'text-gray-600 hover:text-primary'
                 }`}
               >
-                {item.label}
+                {t(item.label)}
               </Link>
             );
           })}
@@ -118,7 +124,7 @@ const Header: React.FC = () => {
                     : 'text-gray-600 hover:text-primary'
                 }`}
               >
-                Hồ sơ
+                {t('profile')}
               </Link>
               <Button 
                 onClick={handleLogout} 
@@ -126,13 +132,21 @@ const Header: React.FC = () => {
                 className="flex items-center gap-2 text-gray-600 hover:text-primary"
               >
                 <LogOut size={18} />
-                Đăng xuất
+                {t('logout')}
+              </Button>
+              <Button onClick={toggleLanguage} variant="outline" className="ml-4">
+                {language === 'vi' ? 'English' : 'Tiếng Việt'}
               </Button>
             </div>
           ) : (
-            <Button onClick={handleLoginClick} variant="outline" className="ml-4">
-              Đăng nhập
-            </Button>
+            <div className="flex items-center space-x-4">
+              <Button onClick={handleLoginClick} variant="outline" className="ml-4">
+                {t('sign_in')}
+              </Button>
+              <Button onClick={toggleLanguage} variant="outline">
+                {language === 'vi' ? 'English' : 'Tiếng Việt'}
+              </Button>
+            </div>
           )}
         </nav>
       </div>
@@ -141,8 +155,8 @@ const Header: React.FC = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white py-4 px-4 shadow-md">
           <nav className="flex flex-col space-y-4">
-            {navItems.filter(item => item.label !== 'Khóa học của tôi').map((item, idx, arr) => {
-              if (item.label === 'Khóa học' && user) {
+            {navItems.filter(item => item.label !== 'my_courses').map((item, idx, arr) => {
+              if (item.label === 'courses' && user) {
                 return [
                   <Link
                     key={item.href}
@@ -154,7 +168,7 @@ const Header: React.FC = () => {
                         : 'text-gray-600'
                     }`}
                   >
-                    {item.label}
+                    {t(item.label)}
                   </Link>,
                   <Link
                     key="/hoc-vien"
@@ -166,7 +180,7 @@ const Header: React.FC = () => {
                         : 'text-gray-600'
                     }`}
                   >
-                    Khóa học của tôi
+                    {t('my_courses')}
                   </Link>
                 ];
               }
@@ -181,7 +195,7 @@ const Header: React.FC = () => {
                       : 'text-gray-600'
                   }`}
                 >
-                  {item.label}
+                  {t(item.label)}
                 </Link>
               );
             })}
@@ -196,31 +210,29 @@ const Header: React.FC = () => {
                       : 'text-gray-600'
                   }`}
                 >
-                  Hồ sơ
+                  {t('profile')}
                 </Link>
-                <Button
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    handleLogout();
-                  }}
-                  variant="ghost"
-                  className="flex items-center gap-2 justify-center w-full text-gray-600"
+                <Button 
+                  onClick={handleLogout} 
+                  variant="ghost" 
+                  className="flex items-center gap-2 text-gray-600"
                 >
                   <LogOut size={18} />
-                  Đăng xuất
+                  {t('logout')}
+                </Button>
+                <Button onClick={toggleLanguage} variant="outline" className="w-full">
+                  {language === 'vi' ? 'English' : 'Tiếng Việt'}
                 </Button>
               </>
             ) : (
-              <Button
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  handleLoginClick();
-                }}
-                variant="outline"
-                className="w-full"
-              >
-                Đăng nhập
-              </Button>
+              <div className="flex flex-col space-y-4">
+                <Button onClick={handleLoginClick} variant="outline" className="w-full">
+                  {t('sign_in')}
+                </Button>
+                <Button onClick={toggleLanguage} variant="outline" className="w-full">
+                  {language === 'vi' ? 'English' : 'Tiếng Việt'}
+                </Button>
+              </div>
             )}
           </nav>
         </div>

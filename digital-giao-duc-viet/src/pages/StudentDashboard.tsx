@@ -6,6 +6,7 @@ import { courses as allCourses } from '@/data/courseData';
 import CourseCard from '@/components/CourseCard';
 import { toast } from 'sonner';
 import { supabase } from "@/lib/supabase";
+import { useLanguage } from '@/context/LanguageContext';
 
 enum TabType {
   Registered = 'registered',
@@ -37,6 +38,7 @@ const StudentDashboard: React.FC = () => {
   const { paidCourses } = usePaidCourses();
   const [detailCourse, setDetailCourse] = useState<any>(null);
   const [showAllRegisteredCourses, setShowAllRegisteredCourses] = useState(false);
+  const { t, language } = useLanguage();
 
   const courseProgress = 30; // 30% progress
   const studentName = "Nguyễn Văn A";
@@ -96,18 +98,17 @@ const StudentDashboard: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Hàm tính thời gian còn lại
-  function getTimeLeft(dueDateStr) {
+  function getTimeLeft(dueDateStr: string) {
     const dueDate = new Date(dueDateStr + 'T23:59:59');
     const diff = dueDate.getTime() - now.getTime();
-    if (diff <= 0) return 'Đã hết hạn';
+    if (diff <= 0) return t('expired');
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const mins = Math.floor((diff / (1000 * 60)) % 60);
     let str = '';
-    if (days > 0) str += days + ' ngày ';
-    if (hours > 0 || days > 0) str += hours + ' giờ ';
-    str += mins + ' phút';
+    if (days > 0) str += `${days} ${t('days')} `;
+    if (hours > 0 || days > 0) str += `${hours} ${t('hours')} `;
+    str += `${mins} ${t('minutes')}`;
     return str;
   }
 
@@ -121,24 +122,24 @@ const StudentDashboard: React.FC = () => {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div>
                   <h1 className="text-2xl font-bold text-white mb-2">
-                    Xin chào, {studentName}!
+                    {t('hello')}, {studentName}!
                   </h1>
                   <p className="text-pink-100">
-                    Chào mừng bạn quay trở lại với khóa học {courseTitle}
+                    {t('welcome_back')} {courseTitle}
                   </p>
                 </div>
                 <div className="mt-4 md:mt-0">
                   <Button asChild className="bg-yellow-300 text-black hover:bg-yellow-400">
-                    <Link to="/khoa-hoc">Khám phá thêm khóa học</Link>
+                    <Link to="/khoa-hoc">{t('explore_more_courses')}</Link>
                   </Button>
                 </div>
               </div>
             </div>
             
             <div className="p-6">
-              <h2 className="text-lg font-semibold mb-4">Tiến độ học tập của bạn</h2>
+              <h2 className="text-lg font-semibold mb-4">{t('your_study_progress')}</h2>
               <div className="mb-2 flex justify-between">
-                <span>Hoàn thành: {courseProgress}%</span>
+                <span>{t('completed_progress')}: {courseProgress}%</span>
                 <span>{courseProgress}% / 100%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
@@ -158,25 +159,25 @@ const StudentDashboard: React.FC = () => {
                 className={`px-4 py-3 text-center flex-1 ${activeTab === TabType.Registered ? 'border-b-2 border-primary text-primary font-medium' : 'text-gray-600'}`}
                 onClick={() => setActiveTab(TabType.Registered)}
               >
-                Đã đăng kí
+                {t('my_classes')}
               </button>
               <button
                 className={`px-4 py-3 text-center flex-1 ${activeTab === TabType.Documents ? 'border-b-2 border-primary text-primary font-medium' : 'text-gray-600'}`}
                 onClick={() => setActiveTab(TabType.Documents)}
               >
-                Tài liệu
+                {t('course_materials')}
               </button>
               <button
                 className={`px-4 py-3 text-center flex-1 ${activeTab === TabType.Assignments ? 'border-b-2 border-primary text-primary font-medium' : 'text-gray-600'}`}
                 onClick={() => setActiveTab(TabType.Assignments)}
               >
-                Bài tập
+                {t('course_assignments')}
               </button>
               <button
                 className={`px-4 py-3 text-center flex-1 ${activeTab === TabType.Schedule ? 'border-b-2 border-primary text-primary font-medium' : 'text-gray-600'}`}
                 onClick={() => setActiveTab(TabType.Schedule)}
               >
-                Lịch học
+                {t('study_schedule')}
               </button>
             </div>
 
@@ -185,7 +186,7 @@ const StudentDashboard: React.FC = () => {
               {activeTab === TabType.Registered && (
                 <div>
                   <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-bold">Lớp học của tôi</h2>
+                    <h2 className="text-xl font-bold">{t('my_classes')}</h2>
                     {paidCourses.length > 3 && (
                       <Button
                         variant="default"
@@ -194,7 +195,7 @@ const StudentDashboard: React.FC = () => {
                           setShowAllRegisteredCourses(!showAllRegisteredCourses);
                         }}
                       >
-                        {showAllRegisteredCourses ? "Thu gọn" : "Xem tất cả lớp học"}
+                        {showAllRegisteredCourses ? t('collapse') : t('view_all_classes')}
                       </Button>
                     )}
                   </div>
@@ -207,12 +208,12 @@ const StudentDashboard: React.FC = () => {
                     </div>
                   ) : (
                     <div className="text-center py-12 bg-white rounded-lg shadow">
-                      <h3 className="text-lg font-semibold mb-2">Bạn chưa đăng kí khóa học nào</h3>
+                      <h3 className="text-lg font-semibold mb-2">{t('no_registered_courses')}</h3>
                       <p className="text-gray-600 mb-6">
-                        Khám phá các khóa học hấp dẫn của chúng tôi và đăng kí ngay hôm nay!
+                        {t('explore_our_courses_desc')}
                       </p>
                       <Button asChild>
-                        <Link to="/khoa-hoc">Khám phá khóa học</Link>
+                        <Link to="/khoa-hoc">{t('explore_more_courses')}</Link>
                       </Button>
                     </div>
                   )}
@@ -221,7 +222,7 @@ const StudentDashboard: React.FC = () => {
 
               {activeTab === TabType.Documents && (
                 <div>
-                  <h2 className="text-xl font-bold mb-4">Tài liệu khóa học</h2>
+                  <h2 className="text-xl font-bold mb-4">{t('course_materials')}</h2>
                   <div className="space-y-4">
                     {documents.map((doc) => (
                       <div key={doc.id} className="border rounded-lg p-4">
@@ -243,11 +244,11 @@ const StudentDashboard: React.FC = () => {
                           </div>
                           {doc.type === "Video" ? (
                             <Button variant="outline" size="sm" onClick={() => handleView(doc.url, doc.type)}>
-                              Xem
+                              {t('view')}
                             </Button>
                           ) : (
                             <Button variant="outline" size="sm" onClick={() => handleDownload(doc.url, doc.name)}>
-                              Tải xuống
+                              {t('download')}
                             </Button>
                           )}
                         </div>
@@ -259,49 +260,47 @@ const StudentDashboard: React.FC = () => {
 
               {activeTab === TabType.Assignments && (
                 <div>
-                  <h2 className="text-xl font-bold mb-4">Bài tập của khóa học</h2>
+                  <h2 className="text-xl font-bold mb-4">{t('course_assignments')}</h2>
                   
                   <div className="space-y-6">
                     <div className="border rounded-lg p-6">
                       <div className="flex justify-between items-start mb-4">
                         <div>
-                          <h3 className="font-medium text-lg">Bài tập 1: Viết chương trình Hello World</h3>
-                          <span className="text-gray-600 mb-2">Hạn nộp: {getTimeLeft('2025-05-15') !== 'Đã hết hạn' ? '15/05/2025' : 'Đã hết hạn'}</span>
+                          <h3 className="font-medium text-lg">{t('assignment_details')} 1: {t('basic_python_programming')}</h3>
+                          <span className="text-gray-600 mb-2">{t('due_date')}: {getTimeLeft('2025-05-15') !== t('expired') ? '15/05/2025' : t('expired')}</span>
                         </div>
                         <div className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
-                          Đã hoàn thành
+                          {t('completed')}
                         </div>
                       </div>
                       <div className="mb-4">
                         <p className="text-gray-700">
-                          Viết một chương trình Python đơn giản in ra màn hình dòng chữ "Hello, World!". 
-                          Sau đó mở rộng chương trình để nhận tên người dùng từ bàn phím và hiển thị lời 
-                          chào với tên đó.
+                          {t('learn_programming_desc')}
                         </p>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-500">Điểm: 10/10</span>
+                        <span className="text-sm text-gray-500">{t('score')}: 10/10</span>
                         <div className="flex gap-2">
                           <Button variant="outline" size="sm" className="bg-white text-black border border-gray-300" onClick={() => { setSelectedAssignment({
-                            title: "Bài tập 1: Viết chương trình Hello World",
-                            description: "Viết một chương trình Python đơn giản in ra màn hình dòng chữ 'Hello, World!'. Sau đó mở rộng chương trình để nhận tên người dùng từ bàn phím và hiển thị lời chào với tên đó.",
+                            title: t('assignment_details') + ': ' + t('basic_python_programming'),
+                            description: t('learn_programming_desc'),
                             dueDate: "15/05/2025",
-                            status: "Đã hoàn thành",
+                            status: t('completed'),
                             score: 10,
-                            teacherComment: "Bài làm rất tốt!",
+                            teacherComment: t('teacher_comment'),
                             submittedFile: { name: "baitap1.py", url: "/files/baitap1.py" },
                             submittedAt: "2024-06-10 14:30"
-                          }); setShowDetailModal(true); }}>Xem chi tiết</Button>
+                          }); setShowDetailModal(true); }}>{t('view_details')}</Button>
                           <Button variant="outline" size="sm" className="bg-white text-black border border-gray-300" onClick={() => { setSelectedAssignment({
-                            title: "Bài tập 1: Viết chương trình Hello World",
-                            description: "Viết một chương trình Python đơn giản in ra màn hình dòng chữ 'Hello, World!'. Sau đó mở rộng chương trình để nhận tên người dùng từ bàn phím và hiển thị lời chào với tên đó.",
+                            title: t('assignment_details') + ': ' + t('basic_python_programming'),
+                            description: t('learn_programming_desc'),
                             dueDate: "15/05/2025",
-                            status: "Đã hoàn thành",
+                            status: t('completed'),
                             score: 10,
-                            teacherComment: "Bài làm rất tốt!",
+                            teacherComment: t('teacher_comment'),
                             submittedFile: { name: "baitap1.py", url: "/files/baitap1.py" },
                             submittedAt: "2024-06-10 14:30"
-                          }); setShowSubmitModal(true); }}>Nộp bài</Button>
+                          }); setShowSubmitModal(true); }}>{t('submit_assignment')}</Button>
                         </div>
                       </div>
                     </div>
@@ -309,48 +308,46 @@ const StudentDashboard: React.FC = () => {
                     <div className="border rounded-lg p-6">
                       <div className="flex justify-between items-start mb-4">
                         <div>
-                          <h3 className="font-medium text-lg">Bài tập 2: Biến và kiểu dữ liệu</h3>
-                          <span className="text-gray-600 mb-2">Hạn nộp: {getTimeLeft('2025-05-22') !== 'Đã hết hạn' ? '22/05/2025' : 'Đã hết hạn'}</span>
+                          <h3 className="font-medium text-lg">{t('assignment_details')} 2: {t('basic_python_programming')}</h3>
+                          <span className="text-gray-600 mb-2">{t('due_date')}: {getTimeLeft('2025-05-22') !== t('expired') ? '22/05/2025' : t('expired')}</span>
                         </div>
                         <div className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">
-                          Đang làm
+                          {t('in_progress')}
                         </div>
                       </div>
                       <div className="mb-4">
                         <p className="text-gray-700">
-                          Viết chương trình Python để thực hiện các phép tính cơ bản (cộng, trừ, nhân, chia) 
-                          với hai số nguyên nhập từ bàn phím. Hiển thị kết quả của từng phép tính.
+                          {t('ielts_toeic_desc')}
                         </p>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-500">Thời gian còn lại: {getTimeLeft('2025-05-22')}</span>
+                        <span className="text-sm text-gray-500">{t('time_remaining')}: {getTimeLeft('2025-05-22')}</span>
                         <Button variant="outline" size="sm" className="bg-white text-black border border-gray-300" onClick={() => { setSelectedAssignment({
-                          title: "Bài tập 2: Biến và kiểu dữ liệu",
-                          description: "Viết chương trình Python để thực hiện các phép tính cơ bản (cộng, trừ, nhân, chia) với hai số nguyên nhập từ bàn phím. Hiển thị kết quả của từng phép tính.",
+                          title: t('assignment_details') + ': ' + t('ielts_in_3_months'),
+                          description: t('ielts_toeic_desc'),
                           dueDate: "22/05/2025",
-                          status: "Đang làm"
-                        }); setShowSubmitModal(true); }}>Nộp bài</Button>
+                          status: t('in_progress')
+                        }); setShowSubmitModal(true); }}>{t('submit_assignment')}</Button>
                       </div>
                     </div>
 
                     <div className="border rounded-lg p-6">
                       <div className="flex justify-between items-start mb-4">
                         <div>
-                          <h3 className="font-medium text-lg">Bài tập 3: Cấu trúc điều khiển</h3>
-                          <span className="text-gray-600 mb-2">Hạn nộp: {getTimeLeft('2025-05-29') !== 'Đã hết hạn' ? '29/05/2025' : 'Đã hết hạn'}</span>
+                          <h3 className="font-medium text-lg">{t('assignment_details')} 3: {t('web_design_html_css_javascript')}</h3>
+                          <span className="text-gray-600 mb-2">{t('due_date')}: {getTimeLeft('2025-05-29') !== t('expired') ? '29/05/2025' : t('expired')}</span>
                         </div>
                         <div className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">
-                          Chưa mở
+                          {t('not_opened')}
                         </div>
                       </div>
                       <div className="mb-4">
                         <p className="text-gray-700">
-                          Viết chương trình kiểm tra một số nhập vào có phải là số nguyên tố hay không. 
-                          Sử dụng cấu trúc điều khiển if-else và vòng lặp để thực hiện kiểm tra.
+                          {t('web_design_html_css_javascript')}
                         </p>
                       </div>
                       <div className="text-sm text-gray-500">
-                        Bài tập sẽ được mở sau khi bạn hoàn thành Bài tập 2.
+                        {t('assignment_will_open')} 2.
                       </div>
                     </div>
                   </div>
@@ -359,7 +356,7 @@ const StudentDashboard: React.FC = () => {
 
               {activeTab === TabType.Schedule && (
                 <div>
-                  <h2 className="text-xl font-bold mb-4">Lịch học</h2>
+                  <h2 className="text-xl font-bold mb-4">{t('study_schedule')}</h2>
                   
                   <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
                     <div className="flex">
@@ -370,7 +367,7 @@ const StudentDashboard: React.FC = () => {
                       </svg>
                       <div>
                         <p className="text-sm text-yellow-700">
-                          Buổi học tới sẽ diễn ra vào ngày mai (13/05/2025) lúc 19:00. Vui lòng chuẩn bị bài tập và câu hỏi trước giờ học.
+                          {t('next_session')} (13/05/2025) {t('at')} 19:00. {t('please_prepare')}
                         </p>
                       </div>
                     </div>
@@ -379,33 +376,33 @@ const StudentDashboard: React.FC = () => {
                   <div className="space-y-4">
                     <div className="border rounded-lg overflow-hidden">
                       <div className="bg-primary text-white px-4 py-2 font-medium">
-                        Tuần này
+                        {t('this_week')}
                       </div>
                       <div className="p-4">
                         <div className="mb-6 last:mb-0">
                           <div className="flex justify-between mb-2 items-center">
-                            <span className="font-medium">Bài 3: Hàm và Module trong Python</span>
+                            <span className="font-medium">{t('basic_python_programming')}</span>
                             <div className="flex items-center gap-2">
                               <span className="text-pink-400 font-medium">13/05/2025</span>
-                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/123456789', '_blank')}>Vào học</Button>
+                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/123456789', '_blank')}>{t('go_to_class')}</Button>
                             </div>
                           </div>
                           <div className="flex justify-between text-sm text-gray-600">
-                            <div>Giảng viên: Thầy Nguyễn Văn A</div>
+                            <div>{t('instructor')}: Thầy Nguyễn Văn A</div>
                             <div>19:00 - 21:00</div>
                           </div>
                         </div>
                         
                         <div className="mb-6 last:mb-0">
                           <div className="flex justify-between mb-2 items-center">
-                            <span className="font-medium">Thực hành: Xây dựng ứng dụng đơn giản</span>
+                            <span className="font-medium">{t('ielts_in_3_months')}</span>
                             <div className="flex items-center gap-2">
                               <span className="text-pink-400 font-medium">15/05/2025</span>
-                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/123456789', '_blank')}>Vào học</Button>
+                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/123456789', '_blank')}>{t('go_to_class')}</Button>
                             </div>
                           </div>
                           <div className="flex justify-between text-sm text-gray-600">
-                            <div>Giảng viên: Thầy Nguyễn Văn A</div>
+                            <div>{t('instructor')}: Thầy Nguyễn Văn A</div>
                             <div>19:00 - 21:00</div>
                           </div>
                         </div>
@@ -414,33 +411,33 @@ const StudentDashboard: React.FC = () => {
 
                     <div className="border rounded-lg overflow-hidden">
                       <div className="bg-gray-100 px-4 py-2 font-medium">
-                        Tuần sau
+                        {t('next_week')}
                       </div>
                       <div className="p-4">
                         <div className="mb-6 last:mb-0">
                           <div className="flex justify-between mb-2 items-center">
-                            <span className="font-medium">Bài 4: Xử lý tệp tin</span>
+                            <span className="font-medium">{t('advanced_math_grade_12')}</span>
                             <div className="flex items-center gap-2">
                               <span className="text-pink-400 font-medium">20/05/2025</span>
-                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/123456789', '_blank')}>Vào học</Button>
+                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/123456789', '_blank')}>{t('go_to_class')}</Button>
                             </div>
                           </div>
                           <div className="flex justify-between text-sm text-gray-600">
-                            <div>Giảng viên: Thầy Nguyễn Văn A</div>
+                            <div>{t('instructor')}: Thầy Nguyễn Văn A</div>
                             <div>19:00 - 21:00</div>
                           </div>
                         </div>
                         
                         <div className="mb-6 last:mb-0">
                           <div className="flex justify-between mb-2 items-center">
-                            <span className="font-medium">Thực hành: Đọc và ghi tệp tin</span>
+                            <span className="font-medium">{t('university_physics_prep')}</span>
                             <div className="flex items-center gap-2">
                               <span className="text-pink-400 font-medium">22/05/2025</span>
-                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/123456789', '_blank')}>Vào học</Button>
+                              <Button size="sm" className="bg-pink-400 text-white hover:bg-pink-500" onClick={() => window.open('https://zoom.us/j/123456789', '_blank')}>{t('go_to_class')}</Button>
                             </div>
                           </div>
                           <div className="flex justify-between text-sm text-gray-600">
-                            <div>Giảng viên: Thầy Nguyễn Văn A</div>
+                            <div>{t('instructor')}: Thầy Nguyễn Văn A</div>
                             <div>19:00 - 21:00</div>
                           </div>
                         </div>
@@ -458,24 +455,24 @@ const StudentDashboard: React.FC = () => {
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
             <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-600" onClick={() => setShowDetailModal(false)}>&times;</button>
-            <h2 className="text-xl font-bold mb-4">Chi tiết bài tập</h2>
+            <h2 className="text-xl font-bold mb-4">{t('assignment_details')}</h2>
             <div className="mb-2 font-medium">{selectedAssignment.title}</div>
             <div className="mb-2 text-gray-600">{selectedAssignment.description}</div>
-            <div className="mb-2 text-gray-500">Hạn nộp: {selectedAssignment.dueDate}</div>
-            <div className="mb-2 text-gray-500">Trạng thái: {selectedAssignment.status}</div>
+            <div className="mb-2 text-gray-500">{t('due_date')}: {selectedAssignment.dueDate}</div>
+            <div className="mb-2 text-gray-500">{t('status')}: {selectedAssignment.status}</div>
             {selectedAssignment.score !== undefined && (
-              <div className="mb-2 text-green-600 font-semibold">Điểm: {selectedAssignment.score}</div>
+              <div className="mb-2 text-green-600 font-semibold">{t('score')}: {selectedAssignment.score}</div>
             )}
             {selectedAssignment.teacherComment && (
-              <div className="mb-2 text-gray-700 italic">Nhận xét: {selectedAssignment.teacherComment}</div>
+              <div className="mb-2 text-gray-700 italic">{t('teacher_comment')}: {selectedAssignment.teacherComment}</div>
             )}
             {selectedAssignment.submittedFile && (
               <div className="mb-2">
                 <a href={selectedAssignment.submittedFile.url} className="text-blue-500 underline" download>{selectedAssignment.submittedFile.name}</a>
-                <span className="ml-2 text-xs text-gray-500">(Nộp lúc: {selectedAssignment.submittedAt})</span>
+                <span className="ml-2 text-xs text-gray-500">({t('submitted_at')}: {selectedAssignment.submittedAt})</span>
               </div>
             )}
-            <Button onClick={() => { setShowDetailModal(false); setShowSubmitModal(true); }}>Nộp bài</Button>
+            <Button onClick={() => { setShowDetailModal(false); setShowSubmitModal(true); }}>{t('submit_assignment')}</Button>
           </div>
         </div>
       )}
@@ -485,19 +482,19 @@ const StudentDashboard: React.FC = () => {
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
             <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-600" onClick={() => { setShowSubmitModal(false); setUploadFiles([]); }}>&times;</button>
-            <h2 className="text-xl font-bold mb-4">Nộp bài tập</h2>
+            <h2 className="text-xl font-bold mb-4">{t('assignment_submission')}</h2>
             <div className="mb-2 font-medium">{selectedAssignment.title}</div>
             <div className="mb-4 text-gray-600">{selectedAssignment.description}</div>
             <form onSubmit={e => { e.preventDefault(); /* Xử lý nộp bài ở đây */ setShowSubmitModal(false); setUploadFiles([]); }}>
               <div className="mb-4">
-                <label htmlFor="student-upload-input" className="block text-sm font-medium mb-1">Chọn tệp để nộp (có thể chọn nhiều tệp)</label>
+                <label htmlFor="student-upload-input" className="block text-sm font-medium mb-1">{t('select_files_to_submit')}</label>
                 <div className="flex items-center gap-3">
                   <button
                     type="button"
                     className="bg-pink-300 text-pink-900 font-semibold rounded px-4 py-2 border border-pink-400 hover:bg-pink-400 transition"
                     onClick={() => document.getElementById('student-upload-input')?.click()}
                   >
-                    Chọn tệp
+                    {t('select_files')}
                   </button>
                   <input
                     id="student-upload-input"
@@ -520,8 +517,8 @@ const StudentDashboard: React.FC = () => {
                 </div>
               </div>
               <div className="flex justify-end gap-2">
-                <Button type="button" variant="outline" onClick={() => { setShowSubmitModal(false); setUploadFiles([]); }}>Hủy</Button>
-                <Button type="submit" disabled={uploadFiles.length === 0}>Nộp bài</Button>
+                <Button type="button" variant="outline" onClick={() => { setShowSubmitModal(false); setUploadFiles([]); }}>{t('cancel')}</Button>
+                <Button type="submit" disabled={uploadFiles.length === 0}>{t('submit')}</Button>
               </div>
             </form>
           </div>

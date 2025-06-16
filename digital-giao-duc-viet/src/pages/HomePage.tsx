@@ -214,7 +214,7 @@ const HomePage: React.FC = () => {
             <p className="text-white text-lg mb-8 max-w-xl mx-auto">
               Đăng ký học thử miễn phí ngay hôm nay và trải nghiệm phương pháp học hiệu quả tại Digital Education.
             </p>
-            <Button asChild size="lg" className="bg-pink-400 text-white hover:bg-pink-500">
+            <Button asChild size="lg" className="bg-pink-600 text-white hover:bg-pink-700 font-semibold shadow-lg transition-all duration-300 transform hover:-translate-y-1">
               <Link to="/dang-ky">Đăng ký học thử miễn phí</Link>
             </Button>
           </div>
