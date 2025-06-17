@@ -12,7 +12,7 @@ export interface CurriculumSection {
 }
 
 export interface Course {
-  id: number;
+  id: string;
   title: string;
   description: string;
   image: string;

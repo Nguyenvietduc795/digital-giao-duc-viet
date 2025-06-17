@@ -114,18 +114,12 @@ const RegisterForm: React.FC = () => {
           className="h-28 w-28 object-contain mr-4"
           style={{ minWidth: 112 }}
         />
-        <span className="block" style={{
-          fontSize: 48,
-          fontWeight: 'bold',
-          background: 'linear-gradient(to right, #e18df9, #888ff7)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-          color: 'transparent',
-          whiteSpace: 'nowrap'
-        }}>
-          Digital Education
-        </span>
+        <img
+          src="/2-Photoroom.png"
+          alt="Digital Education"
+          className="h-16 object-contain"
+          style={{ maxHeight: 64 }}
+        />
       </div>
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Họ và tên" value={fullName} onChange={(e) => setFullName(e.target.value)} required />

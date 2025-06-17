@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Footer from '@/components/Footer';
 import CourseCard from '@/components/CourseCard';
 import { courses } from '@/data/courseData';
 import { usePaidCourses } from '@/context/PaidCoursesContext';
 import { useLanguage } from '@/context/LanguageContext';
+import { supabase } from "@/lib/supabase";
 
 // Define course categories and levels for filters
 const categories = ["Tất cả", "Lập trình & CNTT", "Tiếng Anh & Chứng chỉ", "Toán học nâng cao", "Luyện thi đại học"];
@@ -15,6 +16,28 @@ const CourseList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { paidCourses } = usePaidCourses();
   const { t } = useLanguage();
+
+  // Test Supabase connection
+  useEffect(() => {
+    const testSupabaseConnection = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('courses')
+          .select('*')
+          .limit(1);
+        
+        if (error) {
+          console.error("Supabase connection error:", error);
+        } else {
+          console.log("Supabase connection successful:", data);
+        }
+      } catch (error) {
+        console.error("Error testing Supabase connection:", error);
+      }
+    };
+    
+    testSupabaseConnection();
+  }, []);
 
   // Filter courses based on selected filters and search term
   const filteredCourses = useMemo(() => {

@@ -46,24 +46,20 @@ const Header: React.FC = () => {
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
-          {/* Đổi logo thành logo mới vừa thêm vào */}
+          {/* Logo mới thay cho logo cũ */}
           <img
-            src="/Blue_and_Yellow_Minimalist_Modern_University_Logo__3_-removebg-preview.png"
+            src="/1-Photoroom.png"
             alt="Digital Education Logo"
-            className="h-16 w-auto mr-2 inline-block align-middle"
+            className="h-12 w-auto inline-block align-middle object-contain"
+            style={{ maxHeight: '3rem' }}
           />
-          <span
-            className="font-bold text-xl"
-            style={{
-              background: 'linear-gradient(90deg, #e3a6e7 0%, #7ea7f7 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              color: 'transparent',
-            }}
-          >
-            Digital Education
-          </span>
+          {/* Ảnh kế logo */}
+          <img
+            src="/2-Photoroom.png"
+            alt="Digital Education Text"
+            className="h-12 max-h-6 w-auto inline-block align-middle object-contain"
+            style={{ maxHeight: '1.65rem', position: 'relative', top: '1px' }}
+          />
         </Link>
 
         {/* Mobile menu button */}

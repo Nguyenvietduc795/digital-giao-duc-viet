@@ -28,14 +28,14 @@ const CourseDetail: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'curriculum' | 'teacher' | 'faq'>('overview');
   const [coursePrice, setCoursePrice] = useState<number | null>(null);
   const [loadingPrice, setLoadingPrice] = useState(true);
-
   // Find the course based on the ID from URL params
-  const course = courses.find(course => course.id === Number(id));
+  const course = courses.find(course => course.id === id);
 
   // Fetch course price from Supabase
   useEffect(() => {
     const fetchPrice = async () => {
-      console.log("Fetching price for course ID:", id);
+      console.log("Debug - Course ID:", id);
+      console.log("Debug - Course found:", course);
       if (!id) {
         console.log("Course ID is undefined.");
         setLoadingPrice(false);
@@ -43,10 +43,11 @@ const CourseDetail: React.FC = () => {
       }
       setLoadingPrice(true);
       try {
+        console.log("Making Supabase query for ID:", id);
         const { data, error } = await supabase
           .from('courses')
-          .select('price')
-          .eq('id', Number(id))
+          .select('*')
+          .eq('id', id)
           .single();
 
         if (error) {
@@ -54,8 +55,8 @@ const CourseDetail: React.FC = () => {
           throw error;
         }
         if (data) {
+          console.log("Successfully fetched course price data:", data);
           setCoursePrice(data.price);
-          console.log("Successfully fetched course price:", data.price);
         } else {
           console.log("No data returned for course ID:", id);
           setCoursePrice(null);
