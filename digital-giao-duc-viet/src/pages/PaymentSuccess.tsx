@@ -1,16 +1,44 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { usePaidCourses } from '@/context/PaidCoursesContext';
+import { supabase } from "@/lib/supabase";
+
+interface LocationState {
+  courseId?: number;
+  paymentMethod?: 'momo' | 'vnpay' | 'bank';
+}
 
 const PaymentSuccess: React.FC = () => {
   const location = useLocation();
   const { addPaidCourse } = usePaidCourses();
-  const courseId = (location.state as { courseId?: number })?.courseId;
+  const { courseId, paymentMethod } = location.state as LocationState;
+  const [courseDetails, setCourseDetails] = useState<{ title: string; price: number } | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (courseId) {
       addPaidCourse(courseId);
+
+      const fetchCourseDetails = async () => {
+        try {
+          const { data: course, error } = await supabase
+            .from('courses')
+            .select('title, price')
+            .eq('id', courseId)
+            .single();
+
+          if (error) throw error;
+          setCourseDetails(course);
+        } catch (error) {
+          console.error('Error fetching course details:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchCourseDetails();
+    } else {
+      setLoading(false);
     }
   }, [courseId, addPaidCourse]);
 
@@ -21,6 +49,15 @@ const PaymentSuccess: React.FC = () => {
   const currentDate = new Date();
   const expirationDate = new Date(currentDate);
   expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+
+  const getPaymentMethodName = (method: 'momo' | 'vnpay' | 'bank' | undefined) => {
+    switch (method) {
+      case 'momo': return 'Ví MoMo';
+      case 'vnpay': return 'VNPay';
+      case 'bank': return 'Chuyển khoản ngân hàng';
+      default: return 'N/A';
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -41,6 +78,12 @@ const PaymentSuccess: React.FC = () => {
               <div className="mb-8">
                 <h2 className="text-xl font-bold mb-4">Chi tiết đơn hàng</h2>
                 <div className="bg-gray-50 p-4 rounded-md mb-6">
+                  {courseDetails && (
+                    <div className="flex justify-between py-2 border-b">
+                      <span className="text-gray-600">Khóa học:</span>
+                      <span className="font-medium">{courseDetails.title}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between py-2 border-b">
                     <span className="text-gray-600">Mã đơn hàng:</span>
                     <span className="font-medium">{orderId}</span>
@@ -51,11 +94,17 @@ const PaymentSuccess: React.FC = () => {
                   </div>
                   <div className="flex justify-between py-2 border-b">
                     <span className="text-gray-600">Phương thức:</span>
-                    <span>Ví MoMo</span>
+                    <span>{getPaymentMethodName(paymentMethod)}</span>
                   </div>
                   <div className="flex justify-between py-2 border-b">
                     <span className="text-gray-600">Tổng tiền:</span>
-                    <span className="font-bold">4.490.000₫</span>
+                    {loading ? (
+                      <span>Đang tải...</span>
+                    ) : courseDetails ? (
+                      <span className="font-bold">{courseDetails.price.toLocaleString('vi-VN')}₫</span>
+                    ) : (
+                      <span className="font-bold">N/A</span>
+                    )}
                   </div>
                   <div className="flex justify-between py-2">
                     <span className="text-gray-600">Quyền truy cập:</span>
@@ -64,14 +113,14 @@ const PaymentSuccess: React.FC = () => {
                 </div>
                 
                 <h3 className="font-semibold text-lg mb-2">Các bước tiếp theo:</h3>
-                <ol className="list-decimal pl-5 space-y-2 mb-6">
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li>Kiểm tra email xác nhận đã được gửi tới hòm thư của bạn.</li>
                   <li>Đăng nhập vào tài khoản học viên để bắt đầu học ngay.</li>
                   <li>Truy cập đầy đủ vào tất cả các nội dung khóa học.</li>
                   <li>Liên hệ hỗ trợ nếu bạn gặp bất kỳ vấn đề nào.</li>
                 </ol>
 
-                <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6">
                   <div className="flex">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500 mr-2">
                       <circle cx="12" cy="12" r="10"></circle>
