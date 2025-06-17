@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { courses } from '@/data/courseData';
+import { supabase } from "@/lib/supabase";
 
 const getTeacherAvatarSrc = (teacherName: string, gender?: string): string => {
   const specificAvatars: { [key: string]: string } = {
@@ -25,9 +26,48 @@ const getTeacherAvatarSrc = (teacherName: string, gender?: string): string => {
 const CourseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState<'overview' | 'curriculum' | 'teacher' | 'faq'>('overview');
+  const [coursePrice, setCoursePrice] = useState<number | null>(null);
+  const [loadingPrice, setLoadingPrice] = useState(true);
 
   // Find the course based on the ID from URL params
   const course = courses.find(course => course.id === Number(id));
+
+  // Fetch course price from Supabase
+  useEffect(() => {
+    const fetchPrice = async () => {
+      console.log("Fetching price for course ID:", id);
+      if (!id) {
+        console.log("Course ID is undefined.");
+        setLoadingPrice(false);
+        return;
+      }
+      setLoadingPrice(true);
+      try {
+        const { data, error } = await supabase
+          .from('courses')
+          .select('price')
+          .eq('id', Number(id))
+          .single();
+
+        if (error) {
+          console.error("Supabase error fetching course price:", error);
+          throw error;
+        }
+        if (data) {
+          setCoursePrice(data.price);
+          console.log("Successfully fetched course price:", data.price);
+        } else {
+          console.log("No data returned for course ID:", id);
+          setCoursePrice(null);
+        }
+      } catch (error) {
+        console.error("Error fetching course price:", error);
+      } finally {
+        setLoadingPrice(false);
+      }
+    };
+    fetchPrice();
+  }, [id]);
 
   // If course not found
   if (!course) {
@@ -228,7 +268,13 @@ const CourseDetail: React.FC = () => {
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-gray-700">Học phí:</span>
-                    <span className="text-2xl font-bold text-primary">1.990.000₫</span>
+                    {loadingPrice ? (
+                      <span>Đang tải...</span>
+                    ) : coursePrice !== null ? (
+                      <span className="text-2xl font-bold text-primary">{coursePrice.toLocaleString('vi-VN')}₫</span>
+                    ) : (
+                      <span className="text-2xl font-bold text-primary">N/A</span>
+                    )}
                   </div>
                   <div className="text-sm text-gray-600 mb-4">
                     Thanh toán một lần, truy cập vĩnh viễn
