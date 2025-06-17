@@ -53,16 +53,11 @@ const StudentDashboard: React.FC = () => {
   const [showAllRegisteredCourses, setShowAllRegisteredCourses] = useState(false);
   const { t, language } = useLanguage();
 
-  const [scheduledCourses, setScheduledCourses] = useState<{
-    courseId: number;
-    date: string;
-    time: string;
-    zoomLink: string;
-  }[]>([
-    { courseId: 1, date: "18/06/2025", time: "19:00 - 21:00", zoomLink: "https://zoom.us/j/9876543210" }, // Lập trình Python cơ bản - Tuần này
-    { courseId: 2, date: "20/06/2025", time: "19:00 - 21:00", zoomLink: "https://zoom.us/j/1234567890" }, // IELTS 6.0+ trong 3 tháng - Tuần này
-    { courseId: 1, date: "25/06/2025", time: "19:00 - 21:00", zoomLink: "https://zoom.us/j/9876543210" }, // Lập trình Python cơ bản - Tuần sau
-    { courseId: 2, date: "27/06/2025", time: "19:00 - 21:00", zoomLink: "https://zoom.us/j/1234567890" }, // IELTS 6.0+ trong 3 tháng - Tuần sau
+  const [scheduledCourses, setScheduledCourses] = useState([
+    { courseId: "aa205b7a-01af-47a6-a62f-2679da9946bf", date: "18/06/2025", time: "19:00 - 21:00", zoomLink: "https://meet.google.com/abc-defg-hij" },
+    { courseId: "1b1ff90a-f8ca-421e-96a0-1ea50041cf74", date: "20/06/2025", time: "19:00 - 21:00", zoomLink: "https://zoom.us/j/1234567890" },
+    { courseId: "aa205b7a-01af-47a6-a62f-2679da9946bf", date: "25/06/2025", time: "19:00 - 21:00", zoomLink: "https://meet.google.com/abc-defg-hij" },
+    { courseId: "1b1ff90a-f8ca-421e-96a0-1ea50041cf74", date: "27/06/2025", time: "19:00 - 21:00", zoomLink: "https://zoom.us/j/1234567890" },
   ]);
 
   const thisWeekSchedule = scheduledCourses.filter(item => ["18/06/2025", "20/06/2025"].includes(item.date));
@@ -78,26 +73,26 @@ const StudentDashboard: React.FC = () => {
     },
     {
       id: 2,
-      title: "Chi tiết bài tập 1: IELTS 6.0+ trong 3 tháng",
-      description: "Bài test cơ bản đã hoàn thành.",
+      title: "Chi tiết bài tập 1: TOEIC 750+ trong 2 tháng",
+      description: "Bài test đọc và nghe TOEIC cơ bản.",
       dueDate: "2025-06-18",
       status: "completed",
       score: 10,
-      teacherComment: "Bạn đã hoàn thành rất tốt bài test cơ bản của khóa học IELTS!",
-      submittedFile: { name: "ielts_test_1.pdf", url: "/files/ielts_test_1.pdf" },
+      teacherComment: "Bạn đã hoàn thành rất tốt bài test cơ bản của khóa học TOEIC!",
+      submittedFile: { name: "toeic_test_1.pdf", url: "/files/toeic_test_1.pdf" },
       submittedAt: "2025-06-30 10:00",
     },
     {
       id: 3,
-      title: "Chi tiết bài tập 2: IELTS 6.0+ trong 3 tháng",
-      description: "Luyện tập kỹ năng Viết IELTS Task 1 (mô tả biểu đồ) và Task 2 (viết luận) theo các chủ đề phổ biến.",
+      title: "Chi tiết bài tập 2: TOEIC 750+ trong 2 tháng",
+      description: "Luyện tập kỹ năng nghe TOEIC, phần 1 và 2: Câu hỏi - Đáp án.",
       dueDate: "2025-07-12",
       status: "in_progress",
     },
     {
       id: 4,
-      title: "Chi tiết bài tập 3: IELTS 6.0+ trong 3 tháng",
-      description: "Chuẩn bị và thực hành bài thi Nói IELTS Part 1, 2, 3. Tập trung vào từ vựng, ngữ pháp và sự trôi chảy.",
+      title: "Chi tiết bài tập 3: TOEIC 750+ trong 2 tháng",
+      description: "Luyện tập kỹ năng đọc TOEIC, phần 5 và 6: Hoàn thành câu và hoàn thành đoạn văn.",
       dueDate: "2025-07-19",
       status: "not_opened",
     },
@@ -173,7 +168,7 @@ const StudentDashboard: React.FC = () => {
     if (hours > 0 || days > 0) str += `${hours} ${t('hours')} `;
     str += `${mins} ${t('minutes')}`;
     return str;
-  }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -301,19 +296,16 @@ const StudentDashboard: React.FC = () => {
                               </svg>
                             </div>
                             <div>
-                              <h3 className="font-medium">{doc.name}</h3>
-                              <p className="text-sm text-gray-600">{doc.type} • {doc.size}</p>
+                              <p className="font-medium">{doc.name}</p>
+                              <p className="text-sm text-gray-500">{doc.type} - {doc.size}</p>
                             </div>
                           </div>
-                          {doc.type === "Video" ? (
-                            <Button variant="outline" size="sm" onClick={() => handleView(doc.url, doc.type)}>
-                              {t('view')}
-                            </Button>
-                          ) : (
-                            <Button variant="outline" size="sm" onClick={() => handleDownload(doc.url, doc.name)}>
-                              {t('download')}
-                            </Button>
-                          )}
+                          <div className="flex space-x-2">
+                            <Button size="sm" onClick={() => handleDownload(doc.url, doc.name)}>{t('download')}</Button>
+                            {doc.type !== 'ZIP' && (
+                              <Button size="sm" variant="outline" onClick={() => handleView(doc.url, doc.type)}>{t('view')}</Button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -324,14 +316,13 @@ const StudentDashboard: React.FC = () => {
               {activeTab === TabType.Assignments && (
                 <div>
                   <h2 className="text-xl font-bold mb-4">{t('course_assignments')}</h2>
-                  
-                  <div className="space-y-6 overflow-y-auto max-h-[calc(100vh-200px)]">
-                    {assignments.map(assignment => (
+                  <div className="space-y-4">
+                    {assignments.map((assignment) => (
                       <div key={assignment.id} className="border rounded-lg p-6">
                         <div className="flex justify-between items-start mb-4">
                           <div>
                             <h3 className="font-medium text-lg">{assignment.title}</h3>
-                            <span className="text-gray-600 mb-2">Hạn nộp: {getTimeLeft(assignment.dueDate) !== t('expired') ? assignment.dueDate.split('-').reverse().join('/') : t('expired')}</span>
+                            <span className="text-gray-600 mb-2">{t('due_date')}: {getTimeLeft(assignment.dueDate) !== t('expired') ? assignment.dueDate.split('-').reverse().join('/') : t('expired')}</span>
                           </div>
                           <div className={`text-xs px-2 py-1 rounded ${
                             assignment.status === 'completed' ? 'bg-green-100 text-green-800' :
@@ -350,11 +341,11 @@ const StudentDashboard: React.FC = () => {
                         </div>
                         <div className="flex justify-between items-center">
                           {assignment.status === 'completed' && assignment.score !== undefined ? (
-                            <span className="text-sm text-gray-500">Điểm: {assignment.score}/10</span>
+                            <span className="text-sm text-gray-500">{t('score')}: {assignment.score}/10</span>
                           ) : assignment.status === 'in_progress' ? (
-                            <span className="text-sm text-gray-500">Thời gian còn lại: {getTimeLeft(assignment.dueDate)}</span>
+                            <span className="text-sm text-gray-500">{t('time_left')}: {getTimeLeft(assignment.dueDate)}</span>
                           ) : (
-                            <span className="text-sm text-gray-500">Bài tập sẽ được mở sau khi bạn hoàn thành Bài tập 2.</span>
+                            <span className="text-sm text-gray-500">{t('assignment_will_open')} 2.</span>
                           )}
                           <div className="flex gap-2">
                             {assignment.status !== 'not_opened' && (
@@ -373,7 +364,7 @@ const StudentDashboard: React.FC = () => {
                                   });
                                   setShowDetailModal(true);
                                 }}>
-                                Xem chi tiết
+                                {t('view_details')}
                               </Button>
                             )}
                             {assignment.status === 'in_progress' && (
@@ -388,7 +379,7 @@ const StudentDashboard: React.FC = () => {
                                   });
                                   setShowSubmitModal(true);
                                 }}>
-                                Nộp bài
+                                {t('submit_assignment')}
                               </Button>
                             )}
                           </div>
@@ -426,7 +417,7 @@ const StudentDashboard: React.FC = () => {
                       <div className="p-4">
                         {thisWeekSchedule.map((item, index) => {
                           const course = allCourses.find(c => c.id === item.courseId);
-                          if (!course) return null; // Should not happen with valid courseIds
+                          if (!course) return null; 
 
                           return (
                             <div key={index} className="mb-6 last:mb-0">
@@ -454,7 +445,7 @@ const StudentDashboard: React.FC = () => {
                       <div className="p-4">
                         {nextWeekSchedule.map((item, index) => {
                           const course = allCourses.find(c => c.id === item.courseId);
-                          if (!course) return null; // Should not happen with valid courseIds
+                          if (!course) return null; 
 
                           return (
                             <div key={index} className="mb-6 last:mb-0">
@@ -490,7 +481,7 @@ const StudentDashboard: React.FC = () => {
             <div className="mb-2 font-medium">{selectedAssignment.title}</div>
             <div className="mb-2 text-gray-600">{selectedAssignment.description}</div>
             <div className="mb-2 text-gray-500">{t('due_date')}: {selectedAssignment.dueDate}</div>
-            <div className="mb-2 text-gray-500">{t('status')}: {selectedAssignment.status}</div>
+            <div className="mb-2 text-gray-500">{t('status')}: {t(selectedAssignment.status)}</div>
             {selectedAssignment.score !== undefined && (
               <div className="mb-2 text-green-600 font-semibold">{t('score')}: {selectedAssignment.score}</div>
             )}
@@ -532,26 +523,25 @@ const StudentDashboard: React.FC = () => {
                   <input
                     id="student-upload-input"
                     type="file"
-                    className="hidden"
                     multiple
-                    onChange={e => {
-                      if (e.target.files) {
-                        setUploadFiles(Array.from(e.target.files));
-                      }
-                    }}
+                    onChange={e => setUploadFiles(Array.from(e.target.files || []))}
+                    className="sr-only"
                   />
                   {uploadFiles.length > 0 && (
-                    <ul className="text-sm text-gray-700">
-                      {uploadFiles.map((file, idx) => (
-                        <li key={idx}>{file.name}</li>
-                      ))}
-                    </ul>
+                    <span className="text-sm text-gray-600">{uploadFiles.length} {t('files_selected')}</span>
                   )}
                 </div>
               </div>
-              <div className="flex justify-end gap-2">
-                <Button type="button" variant="outline" onClick={() => { setShowSubmitModal(false); setUploadFiles([]); }}>{t('cancel')}</Button>
-                <Button type="submit" disabled={uploadFiles.length === 0}>{t('submit')}</Button>
+              {uploadFiles.length > 0 && (
+                <ul className="list-disc pl-5 mb-4 text-sm text-gray-600">
+                  {uploadFiles.map((file, index) => (
+                    <li key={index}>{file.name}</li>
+                  ))}
+                </ul>
+              )}
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => { setShowSubmitModal(false); setUploadFiles([]); }}>{t('cancel')}</Button>
+                <Button type="submit">{t('submit')}</Button>
               </div>
             </form>
           </div>
@@ -559,6 +549,6 @@ const StudentDashboard: React.FC = () => {
       )}
     </div>
   );
-};
+}
 
 export default StudentDashboard;

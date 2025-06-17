@@ -104,7 +104,7 @@ const TeacherDashboard: React.FC = () => {
     },
     {
       id: 2,
-      name: "TOEIC 750+ - Lớp B",
+      name: "Lập trình Python cơ bản - Lớp B",
       schedule: "Thứ 2, Thứ 4, Thứ 6 (18:00 - 19:30)",
       students: 25,
       progress: 45,
@@ -120,7 +120,7 @@ const TeacherDashboard: React.FC = () => {
     },
     {
       id: 4,
-      name: "Toán cao cấp cho lớp 12",
+      name: " Lập trình Python cơ bản - Lớp C",
       schedule: "Thứ 2, Thứ 6 (9:00 - 11:00)",
       students: 18,
       progress: 75,
@@ -128,7 +128,7 @@ const TeacherDashboard: React.FC = () => {
     },
     {
       id: 5,
-      name: "Luyện thi đại học môn Vật lý",
+      name: "Thiết kế web với HTML, CSS và JavaScript - Lớp B",
       schedule: "Thứ 4, Chủ nhật (14:00 - 16:00)",
       students: 22,
       progress: 50,
@@ -136,7 +136,7 @@ const TeacherDashboard: React.FC = () => {
     },
     {
       id: 6,
-      name: "IELTS 6.0+ trong 3 tháng",
+      name: "Thiết kế web với HTML, CSS và JavaScript - Lớp D",
       schedule: "Thứ 3, Thứ 7 (17:00 - 19:00)",
       students: 17,
       progress: 85,
@@ -145,6 +145,13 @@ const TeacherDashboard: React.FC = () => {
   ]);
 
   const displayedClasses = showAllClasses ? classes : classes.slice(0, 3);
+
+  useEffect(() => {
+    // Display notifications for new class schedules on component mount
+    classes.slice(0, 3).forEach((classItem) => {
+      toast.info(`Bạn có lịch dạy lớp học mới: ${classItem.name}`);
+    });
+  }, []);
 
   useEffect(() => {
     if (detailClass) {
@@ -242,9 +249,7 @@ const TeacherDashboard: React.FC = () => {
                 <h1 className="text-2xl font-bold text-white mb-2">
                   Xin chào, Thầy Nguyễn Văn A!
                 </h1>
-                <p className="text-white">
-                  Bạn có 3 lớp học đang diễn ra và 18 bài tập cần đánh giá.
-                </p>
+                <p className="text-gray-600 dark:text-gray-400"></p>
               </div>
               <div className="mt-4 md:mt-0 space-x-3">
                 <Button className="bg-secondary text-black hover:bg-yellow-300" onClick={() => setShowCreateModal(true)}>
@@ -329,7 +334,7 @@ const TeacherDashboard: React.FC = () => {
         </div>
 
         {/* Assignments Section */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white rounded-lg shadow-md overflow-hidden mb-16">
           <div className="p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold">Bài tập đã giao</h2>
