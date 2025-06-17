@@ -1,0 +1,19 @@
+.header {
+    height: 60px;
+    /* or your existing height */
+    display: flex;
+    align-items: center;
+    /* ...existing code... */
+}
+
+.header-title {
+    font-size: 2rem;
+    /* Increase as needed */
+    margin-left: 16px;
+    white-space: nowrap;
+    line-height: 1;
+    /* Prevent text from increasing header height */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* ...existing code... */
+}
