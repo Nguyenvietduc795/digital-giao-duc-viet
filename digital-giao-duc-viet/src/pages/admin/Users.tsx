@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -23,39 +23,135 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Plus, MoreHorizontal, Search, Edit, Trash2 } from "lucide-react"
+import { supabase } from "@/lib/supabase"
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  joinedDate: string;
+}
 
 // Mock data
-const users = [
-  {
-    id: 1,
-    name: "Nguyễn Văn A",
-    email: "nguyenvana@example.com",
-    role: "student",
-    status: "active",
-    joinedDate: "01/01/2024",
-  },
-  {
-    id: 2,
-    name: "Trần Thị B",
-    email: "tranthib@example.com",
-    role: "teacher",
-    status: "active",
-    joinedDate: "15/01/2024",
-  },
-  {
-    id: 3,
-    name: "Lê Văn C",
-    email: "levanc@example.com",
-    role: "student",
-    status: "inactive",
-    joinedDate: "20/01/2024",
-  },
-]
+// const users = [
+//   {
+//     id: 1,
+//     name: "Nguyễn Văn A",
+//     email: "nguyenvana@example.com",
+//     role: "student",
+//     status: "active",
+//     joinedDate: "01/01/2024",
+//   },
+//   {
+//     id: 2,
+//     name: "Trần Thị B",
+//     email: "tranthib@example.com",
+//     role: "teacher",
+//     status: "active",
+//     joinedDate: "15/01/2024",
+//   },
+//   {
+//     id: 3,
+//     name: "Lê Văn C",
+//     email: "levanc@example.com",
+//     role: "student",
+//     status: "inactive",
+//     joinedDate: "20/01/2024",
+//   },
+// ]
 
 export default function Users() {
   const [searchQuery, setSearchQuery] = useState("")
   const [roleFilter, setRoleFilter] = useState("all")
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [newRole, setNewRole] = useState<string>("")
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id, name, email, role, created_at')
+
+        if (error) {
+          throw error
+        }
+        
+        const formattedUsers: User[] = data.map(user => ({
+          id: user.id,
+          name: user.name || 'N/A',
+          email: user.email || 'N/A',
+          role: user.role || 'student',
+          status: 'active',
+          joinedDate: user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A',
+        }))
+
+        setUsers(formattedUsers)
+      } catch (err: any) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUsers()
+  }, [])
+
+  const handleEditClick = (user: User) => {
+    setSelectedUser(user)
+    setNewRole(user.role)
+    setIsEditDialogOpen(true)
+  }
+
+  const handleSaveRole = async () => {
+    if (selectedUser && newRole) {
+      try {
+        const { error } = await supabase
+          .from('profiles')
+          .update({ role: newRole })
+          .eq('id', selectedUser.id)
+
+        if (error) throw error
+
+        // Update the user in the local state
+        setUsers(users.map(user => 
+          user.id === selectedUser.id ? { ...user, role: newRole } : user
+        ))
+        setIsEditDialogOpen(false)
+        setSelectedUser(null)
+        setNewRole("")
+      } catch (err: any) {
+        console.error("Error updating role:", err.message)
+        setError("Error updating role: " + err.message)
+      }
+    }
+  }
+
+  const filteredUsers = users.filter((user) => {
+    const matchesSearchQuery = user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                               user.email.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesRoleFilter = roleFilter === "all" || user.role === roleFilter
+    return matchesSearchQuery && matchesRoleFilter
+  })
+
+  if (loading) return <div>Loading users...</div>
+  if (error) return <div>Error: {error}</div>
 
   return (
     <div className="space-y-6">
@@ -103,7 +199,7 @@ export default function Users() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <TableRow key={user.id} className="hover:bg-gray-50">
                 <TableCell className="font-medium">{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
@@ -138,7 +234,12 @@ export default function Users() {
                 <TableCell>{user.joinedDate}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end space-x-2">
-                    <Button variant="outline" size="icon" className="h-8 w-8 text-blue-600 hover:bg-blue-50 hover:text-blue-700 border-blue-600">
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      className="h-8 w-8 text-blue-600 hover:bg-blue-50 hover:text-blue-700 border-blue-600"
+                      onClick={() => handleEditClick(user)}
+                    >
                       <Edit className="h-4 w-4" />
                     </Button>
                     <Button variant="outline" size="icon" className="h-8 w-8 text-red-600 hover:bg-red-50 hover:text-red-700 border-red-600">
@@ -151,6 +252,36 @@ export default function Users() {
           </TableBody>
         </Table>
       </div>
+
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Chỉnh sửa vai trò người dùng</DialogTitle>
+            <DialogDescription>
+              Thay đổi vai trò cho {selectedUser?.name}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label htmlFor="role" className="text-right">Vai trò</label>
+              <Select value={newRole} onValueChange={setNewRole}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Chọn vai trò" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="student">Học viên</SelectItem>
+                  <SelectItem value="teacher">Giảng viên</SelectItem>
+                  <SelectItem value="admin">Quản trị viên</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Hủy</Button>
+            <Button onClick={handleSaveRole}>Lưu thay đổi</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 } 
