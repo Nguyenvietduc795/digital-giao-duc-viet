@@ -61,14 +61,9 @@ export default function Courses() {
     setIsModalOpen(true);
   };
 
-  const handleDeleteCourse = async (id: number) => {
+  const handleDeleteCourse = (id: number) => {
     if (window.confirm('Are you sure you want to delete this course?')) {
-      const { error } = await supabase.from('courses').delete().eq('id', id);
-      if (error) {
-        setError(error.message);
-      } else {
-        fetchCourses(); // Refresh list
-      }
+      setCourses(prev => prev.filter(course => course.id !== id));
     }
   };
 
