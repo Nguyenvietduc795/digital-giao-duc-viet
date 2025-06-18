@@ -61,7 +61,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   const showNotificationBell = location.pathname === '/hoc-vien' || location.pathname === '/giao-vien';
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-r from-[#F9AD6A] to-[#FF9CDA]">
       {!hideHeaderFooter && <Header />}
       {showNotificationBell && (
         <div className="relative">

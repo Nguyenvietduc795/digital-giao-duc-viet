@@ -181,6 +181,7 @@ const translations: Record<Language, Record<string, string>> = {
     'role_description_admin': 'Toàn quyền truy cập vào tất cả các tính năng và cài đặt hệ thống.',
     'role_description_teacher': 'Có thể quản lý khóa học, bài tập và xem tiến độ học tập của học sinh.',
     'role_description_student': 'Có thể đăng ký khóa học, truy cập tài liệu học tập và nộp bài tập.',
+    'time_left': 'Thời gian còn lại',
   },
   en: {
     'home': 'Home',
@@ -352,6 +353,7 @@ const translations: Record<Language, Record<string, string>> = {
     'role_description_admin': 'Full access to all system features and settings.',
     'role_description_teacher': 'Can manage courses, assignments, and view student progress.',
     'role_description_student': 'Can enroll in courses, access learning materials, and submit assignments.',
+    'time_left': 'Time Left',
   }
 };
 

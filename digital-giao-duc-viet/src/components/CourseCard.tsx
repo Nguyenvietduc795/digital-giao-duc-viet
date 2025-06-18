@@ -26,6 +26,7 @@ export interface Course {
 interface CourseCardProps {
   course: Course;
   isPaid?: boolean;
+  className?: string;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course, isPaid }) => {
