@@ -113,117 +113,119 @@ const Payment: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Thanh toán khóa học</h1>
-      
-      {/* Phần chọn khóa học */}
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Khóa học</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {courses.map((course) => (
-            <div
-              key={course.id}
-              className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                selectedCourse === course.id ? 'border-primary shadow-md' : 'border-gray-200 hover:border-gray-300'
+    <div className="bg-white min-h-screen">
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold mb-6">Thanh toán khóa học</h1>
+        
+        {/* Phần chọn khóa học */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">Khóa học</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {courses.map((course) => (
+              <div
+                key={course.id}
+                className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                  selectedCourse === course.id ? 'border-primary shadow-md' : 'border-gray-200 hover:border-gray-300'
+                }`}
+                onClick={() => setSelectedCourse(course.id)}
+              >
+                {course.image_url && (
+                  <img 
+                    src={course.image_url} 
+                    alt={course.title}
+                    className="w-full h-40 object-cover rounded-md mb-4"
+                  />
+                )}
+                <h3 className="font-semibold text-lg mb-2">{course.title}</h3>
+                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{course.description}</p>
+                <p className="text-primary font-bold">
+                  {course.price.toLocaleString('vi-VN')}đ
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Phần chọn phương thức thanh toán */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">Phương thức thanh toán</h2>
+          <div className="space-y-4">
+            <div 
+              className={`border rounded-md p-4 flex items-center cursor-pointer ${
+                paymentMethod === 'momo' ? 'border-primary' : 'border-gray-200'
               }`}
-              onClick={() => setSelectedCourse(course.id)}
+              onClick={() => setPaymentMethod('momo')}
             >
-              {course.image_url && (
+              <div className={`w-5 h-5 rounded-full border mr-3 ${
+                paymentMethod === 'momo' ? 'border-4 border-primary' : 'border border-gray-300'
+              }`}></div>
+              <div className="bg-pink-500 text-white px-3 py-1 rounded-md mr-3">
+                MoMo
+              </div>
+              <span>Ví MoMo</span>
+            </div>
+
+            <div 
+              className={`border rounded-md p-4 flex items-center cursor-pointer ${
+                paymentMethod === 'vnpay' ? 'border-primary' : 'border-gray-200'
+              }`}
+              onClick={() => setPaymentMethod('vnpay')}
+            >
+              <div className={`w-5 h-5 rounded-full border mr-3 ${
+                paymentMethod === 'vnpay' ? 'border-4 border-primary' : 'border border-gray-300'
+              }`}></div>
+              <div className="bg-blue-500 text-white px-3 py-1 rounded-md mr-3">
+                VNPay
+              </div>
+              <span>VNPay</span>
+            </div>
+
+            <div 
+              className={`border rounded-md p-4 flex items-center cursor-pointer ${
+                paymentMethod === 'bank' ? 'border-primary' : 'border-gray-200'
+              }`}
+              onClick={() => setPaymentMethod('bank')}
+            >
+              <div className={`w-5 h-5 rounded-full border mr-3 ${
+                paymentMethod === 'bank' ? 'border-4 border-primary' : 'border border-gray-300'
+              }`}></div>
+              <div className="bg-green-500 text-white px-3 py-1 rounded-md mr-3">
+                Bank
+              </div>
+              <span>Chuyển khoản ngân hàng</span>
+            </div>
+          </div>
+
+          {/* Hiển thị QR Code */}
+          {paymentMethod && (
+            <div className="mt-6 p-6 border rounded-lg bg-white shadow-sm">
+              <h3 className="text-lg font-semibold mb-4">Quét mã QR để thanh toán</h3>
+              <div className="flex flex-col items-center">
                 <img 
-                  src={course.image_url} 
-                  alt={course.title}
-                  className="w-full h-40 object-cover rounded-md mb-4"
+                  src={PAYMENT_QR_CODES[paymentMethod]} 
+                  alt={`QR Code ${paymentMethod}`}
+                  className="w-48 h-48 mb-4"
                 />
-              )}
-              <h3 className="font-semibold text-lg mb-2">{course.title}</h3>
-              <p className="text-gray-600 text-sm mb-3 line-clamp-2">{course.description}</p>
-              <p className="text-primary font-bold">
-                {course.price.toLocaleString('vi-VN')}đ
-              </p>
+                <p className="text-sm text-gray-600">
+                  {paymentMethod === 'momo' && 'Mở ứng dụng MoMo và quét mã QR để thanh toán'}
+                  {paymentMethod === 'vnpay' && 'Mở ứng dụng VNPay và quét mã QR để thanh toán'}
+                  {paymentMethod === 'bank' && 'Quét mã QR để xem thông tin chuyển khoản'}
+                </p>
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Phần chọn phương thức thanh toán */}
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Phương thức thanh toán</h2>
-        <div className="space-y-4">
-          <div 
-            className={`border rounded-md p-4 flex items-center cursor-pointer ${
-              paymentMethod === 'momo' ? 'border-primary' : 'border-gray-200'
-            }`}
-            onClick={() => setPaymentMethod('momo')}
-          >
-            <div className={`w-5 h-5 rounded-full border mr-3 ${
-              paymentMethod === 'momo' ? 'border-4 border-primary' : 'border border-gray-300'
-            }`}></div>
-            <div className="bg-pink-500 text-white px-3 py-1 rounded-md mr-3">
-              MoMo
-            </div>
-            <span>Ví MoMo</span>
-          </div>
-
-          <div 
-            className={`border rounded-md p-4 flex items-center cursor-pointer ${
-              paymentMethod === 'vnpay' ? 'border-primary' : 'border-gray-200'
-            }`}
-            onClick={() => setPaymentMethod('vnpay')}
-          >
-            <div className={`w-5 h-5 rounded-full border mr-3 ${
-              paymentMethod === 'vnpay' ? 'border-4 border-primary' : 'border border-gray-300'
-            }`}></div>
-            <div className="bg-blue-500 text-white px-3 py-1 rounded-md mr-3">
-              VNPay
-            </div>
-            <span>VNPay</span>
-          </div>
-
-          <div 
-            className={`border rounded-md p-4 flex items-center cursor-pointer ${
-              paymentMethod === 'bank' ? 'border-primary' : 'border-gray-200'
-            }`}
-            onClick={() => setPaymentMethod('bank')}
-          >
-            <div className={`w-5 h-5 rounded-full border mr-3 ${
-              paymentMethod === 'bank' ? 'border-4 border-primary' : 'border border-gray-300'
-            }`}></div>
-            <div className="bg-green-500 text-white px-3 py-1 rounded-md mr-3">
-              Bank
-            </div>
-            <span>Chuyển khoản ngân hàng</span>
-          </div>
+          )}
         </div>
 
-        {/* Hiển thị QR Code */}
-        {paymentMethod && (
-          <div className="mt-6 p-6 border rounded-lg bg-white shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">Quét mã QR để thanh toán</h3>
-            <div className="flex flex-col items-center">
-              <img 
-                src={PAYMENT_QR_CODES[paymentMethod]} 
-                alt={`QR Code ${paymentMethod}`}
-                className="w-48 h-48 mb-4"
-              />
-              <p className="text-sm text-gray-600">
-                {paymentMethod === 'momo' && 'Mở ứng dụng MoMo và quét mã QR để thanh toán'}
-                {paymentMethod === 'vnpay' && 'Mở ứng dụng VNPay và quét mã QR để thanh toán'}
-                {paymentMethod === 'bank' && 'Quét mã QR để xem thông tin chuyển khoản'}
-              </p>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Nút thanh toán */}
-      <div className="flex justify-end">
-        <button
-          onClick={handlePayment}
-          disabled={loading}
-          className="bg-primary text-white px-6 py-2 rounded-md hover:bg-primary/90 disabled:opacity-50"
-        >
-          {loading ? 'Đang xử lý...' : 'Thanh toán ngay'}
-        </button>
+        {/* Nút thanh toán */}
+        <div className="flex justify-end">
+          <button
+            onClick={handlePayment}
+            disabled={loading}
+            className="bg-primary text-white px-6 py-2 rounded-md hover:bg-primary/90 disabled:opacity-50"
+          >
+            {loading ? 'Đang xử lý...' : 'Thanh toán ngay'}
+          </button>
+        </div>
       </div>
     </div>
   );
