@@ -21,7 +21,7 @@ import { Plus, Edit, Trash2 } from "lucide-react"
 import { supabase } from "@/lib/supabase" // Import supabase client
 
 interface Course {
-  id: number;
+  id: string;
   name: string;
   category: string;
   level: string;
@@ -34,6 +34,8 @@ export default function Courses() {
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [currentCourse, setCurrentCourse] = useState<Course | null>(null);
+  const [editingCourseId, setEditingCourseId] = useState<string | null>(null);
+  const [editValues, setEditValues] = useState<Partial<Course>>({});
 
   const fetchCourses = async () => {
     setLoading(true);
@@ -52,6 +54,10 @@ export default function Courses() {
   }, []);
 
   const handleAddCourse = () => {
+    if (editingCourseId) {
+      alert('Bạn đang chỉnh sửa một dòng. Vui lòng lưu hoặc hủy trước khi thêm mới!');
+      return;
+    }
     setCurrentCourse(null);
     setIsModalOpen(true);
   };
@@ -61,7 +67,7 @@ export default function Courses() {
     setIsModalOpen(true);
   };
 
-  const handleDeleteCourse = (id: number) => {
+  const handleDeleteCourse = (id: string) => {
     if (window.confirm('Are you sure you want to delete this course?')) {
       setCourses(prev => prev.filter(course => course.id !== id));
     }
@@ -98,6 +104,35 @@ export default function Courses() {
     setIsModalOpen(false);
   };
 
+  const handleEditInline = (course: Course) => {
+    if (editingCourseId) {
+      alert('Bạn đang chỉnh sửa một dòng. Vui lòng lưu hoặc hủy trước khi sửa dòng khác!');
+      return;
+    }
+    setEditingCourseId(course.id);
+    setEditValues({ ...course });
+  };
+
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEditValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveInline = (id: string) => {
+    setCourses((prev) =>
+      prev.map((course) =>
+        course.id === id ? { ...course, ...editValues } : course
+      )
+    );
+    setEditingCourseId(null);
+    setEditValues({});
+  };
+
+  const handleCancelInline = () => {
+    setEditingCourseId(null);
+    setEditValues({});
+  };
+
   if (loading) return <div>Loading courses...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -132,20 +167,69 @@ export default function Courses() {
               courses.map((course) => (
                 <TableRow key={course.id} className="hover:bg-gray-50">
                   <TableCell className="font-medium">{course.id}</TableCell>
-                  <TableCell>{course.name}</TableCell>
-                  <TableCell>{course.category}</TableCell>
-                  <TableCell>{course.level}</TableCell>
-                  <TableCell>{course.instructor}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end space-x-2">
-                      <Button variant="outline" size="icon" className="h-8 w-8 text-blue-600 hover:bg-blue-50 hover:text-blue-700 border-blue-600" onClick={() => handleEditCourse(course)}>
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="icon" className="h-8 w-8 text-red-600 hover:bg-red-50 hover:text-red-700 border-red-600" onClick={() => handleDeleteCourse(course.id)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+                  {editingCourseId === course.id ? (
+                    <>
+                      <TableCell>
+                        <Input
+                          name="name"
+                          value={editValues.name || ''}
+                          onChange={handleEditChange}
+                          className="w-full"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="category"
+                          value={editValues.category || ''}
+                          onChange={handleEditChange}
+                          className="w-full"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="level"
+                          value={editValues.level || ''}
+                          onChange={handleEditChange}
+                          className="w-full"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="instructor"
+                          value={editValues.instructor || ''}
+                          onChange={handleEditChange}
+                          className="w-full"
+                        />
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end space-x-2">
+                          <Button size="sm" className="bg-green-500 text-white" onClick={() => handleSaveInline(course.id)}>
+                            Lưu
+                          </Button>
+                          <Button size="sm" variant="outline" onClick={handleCancelInline}>
+                            Hủy
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </>
+                  ) : (
+                    <>
+                      <TableCell>{course.name}</TableCell>
+                      <TableCell>{course.category}</TableCell>
+                      <TableCell>{course.level}</TableCell>
+                      <TableCell>{course.instructor}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end space-x-2">
+                          <Button variant="outline" size="icon" className="h-8 w-8 text-blue-600 hover:bg-blue-50 hover:text-blue-700 border-blue-600" onClick={() => handleEditInline(course)}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="outline" size="icon" className="h-8 w-8 text-red-600 hover:bg-red-50 hover:text-red-700 border-red-600" onClick={() => handleDeleteCourse(course.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </>
+                  )}
                 </TableRow>
               ))
             )}
@@ -153,7 +237,7 @@ export default function Courses() {
         </Table>
       </div>
 
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <Dialog open={isModalOpen && !editingCourseId} onOpenChange={setIsModalOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{currentCourse ? 'Chỉnh sửa Khóa học' : 'Thêm Khóa học mới'}</DialogTitle>

@@ -16,7 +16,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="relative flex justify-center items-start min-h-[calc(100vh-80px)] py-8 bg-gradient-to-br from-[#fddde6] via-[#fbeff4] to-[#f8c6d8] overflow-hidden">
+    <div className="relative flex justify-center items-start min-h-[calc(100vh-80px)] py-8" style={{ background: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 50%, #f9d976 100%)' }}>
       {/* Nền trang trí */}
       <div className="absolute inset-0 -z-20">
         <img src="/profile-bg.svg" alt="bg" className="w-full h-full object-cover opacity-70" />
